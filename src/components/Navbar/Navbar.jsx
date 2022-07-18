@@ -1,6 +1,14 @@
-import { AppBar, Typography, Box, Grow } from "@mui/material";
-import { Link, NavLink } from "react-router-dom";
+import {
+  AppBar,
+  Typography,
+  Box,
+  Grow,
+  Button,
+  ButtonGroup,
+} from "@mui/material";
+import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { MenuRounded, MenuOpenRounded } from "@mui/icons-material";
 
 import Logo from "../../images/mainLogo.svg";
 import useStyles from "./style";
@@ -12,21 +20,7 @@ const navLinks = [
   { name: "Contact Us", link: "/contact" },
 ];
 
-const Navbar = ({ renderBigPage }) => {
-  const [delayedEffect, setDelayedEffect] = useState(renderBigPage);
-
-  useEffect(() => {
-    let isMounted = true;
-    const delayedTimeout = setTimeout(() => {
-      setDelayedEffect(renderBigPage);
-    }, 600);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(delayedTimeout);
-    };
-  }, [renderBigPage]);
-
+const Navbar = () => {
   const classes = useStyles();
 
   const navClassName = (isActive) =>
@@ -34,14 +28,13 @@ const Navbar = ({ renderBigPage }) => {
 
   return (
     <AppBar
-      position="sticky"
+      position="absolute"
       component="nav"
       className={classes.navbar}
       color="white"
     >
       <Box display="flex" className={classes.box}>
         <Typography
-          // variant="h5"
           fontSize="larger"
           fontWeight="bold"
           component="h1"
@@ -50,20 +43,23 @@ const Navbar = ({ renderBigPage }) => {
           <img src={Logo} alt="" className={classes.image} />
           BOSTON MAPS
         </Typography>
-        {!renderBigPage && (
-          <nav className={classes.nav}>
-            {navLinks.map(({ name, link }, i) => (
-              <Grow
-                key={i}
-                className={({ isActive }) => navClassName(isActive)}
-                in={!delayedEffect}
-                {...(!delayedEffect ? { timeout: i * 100 } : {})}
-              >
-                <NavLink to={link}>{name}</NavLink>
-              </Grow>
-            ))}
-          </nav>
-        )}
+
+        <nav className={classes.nav}>
+          {navLinks.map(({ name, link }, i) => (
+            <NavLink
+              key={i}
+              className={({ isActive }) => navClassName(isActive)}
+              to={link}
+            >
+              {name}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* <ButtonGroup>
+          <Button>Search By Location</Button>
+          <Button>Search By Neighborhood</Button>
+        </ButtonGroup> */}
       </Box>
     </AppBar>
   );

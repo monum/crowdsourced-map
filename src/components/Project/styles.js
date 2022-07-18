@@ -2,10 +2,10 @@ import { makeStyles } from "@mui/styles";
 
 export default makeStyles(() => ({
   card: {
-    height: 410,
+    height: 400,
   },
   image: {
-    height: "60%",
+    height: "61%",
   },
   CardContent: {
     paddingLeft: 13,

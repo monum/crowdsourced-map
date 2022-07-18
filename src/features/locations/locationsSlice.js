@@ -33,14 +33,8 @@ export const locationsSlice = createSlice({
         console.log("done");
       }
     },
-
-    // clearSelectedLocation: (state) => {
-    //   state.selectedNeighborhood = {};
-    // },
   },
 });
-
-// export const selectAllNeighborhoods = (state) => state.posts;
 
 export const { locationSelected } = locationsSlice.actions;
 

@@ -25,6 +25,10 @@ code {
   height: 100%;
 }
 
+nav::-webkit-scrollbar {
+  display: none;
+}
+
 .root {
   border-right: 1px solid rgba(0, 0, 0, 0.204);
   transition: all 1s ease-in-out;

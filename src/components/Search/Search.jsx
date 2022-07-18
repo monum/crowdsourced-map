@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import useStyles from "./styles";
-import { locationSelected } from "../../features/Locations/LocationsSlice";
+import { locationSelected } from "../../features/locations/locationsSlice";
 
 const Search = () => {
   const dispatch = useDispatch();

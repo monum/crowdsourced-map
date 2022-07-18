@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDeterminePageSize } from "./hooks";
 import useStyles from "./globalStyles";
 import { MapPage, MainPage } from "./pages/";
+import { Navbar } from "./components";
 
 function App() {
   // mapIsActive MUST always start out as true or the map will not render properly
@@ -13,9 +14,12 @@ function App() {
   const renderMainPage = mainPageSize === 70 || 30 ? true : false;
 
   return (
-    <div className={globalClasses.app}>
-      {renderMainPage && <MainPage mapIsActive={mapIsActive} />}
-      <MapPage setMapIsActive={setMapIsActive} mapIsActive={mapIsActive} />
+    <div className={globalClasses.main}>
+      <Navbar />
+      <div className={globalClasses.app}>
+        {renderMainPage && <MainPage mapIsActive={mapIsActive} />}
+        <MapPage setMapIsActive={setMapIsActive} mapIsActive={mapIsActive} />
+      </div>
     </div>
   );
 }

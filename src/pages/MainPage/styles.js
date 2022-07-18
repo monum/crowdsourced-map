@@ -8,8 +8,9 @@ export default makeStyles((theme) => ({
     transition: theme.transitions.presets.expandCollapseWidth,
     borderRight: `0.5px ${theme.palette.gray.regular} solid`,
     overflowY: "scroll",
-    overflowX: "visible",
+    overflowX: "hidden",
     position: "relative",
+    paddingTop: 10,
   }),
   mainPageContent: {
     marginTop: 100,

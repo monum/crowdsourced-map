@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useLocalStorage } from "../../hooks";
-import { locationSelected } from "../../features/Locations/LocationsSlice";
+import { locationSelected } from "../../features/locations/locationsSlice";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACESS_TOKEN;
 

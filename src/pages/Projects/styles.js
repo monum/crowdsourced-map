@@ -3,8 +3,13 @@ import { makeStyles } from "@mui/styles";
 export default makeStyles((theme) => ({
   main: {
     marginLeft: 40,
+    marginBottom: 100,
+    paddingBottom: 20,
     overflowY: "scroll",
-    // background: "red",
+    overflowX: "hidden",
+    display: "flex",
+    flexDirection: "column",
+    gap: 15,
   },
   header: {
     display: "flex",
@@ -16,12 +21,11 @@ export default makeStyles((theme) => ({
     color: theme.palette.primary.light,
     borderBottom: `3px solid ${theme.palette.primary.light}`,
     paddingBottom: 10,
-    marginBottom: 20,
+    paddingTop: 5,
   },
 
   projectsContainer: {
     marginRight: 30,
-    // overflow: "scroll",
-    // background: "red",
+    minHeight: "fit-content",
   },
 }));

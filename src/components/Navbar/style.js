@@ -4,30 +4,36 @@ export default makeStyles((theme) => ({
   navbar: {
     marginBottom: 30,
     backgroundColor: "#ffffff",
-    height: 80,
+    // height: ,
     fontWeight: "bold",
     fontSize: "1.05rem",
     flexDirection: "column",
   },
   box: {
-    gap: "22%",
+    paddingBottom: 10,
     alignItems: "center",
-    minWidth: 600,
-    margin: "5px 0  0 30px",
+    width: "60%",
+    marginLeft: 25,
+    justifyContent: "space-between",
+    padding: "10px 0",
   },
   h1: {
     color: theme.palette.primary.main,
     display: "flex",
     alignItems: "center",
     fontSize: "1.5rem",
+    width: 350,
   },
   image: {
     width: 65,
-    marginBottom: 5,
   },
   nav: {
     display: "flex",
     gap: 35,
+    justifyContent: "center",
+    margin: "15px 0 10px 0",
+    fontWeight: "bold",
+    fontSize: "1.05rem",
   },
 
   navLink: {
@@ -36,7 +42,6 @@ export default makeStyles((theme) => ({
     wordWrap: "nowrap",
     transition: theme.transitions.presets.color,
   },
-
   isActive: {
     color: theme.palette.primary.light,
   },

@@ -1,68 +1,20 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Button } from "@mui/material";
+import { ExpandMoreRounded } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
 
 import useStyles from "./styles";
-import { Project, Sort } from "../../components";
-import image from "../../images/pic1.jpg";
-import SearchProjects from "../../components/SearchProjects/SearchProjects";
-import { useEffect, useState } from "react";
-
-const projects = [
-  {
-    image,
-    title: "New Compost Bin",
-    location: "15 Downtown Boston, MA 02116",
-    timeSubmitted: new Date(),
-  },
-  {
-    image,
-    title: "New Compost Bin",
-    location: "15 Downtown Boston, MA 02116",
-    timeSubmitted: new Date(),
-  },
-  {
-    image,
-    title: "New Compost Bin",
-    location: "15 Downtown Boston, MA 02116",
-    timeSubmitted: new Date(),
-  },
-  {
-    image,
-    title: "New Compost Bin",
-    location: "15 Downtown Boston, MA 02116",
-    timeSubmitted: new Date(),
-  },
-  {
-    image,
-    title: "New Compost Bin",
-    location: "15 Downtown Boston, MA 02116",
-    timeSubmitted: new Date(),
-  },
-  {
-    image,
-    title: "New Bench",
-    location: "15 Downtown Boston, MA 02116",
-    timeSubmitted: new Date(),
-  },
-];
-
-const options = [];
-
-projects.forEach(({ title }, i) => {
-  const repeatEntry = options.find(({ name }) => name === title);
-
-  if (repeatEntry) return false;
-
-  options.push({ name: title, id: i });
-});
+import { useGetProjectsQuery } from "../../features/projects/projectsApi";
+import { Project, Sort, SearchProjects } from "../../components";
 
 const Projects = ({ renderBigPage }) => {
   const classes = useStyles();
-  const [delayedEffect, setDelayedEffect] = useState(!renderBigPage);
+  const [delayedEffect, setDelayedEffect] = useState(renderBigPage);
 
   useEffect(() => {
-    if (delayedEffect) return setDelayedEffect(!renderBigPage);
+    if (delayedEffect) return setDelayedEffect(renderBigPage);
     setTimeout(() => {
-      setDelayedEffect(!renderBigPage);
+      setDelayedEffect(renderBigPage);
     }, 350);
   }, [renderBigPage]);
 
@@ -74,21 +26,67 @@ const Projects = ({ renderBigPage }) => {
         </Typography>
         {delayedEffect && <Sort />}
 
-        {delayedEffect && <SearchProjects options={options} />}
+        {delayedEffect && <SearchProjects />}
       </header>
-
-      <Box className={classes.projectsContainer}>
-        <Grid container rowSpacing={7} columnSpacing={4}>
-          {projects.map((project, i) => (
-            <Project
-              key={i}
-              projectInfo={project}
-              renderBigPage={renderBigPage}
-            />
-          ))}
-        </Grid>
-      </Box>
+      <ProjectsContainer
+        renderBigPage={renderBigPage}
+        delayedEffect={delayedEffect}
+      />
     </div>
+  );
+};
+
+const ProjectsContainer = ({ renderBigPage, delayedEffect }) => {
+  const classes = useStyles();
+  const pageSize = [9];
+  const [projects, setProjects] = useState(useGetProjectsQuery());
+  const [offset, setOffset] = useState(null);
+
+  const handleLoadMore = () => {
+    setOffset(data.offset);
+  };
+
+  const { data, error, isLoading, isFetching, isSuccess } = useGetProjectsQuery(
+    { offset }
+  );
+  const [projectsData, setprojectsData] = useState([]);
+
+  useEffect(() => {
+    if (!data || isFetching) return;
+
+    for (let d of projectsData) {
+      if (data.records.find((r) => r.id === d.id)) return;
+    }
+
+    setprojectsData((oldData) => [...oldData, ...data?.records]);
+  }, [isFetching]);
+
+  return (
+    <Box className={classes.projectsContainer}>
+      <Grid container rowSpacing={7} columnSpacing={4}>
+        {data
+          ? projectsData.map(({ id, fields }) => (
+              <Project
+                key={id}
+                projectInfo={fields}
+                renderBigPage={renderBigPage}
+              />
+            ))
+          : [0, 0, 0].map((_, i) => (
+              <Project key={i} skeleton renderBigPage={renderBigPage} />
+            ))}
+      </Grid>
+      {isSuccess && data?.offset && (
+        <Button
+          variant="outlined"
+          sx={{ margin: "50px 0 0 20%", width: "50%", padding: "10px 0" }}
+          startIcon={!isFetching && <ExpandMoreRounded />}
+          onClick={handleLoadMore}
+        >
+          {isFetching ? <SyncLoader size={10} margin={6} /> : "See More"}
+        </Button>
+      )}
+    </Box>
   );
 };
 

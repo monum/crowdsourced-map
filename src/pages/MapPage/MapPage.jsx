@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { Map, Search, SuggestProject, Flap } from "../../components";
 import useStyles from "./styles";
 import { useDeterminePageSize } from "../../hooks";

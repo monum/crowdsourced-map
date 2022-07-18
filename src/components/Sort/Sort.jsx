@@ -23,10 +23,9 @@ const Sort = () => {
   return (
     <Grow in={delayedEffect}>
       <FormControl>
-        <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
+        <InputLabel>Sort By</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="projects sort"
           value={sort}
           label="Sort"
           variant="standard"
