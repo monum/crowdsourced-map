@@ -1,22 +1,24 @@
-import { Box, Grid, Typography, Button } from "@mui/material";
-import { ExpandMoreRounded } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
+import { ExpandMoreRounded } from "@mui/icons-material";
+import { Box, Grid, Typography, Button } from "@mui/material";
 
 import useStyles from "./styles";
+import { useDeterminePageSize } from "../../hooks";
 import { useGetProjectsQuery } from "../../features/projects/projectsApi";
 import { Project, Sort, SearchProjects } from "../../components";
 
-const Projects = ({ renderBigPage }) => {
+const Projects = () => {
   const classes = useStyles();
-  const [delayedEffect, setDelayedEffect] = useState(renderBigPage);
+  const { renderFullMap } = useDeterminePageSize();
+  const [delayedEffect, setDelayedEffect] = useState(!renderFullMap);
 
   useEffect(() => {
-    if (delayedEffect) return setDelayedEffect(renderBigPage);
+    if (delayedEffect) return setDelayedEffect(!renderFullMap);
     setTimeout(() => {
-      setDelayedEffect(renderBigPage);
+      setDelayedEffect(!renderFullMap);
     }, 350);
-  }, [renderBigPage]);
+  }, [renderFullMap]);
 
   return (
     <div className={classes.main}>
@@ -28,19 +30,16 @@ const Projects = ({ renderBigPage }) => {
 
         {delayedEffect && <SearchProjects />}
       </header>
-      <ProjectsContainer
-        renderBigPage={renderBigPage}
-        delayedEffect={delayedEffect}
-      />
+      <ProjectsContainer />
     </div>
   );
 };
 
-const ProjectsContainer = ({ renderBigPage, delayedEffect }) => {
+const ProjectsContainer = () => {
   const classes = useStyles();
   const pageSize = [9];
-  const [projects, setProjects] = useState(useGetProjectsQuery());
   const [offset, setOffset] = useState(null);
+  const { renderFullMap } = useDeterminePageSize();
 
   const handleLoadMore = () => {
     setOffset(data.offset);
@@ -66,15 +65,9 @@ const ProjectsContainer = ({ renderBigPage, delayedEffect }) => {
       <Grid container rowSpacing={7} columnSpacing={4}>
         {data
           ? projectsData.map(({ id, fields }) => (
-              <Project
-                key={id}
-                projectInfo={fields}
-                renderBigPage={renderBigPage}
-              />
+              <Project key={id} projectInfo={fields} />
             ))
-          : [0, 0, 0].map((_, i) => (
-              <Project key={i} skeleton renderBigPage={renderBigPage} />
-            ))}
+          : [0, 0, 0].map((_, i) => <Project key={i} skeleton />)}
       </Grid>
       {isSuccess && data?.offset && (
         <Button

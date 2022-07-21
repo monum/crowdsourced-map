@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const projectsApi = createApi({
+const projectsApi = createApi({
   reducerPath: "projectsApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
@@ -32,5 +32,7 @@ export const projectsApi = createApi({
     }),
   }),
 });
+
+export default projectsApi;
 
 export const { useGetProjectsQuery, useAddProjectMutation } = projectsApi;

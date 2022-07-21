@@ -1,8 +1,7 @@
-const date = {
-  obj: "",
+const hero = {
+  name: "Batman",
+  city: "Gotham",
 };
+const { city, ...heroClone } = hero;
 
-date.obj = new Date().toLocaleDateString("en-US", {
-  timeZone: "America/New_York",
-});
-console.log(date.obj);
+console.log(heroClone);

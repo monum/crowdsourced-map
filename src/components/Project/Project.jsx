@@ -12,23 +12,33 @@ import { RoomOutlined, WatchLaterOutlined } from "@mui/icons-material/";
 
 import image from "../../images/pic1.jpg";
 import useStyles from "./styles";
+import { useDeterminePageSize } from "../../hooks";
 
-const Project = ({ projectInfo, renderBigPage, skeleton }) => {
+const trimAddress = (address = "") => {
+  const addressArr = address.split(",");
+
+  addressArr.pop(); // getting out "United States" from the address
+  if (addressArr.length > 2) addressArr.pop(); // getting out "Massachusetts" from the address
+
+  return addressArr.join(",");
+};
+
+const Project = ({ projectInfo, skeleton }) => {
   const classes = useStyles();
-  const [delayedEffect, setDelayedEffect] = useState(!renderBigPage);
-  if (skeleton) console.log("here");
+  const { renderFullMap } = useDeterminePageSize();
+  const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
+
+  const address = trimAddress(projectInfo?.Address);
 
   useEffect(() => {
-    let isMounted = true;
     const delayedTimeout = setTimeout(() => {
-      setDelayedEffect(!renderBigPage);
+      setDelayedEffect(renderFullMap);
     }, 150);
 
     return () => {
-      isMounted = false;
       clearTimeout(delayedTimeout);
     };
-  }, [renderBigPage]);
+  }, [renderFullMap]);
 
   return (
     <Grid item lg={delayedEffect ? 11 : 4} md={delayedEffect ? 11 : 6} xs={11}>
@@ -43,7 +53,7 @@ const Project = ({ projectInfo, renderBigPage, skeleton }) => {
             <Typography variant="h5">{projectInfo.Title}</Typography>
             <div className={classes.info}>
               <span className={classes.infoContent}>
-                <RoomOutlined fontSize="small" /> {projectInfo.location}
+                <RoomOutlined fontSize="small" /> {address}
               </span>
               <span className={classes.infoContent}>
                 <WatchLaterOutlined fontSize="small" /> Submitted{" "}

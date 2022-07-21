@@ -1,12 +1,18 @@
 import { Fab, Tooltip, ClickAwayListener } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import useStyles from "./styles";
 import { useEffect, useState } from "react";
+import { setPreviousLocation } from "../../features/utilsSlice";
+import { toggleSuggestingProject } from "../../features/projects/newProjectSlice";
 
 const SuggestProjectButton = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -22,9 +28,17 @@ const SuggestProjectButton = () => {
     };
   }, []);
 
+  const handleRedirect = () => {
+    dispatch(setPreviousLocation(location));
+    navigate("/projects/suggest-a-project");
+  };
+
   return (
-    <div className={classes.buttonContainer}>
-      <Link to="/projects/suggest-a-project">
+    <div
+      className={classes.buttonContainer}
+      onClick={() => dispatch(toggleSuggestingProject(true))}
+    >
+      <div onClick={handleRedirect}>
         <ClickAwayListener onClickAway={() => setOpen(false)}>
           <Tooltip
             title="Suggest a new Project"
@@ -38,7 +52,7 @@ const SuggestProjectButton = () => {
             </Fab>
           </Tooltip>
         </ClickAwayListener>
-      </Link>
+      </div>
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useWindowSize } from "./";
 
-const useDeterminePageSize = (mapIsActive) => {
+const useDeterminePageSize = () => {
+  const { fullSizeMap } = useSelector((state) => state.utils);
   const { width } = useWindowSize();
 
   const checkPageSize = () => {
-    if (mapIsActive) {
+    if (fullSizeMap) {
       if (width < 1155) {
         return {
           mapSize: 100,
@@ -40,8 +42,11 @@ const useDeterminePageSize = (mapIsActive) => {
   useEffect(() => {
     setMapSize(checkPageSize().mapSize);
     setMainPageSize(checkPageSize().mainPageSize);
-  }, [mapIsActive, width]);
+  }, [fullSizeMap, width]);
+
   return {
+    renderFullMap: mapSize === 70 || mapSize === 100 ? true : false,
+    renderMainPage: mainPageSize === 70 || mainPageSize === 30 ? true : false,
     mapSize,
     mainPageSize,
   };
