@@ -196,6 +196,7 @@ const SubmitButton = ({ handleClearInput, title, description }) => {
   const handleSubmit = async () => {
     setSubmitting(true);
     const addressData = projectsData.address.data;
+    console.log(addressData);
     const lat = projectsData.coords.lat;
     const lng = projectsData.coords.lng;
 
@@ -205,7 +206,7 @@ const SubmitButton = ({ handleClearInput, title, description }) => {
       timeZone: "America/New_York",
     });
 
-    const { address, coords, ...project } = {
+    const { coords, ...project } = {
       ...projectsData,
       address: addressData,
       lat,
@@ -217,6 +218,8 @@ const SubmitButton = ({ handleClearInput, title, description }) => {
     };
 
     const newProject = capitalizeKeys(project);
+
+    console.log(newProject);
 
     const action = await addProject({
       records: [

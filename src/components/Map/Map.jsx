@@ -1,92 +1,69 @@
-import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Circle } from "@mui/icons-material";
+import Map, { Marker, useMap } from "react-map-gl";
 
 import { useLocalStorage } from "../../hooks";
+import { ProjectMarker } from "../../components";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
 import { useGetProjectsQuery } from "../../features/projects/projectsApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
 import { setProjectDetails } from "../../features/projects/newProjectSlice";
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACESS_TOKEN;
+function MapRoot() {
+  const { getItem, setItem } = useLocalStorage("defaultMapOptions");
+  const [zoom, setZoom] = useState(false);
 
-function Map() {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
-  const newProjectMarker = useRef(null);
+  const mapRef = useRef(null);
+  const [viewState, setViewState] = useState({
+    longitude: getItem()?.lng ?? -70.9,
+    latitude: getItem()?.lat ?? 42.35,
+    zoom: getItem()?.zoom || 8,
+  });
+
   const dispatch = useDispatch();
   const { selectedLocation } = useSelector((state) => state.location);
   const { isActive } = useSelector((state) => state.newProject);
-  const { getItem, setItem } = useLocalStorage("defaultMapOptions");
-  const [getAddressTrigger, addressData] = useLazyGetAddressQuery();
   const { data, isFetching, isError } = useGetProjectsQuery();
-  const marker = useRef(null);
-
-  const [lng, setLng] = useState(getItem()?.lng ?? -70.9);
-  const [lat, setLat] = useState(getItem()?.lat ?? 42.35);
-  const [zoom, setZoom] = useState(getItem()?.zoom || 8);
 
   useEffect(() => {
-    if (map.current) return;
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current, // container ID
-      style: "mapbox://styles/mapbox/streets-v11", // style
-      bearingSnap: 7,
-      center: [lng, lat], // starting position [lng, lat]
-      zoom: zoom, // starting zoom
-      testMode: true,
-      maxPitch: 85,
-    });
-  }, []);
+    if (!selectedLocation || !mapRef.current) return;
+    const { lng, lat } = selectedLocation.coords;
+    mapRef.current?.easeTo({ center: [lng, lat], zoom: 13.5, duration: 1500 });
 
-  useEffect(() => {
-    if (!map.current) return;
-    if (!isActive && newProjectMarker.current) {
-      newProjectMarker.current.remove();
-      setProjectDetails({ coords: "" });
-    }
-    if (!isActive) return;
+    dispatch(locationSelected(null));
+  }, [selectedLocation]);
 
-    newProjectMarker.current = new mapboxgl.Marker({ draggable: true })
-      .setLngLat([lng, lat])
-      .addTo(map.current);
+  return (
+    <Map
+      {...viewState}
+      ref={mapRef}
+      onMove={(e) => setViewState(e.viewState)}
+      reuseMaps
+      attributionControl={false}
+      style={{ width: "100%", height: "100%" }}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
+    >
+      {data?.records.map((record) => (
+        <ProjectMarker
+          key={record.id}
+          coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
+        />
+      ))}
+      {isActive && <NewProjectMarker isActive={isActive} />}
+    </Map>
+  );
+}
 
-    const markerCoords = {
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
-    };
+const NewProjectMarker = ({ isActive }) => {
+  const dispatch = useDispatch();
+  const { current: map } = useMap();
+  const [getAddressTrigger, addressData] = useLazyGetAddressQuery();
 
-    getAddressTrigger(markerCoords);
-    dispatch(
-      setProjectDetails({
-        coords: markerCoords,
-      })
-    );
-  }, [isActive]);
-
-  // useEffect(() => {
-  //   if (!data || !map.current) return;
-  //   data.records.forEach(({ Lat, Lng }) => {
-  //     const newMarker = new mapboxgl.Marker(<Circle />)
-  //       .setLngLat([lng, lat])
-  //       .addTo(map.current);
-  //   });
-  // }, [data]);
-
-  useEffect(() => {
-    if (!map.current) return;
-
-    map.current.once("move", () => {
-      const { lat, lng } = map.current.getCenter();
-      const zoom = map.current.getZoom();
-
-      setLng(lng.toFixed(4));
-      setLat(lat.toFixed(4));
-      setZoom(zoom.toFixed(4));
-      setItem({ lat, lng, zoom });
-    });
+  const [newProjectCoords, setNewProjectCoords] = useState({
+    lat: map.getCenter().lat,
+    lng: map.getCenter().lng,
   });
 
   useEffect(() => {
@@ -96,7 +73,7 @@ function Map() {
       setProjectDetails({
         address: {
           isFetching: addressData.isFetching,
-          status: addressData.isSuccess,
+          isError: addressData.isError,
           data: addressData.data.features[0]["place_name"],
         },
       })
@@ -104,58 +81,40 @@ function Map() {
   }, [addressData]);
 
   useEffect(() => {
-    if (!newProjectMarker.current || !isActive) return;
+    if (!isActive) return;
+    setNewProjectCoords();
+    handleNewProjectUpdate("address", newProjectCoords);
+    handleNewProjectUpdate("coords", newProjectCoords);
+  }, [isActive]);
 
-    const resetCoords = () => {
-      const { lat, lng } = newProjectMarker.current.getLngLat();
-
+  const handleNewProjectUpdate = async (key, details) => {
+    setNewProjectCoords(details);
+    if (key === "coords") {
       dispatch(
         setProjectDetails({
-          coords: { lat, lng },
+          coords: {
+            lat: parseFloat(details.lat),
+            lng: parseFloat(details.lng),
+          },
         })
       );
-      newProjectMarker.current.setLngLat([lng, lat]);
-    };
+    } else if (key === "address") {
+      getAddressTrigger({
+        lat: parseFloat(details.lat),
+        lng: parseFloat(details.lng),
+      });
+    }
+  };
 
-    const resetAddress = () => {
-      const { lat, lng } = newProjectMarker.current.getLngLat();
+  return (
+    <Marker
+      longitude={newProjectCoords.lng}
+      latitude={newProjectCoords.lat}
+      draggable
+      onDrag={(e) => handleNewProjectUpdate("coords", e.lngLat)}
+      onDragEnd={(e) => handleNewProjectUpdate("address", e.lngLat)}
+    ></Marker>
+  );
+};
 
-      const markerCoords = {
-        lat: parseFloat(lat).toFixed(4),
-        lng: parseFloat(lng).toFixed(4),
-      };
-
-      getAddressTrigger(markerCoords);
-    };
-
-    newProjectMarker.current.on("drag", resetCoords);
-    newProjectMarker.current.on("dragend", resetAddress);
-
-    return () => {
-      newProjectMarker.current.off("drag", resetCoords);
-      newProjectMarker.current.off("dragend", resetAddress);
-    };
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    if (!selectedLocation) return;
-
-    const { lng, lat } = selectedLocation.coords;
-    map.current.panTo([lng, lat], { duration: 500 });
-
-    const timeout = setTimeout(() => {
-      map.current?.zoomTo(13.5, { duration: 1000 });
-    }, 1000);
-
-    dispatch(locationSelected(null));
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [selectedLocation]);
-
-  return <div className="mapContainer" ref={mapContainer}></div>;
-}
-
-export default Map;
+export default MapRoot;

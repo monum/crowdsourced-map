@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+
+import utilsReducer from "../features/utilsSlice";
 import projectsApi from "../features/projects/projectsApi";
 import addressApi from "../features/projects/addressApi";
 import locationsReducer from "../features/locations/locationsSlice";
 import newProjectReducer from "../features/projects/newProjectSlice";
-import utilsReducer from "../features/utilsSlice";
+import projectsReducer from "../features/projects/projectsSlice";
 
 export const store = configureStore({
   middleware: (getDefaultMiddleWare) =>
@@ -17,6 +19,7 @@ export const store = configureStore({
     location: locationsReducer,
     newProject: newProjectReducer,
     utils: utilsReducer,
+    projects: projectsReducer,
     [projectsApi.reducerPath]: projectsApi.reducer,
     [addressApi.reducerPath]: addressApi.reducer,
   },

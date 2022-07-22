@@ -1,11 +1,50 @@
-import { Grow, Autocomplete, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  TextField,
+  Grid,
+  Paper,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { useState, useEffect } from "react";
+import { CloseRounded } from "@mui/icons-material";
 
 import useStyles from "./styles";
 import { useGetProjectsQuery } from "../../features/projects/projectsApi";
 
 const SearchProjects = () => {
-  const [delayedEffect, setDelayedEffect] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const classes = useStyles();
+
+  const handleSelect = (value) => {
+    const repeatEntry = projects.find((project) => project === value);
+
+    if (repeatEntry || !value.name) return;
+    setProjects((state) => [...state, value]);
+  };
+
+  return (
+    <div>
+      <SearchButton handleSelect={handleSelect} />
+      <Grid container rowSpacing={2} columnSpacing={2}>
+        {projects.map(({ name, id }) => (
+          <Grid key={id} item lg={4} md={6} sm={6}>
+            <Paper className={classes.searched}>
+              <Typography noWrap className={classes.searchedText}>
+                {name}
+              </Typography>
+              <IconButton>
+                <CloseRounded />
+              </IconButton>
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+};
+
+const SearchButton = ({ handleSelect }) => {
   const [options, setOptions] = useState([]);
 
   const { data, isSuccess } = useGetProjectsQuery();
@@ -27,25 +66,20 @@ const SearchProjects = () => {
     });
   }, [data]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDelayedEffect(true);
-    }, 150);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
   return (
-    <Grow in={delayedEffect}>
-      <Autocomplete
-        options={options}
-        getOptionLabel={(option) => option.name}
-        className={classes.searchBar}
-        renderInput={(params) => (
-          <TextField variant="standard" {...params} label="Search Projects" />
-        )}
-      />
-    </Grow>
+    <Autocomplete
+      options={options}
+      getOptionLabel={(option) => option.name}
+      className={classes.searchBar}
+      onChange={(_, value) => handleSelect(value)}
+      renderInput={(params) => (
+        <TextField
+          variant="standard"
+          {...params}
+          label="Filter By Project name"
+        />
+      )}
+    />
   );
 };
 

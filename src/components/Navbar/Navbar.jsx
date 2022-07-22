@@ -1,16 +1,10 @@
-import {
-  AppBar,
-  Typography,
-  Box,
-  Grow,
-  Button,
-  ButtonGroup,
-} from "@mui/material";
+import { AppBar, Typography, Box, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { MenuRounded, MenuOpenRounded } from "@mui/icons-material";
+import { FilterAltRounded } from "@mui/icons-material";
 
 import Logo from "../../images/mainLogo.svg";
+import { FilterModal } from "../";
 import useStyles from "./style";
 
 const navLinks = [
@@ -22,6 +16,7 @@ const navLinks = [
 
 const Navbar = () => {
   const classes = useStyles();
+  const [showFilter, setShowFilter] = useState(false);
 
   const navClassName = (isActive) =>
     isActive ? `${classes.navLink} ${classes.isActive}` : classes.navLink;
@@ -56,11 +51,17 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* <ButtonGroup>
-          <Button>Search By Location</Button>
-          <Button>Search By Neighborhood</Button>
-        </ButtonGroup> */}
+        <Button
+          disableFocusRipple
+          disableElevation
+          startIcon={<FilterAltRounded />}
+          className={classes.filterButton}
+          onClick={() => setShowFilter(true)}
+        >
+          Filters
+        </Button>
       </Box>
+      <FilterModal open={showFilter} onClose={() => setShowFilter(false)} />
     </AppBar>
   );
 };

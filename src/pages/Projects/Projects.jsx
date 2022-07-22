@@ -1,24 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { SyncLoader } from "react-spinners";
-import { ExpandMoreRounded } from "@mui/icons-material";
 import { Box, Grid, Typography, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
 
 import useStyles from "./styles";
-import { useDeterminePageSize } from "../../hooks";
+import { useDeterminePageSize, useIsInViewport } from "../../hooks";
 import { useGetProjectsQuery } from "../../features/projects/projectsApi";
-import { Project, Sort, SearchProjects } from "../../components";
+import { setProjects } from "../../features/projects/projectsSlice";
+import { Project } from "../../components";
 
 const Projects = () => {
   const classes = useStyles();
-  const { renderFullMap } = useDeterminePageSize();
-  const [delayedEffect, setDelayedEffect] = useState(!renderFullMap);
-
-  useEffect(() => {
-    if (delayedEffect) return setDelayedEffect(!renderFullMap);
-    setTimeout(() => {
-      setDelayedEffect(!renderFullMap);
-    }, 350);
-  }, [renderFullMap]);
 
   return (
     <div className={classes.main}>
@@ -26,9 +18,6 @@ const Projects = () => {
         <Typography variant="h4" component="h1">
           Submitted Projects
         </Typography>
-        {delayedEffect && <Sort />}
-
-        {delayedEffect && <SearchProjects />}
       </header>
       <ProjectsContainer />
     </div>
@@ -37,13 +26,14 @@ const Projects = () => {
 
 const ProjectsContainer = () => {
   const classes = useStyles();
-  const pageSize = [9];
+  const dispatch = useDispatch();
+  const pageSize = new Array(3);
   const [offset, setOffset] = useState(null);
   const { renderFullMap } = useDeterminePageSize();
+  const lazyRef = useRef(false);
+  const [showLoader, setShowLoader] = useState(false);
 
-  const handleLoadMore = () => {
-    setOffset(data.offset);
-  };
+  const { isIntersecting: loadMore } = useIsInViewport(lazyRef);
 
   const { data, error, isLoading, isFetching, isSuccess } = useGetProjectsQuery(
     { offset }
@@ -51,13 +41,22 @@ const ProjectsContainer = () => {
   const [projectsData, setprojectsData] = useState([]);
 
   useEffect(() => {
+    if (!loadMore || !data) return;
+    setOffset(data.offset);
+  }, [loadMore]);
+
+  useEffect(() => {
     if (!data || isFetching) return;
 
+    dispatch(setProjects(data));
     for (let d of projectsData) {
       if (data.records.find((r) => r.id === d.id)) return;
     }
 
     setprojectsData((oldData) => [...oldData, ...data?.records]);
+
+    if (data.offset) setShowLoader(true);
+    else setShowLoader(false);
   }, [isFetching]);
 
   return (
@@ -69,15 +68,19 @@ const ProjectsContainer = () => {
             ))
           : [0, 0, 0].map((_, i) => <Project key={i} skeleton />)}
       </Grid>
-      {isSuccess && data?.offset && (
-        <Button
-          variant="outlined"
-          sx={{ margin: "50px 0 0 20%", width: "50%", padding: "10px 0" }}
-          startIcon={!isFetching && <ExpandMoreRounded />}
-          onClick={handleLoadMore}
-        >
-          {isFetching ? <SyncLoader size={10} margin={6} /> : "See More"}
-        </Button>
+
+      <div ref={lazyRef} style={{ width: 1, height: 1, marginTop: 50 }}></div>
+
+      {showLoader && (
+        <SyncLoader
+          size={13}
+          margin={10}
+          style={
+            renderFullMap
+              ? { margin: "0 0 15px 32%" }
+              : { margin: "0 0 15px 45%" }
+          }
+        />
       )}
     </Box>
   );

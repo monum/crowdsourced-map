@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { FormControl, Select, InputLabel, MenuItem, Grow } from "@mui/material";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  FormLabel,
+  RadioGroup,
+  Radio,
+} from "@mui/material";
 
 import useStyles from "./styles";
 
@@ -21,24 +29,22 @@ const Sort = () => {
   };
 
   return (
-    <Grow in={delayedEffect}>
-      <FormControl>
-        <InputLabel>Sort By</InputLabel>
-        <Select
-          labelId="projects sort"
-          value={sort}
-          label="Sort"
-          variant="standard"
-          className={classes.select}
-          onChange={handleChange}
-          autoWidth
-        >
-          <MenuItem value="Size">Size</MenuItem>
-          <MenuItem value="Top">Top</MenuItem>
-          <MenuItem value="Recent">Most Recent</MenuItem>
-        </Select>
-      </FormControl>
-    </Grow>
+    <FormControl>
+      <FormLabel>Sort By: </FormLabel>
+      <RadioGroup
+        aria-labelledby="Sort Projects"
+        defaultValue="top"
+        name="Sort Projects"
+      >
+        <FormControlLabel value="size" control={<Radio />} label="Size" />
+        <FormControlLabel value="top" control={<Radio />} label="Top" />
+        <FormControlLabel
+          value="recent"
+          control={<Radio />}
+          label="Most Recent"
+        />
+      </RadioGroup>
+    </FormControl>
   );
 };
 

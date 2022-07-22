@@ -25,7 +25,7 @@ const Search = () => {
     <div className={classes.searchContainer}>
       <Autocomplete
         options={options}
-        onSelect={(e) => dispatch(locationSelected(e.target.value))}
+        onChange={(_, value) => dispatch(locationSelected(value.name))}
         getOptionLabel={(option) => option.name}
         className={classes.searchBar}
         renderInput={(params) => (

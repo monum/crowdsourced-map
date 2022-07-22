@@ -8,7 +8,7 @@ export default makeStyles(() => ({
   app: {
     overflow: "hidden",
     display: "flex",
-    marginTop: 85,
-    height: "calc(100vh - 85px)",
+    marginTop: 72,
+    height: "calc(100vh - 72px)",
   },
 }));

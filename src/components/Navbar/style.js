@@ -4,18 +4,16 @@ export default makeStyles((theme) => ({
   navbar: {
     marginBottom: 30,
     backgroundColor: "#ffffff",
-    // height: ,
     fontWeight: "bold",
     fontSize: "1.05rem",
     flexDirection: "column",
   },
   box: {
-    paddingBottom: 10,
-    alignItems: "center",
-    width: "60%",
+    width: "80%",
     marginLeft: 25,
     justifyContent: "space-between",
-    padding: "10px 0",
+    alignItems: "center",
+    padding: "7px 0",
   },
   h1: {
     color: theme.palette.primary.main,
@@ -25,7 +23,7 @@ export default makeStyles((theme) => ({
     width: 350,
   },
   image: {
-    width: 65,
+    width: 58,
   },
   nav: {
     display: "flex",
@@ -44,5 +42,16 @@ export default makeStyles((theme) => ({
   },
   isActive: {
     color: theme.palette.primary.light,
+  },
+
+  filterIcon: {
+    display: "flex",
+    flexDirection: "column",
+    gap: -5,
+    height: 1,
+  },
+
+  filterButton: {
+    display: "flex",
   },
 }));

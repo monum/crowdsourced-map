@@ -6,3 +6,5 @@ export { default as SuggestProject } from "./SuggestProjectButton/SuggestProject
 export { default as Sort } from "./Sort/Sort";
 export { default as Flap } from "./Flap/Flap";
 export { default as SearchProjects } from "./SearchProjects/SearchProjects";
+export { default as ProjectMarker } from "./ProjectMarker/ProjectMarker";
+export { default as FilterModal } from "./FilterModal/FilterModal";
