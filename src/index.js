@@ -3,6 +3,8 @@ import ReactDom from "react-dom";
 import { Provider } from "react-redux";
 import { createTheme, duration, easing, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/es/integration/react";
 
 import { store } from "./app/store";
 import App from "./App";
@@ -67,12 +69,16 @@ const theme = createTheme({
   },
 });
 
+const persistor = persistStore(store);
+
 ReactDom.render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </ThemeProvider>,
   document.getElementById("root")

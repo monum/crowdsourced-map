@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import FileBase from "react-file-base64";
+import locationData from "../../Boston Locations Data/Boston_Neighborhoods.json";
+import * as turf from "@turf/turf";
 import { SyncLoader } from "react-spinners";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +27,7 @@ import { useAddProjectMutation } from "../../features/projects/projectsApi";
 import { useDeterminePageSize } from "../../hooks";
 import {
   setProjectDetails,
+  resetProjectDetails,
   submitProject,
   toggleSuggestingProject,
 } from "../../features/projects/newProjectSlice";
@@ -50,7 +53,9 @@ const trimAddress = (address = "") => {
 };
 
 const SuggestProject = () => {
-  const { coords, address } = useSelector((state) => state.newProject);
+  const { coords, address, title, description } = useSelector(
+    (state) => state.newProject
+  );
   const { renderFullMap } = useDeterminePageSize();
 
   const navigate = useNavigate();
@@ -59,13 +64,11 @@ const SuggestProject = () => {
   const { previousLocation } = useSelector((state) => state.utils);
 
   const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [projectTitle, setProjectTitle] = useState("");
   const [showCoords, setShowCoords] = useState(false);
 
   useEffect(() => {
     if (showCoords) {
-      if (!coords) return;
+      if (!coords.lat) return;
       return setLocation(
         `lat: ${coords.lat.toFixed(4)}, lng: ${coords.lng.toFixed(4)}`
       );
@@ -77,13 +80,13 @@ const SuggestProject = () => {
   }, [address, coords, showCoords]);
 
   const handleRedirect = () => {
-    dispatch(toggleSuggestingProject(false));
+    handleClearInput();
     navigate(previousLocation.pathname);
   };
 
   const handleClearInput = () => {
-    setProjectTitle("");
-    setDescription("");
+    dispatch(resetProjectDetails());
+    dispatch(toggleSuggestingProject(false));
     setLocation("");
   };
 
@@ -116,8 +119,10 @@ const SuggestProject = () => {
               fullWidth
               sx={{ marginBottom: 2 }}
               className={classes.textFeild}
-              value={projectTitle}
-              onChange={(e) => setProjectTitle(e.target.value)}
+              value={title}
+              onChange={(e) =>
+                dispatch(setProjectDetails({ title: e.target.value }))
+              }
             />
 
             <TextField
@@ -160,21 +165,19 @@ const SuggestProject = () => {
               sx={{ marginBottom: 2 }}
               className={classes.textFeild}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) =>
+                dispatch(setProjectDetails({ description: e.target.value }))
+              }
             />
           </FormControl>
-          <SubmitButton
-            handleClearInput={handleClearInput}
-            title={projectTitle}
-            description={description}
-          />
+          <SubmitButton handleClearInput={handleClearInput} />
         </CardContent>
       </Card>
     </div>
   );
 };
 
-const SubmitButton = ({ handleClearInput, title, description }) => {
+const SubmitButton = ({ handleClearInput }) => {
   const dispatch = useDispatch();
   const [addProject] = useAddProjectMutation();
   const { renderFullMap } = useDeterminePageSize();
@@ -184,21 +187,23 @@ const SubmitButton = ({ handleClearInput, title, description }) => {
 
   const [submitting, setSubmitting] = useState(false);
 
-  const handleUpdateState = () => {
-    dispatch(
-      setProjectDetails({
-        title,
-        description,
-      })
-    );
-  };
+  // const handleUpdateState = () => {
+  //   dispatch(
+  //     setProjectDetails({
+  //       title,
+  //       description,
+  //     })
+  //   );
+  // };
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    dispatch(submitProject());
     const addressData = projectsData.address.data;
-    console.log(addressData);
     const lat = projectsData.coords.lat;
     const lng = projectsData.coords.lng;
+
+    const neighborhood = getNeighborhood(lng, lat);
 
     const dateObj = new Date();
     const timestamp = () => Math.round(dateObj.getTime() / 1000);
@@ -211,16 +216,12 @@ const SubmitButton = ({ handleClearInput, title, description }) => {
       address: addressData,
       lat,
       lng,
-      title,
-      description,
       timestamp: timestamp(),
       date,
+      neighborhood,
     };
 
     const newProject = capitalizeKeys(project);
-
-    console.log(newProject);
-
     const action = await addProject({
       records: [
         {
@@ -254,6 +255,20 @@ const SubmitButton = ({ handleClearInput, title, description }) => {
       )}
     </Button>
   );
+};
+
+const getNeighborhood = (lng, lat) => {
+  const features = locationData.features;
+
+  const point = turf.point([
+    parseFloat(lng.toFixed(14)),
+    parseFloat(lat.toFixed(14)),
+  ]);
+  const neighborhood = features.find((feature) =>
+    turf.booleanWithin(point, feature)
+  );
+
+  return neighborhood?.properties.Name;
 };
 
 export default SuggestProject;

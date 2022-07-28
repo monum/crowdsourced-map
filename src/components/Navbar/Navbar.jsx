@@ -1,5 +1,6 @@
-import { AppBar, Typography, Box, Button } from "@mui/material";
+import { AppBar, Typography, Box, Button, Badge } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { FilterAltRounded } from "@mui/icons-material";
 
@@ -17,6 +18,7 @@ const navLinks = [
 const Navbar = () => {
   const classes = useStyles();
   const [showFilter, setShowFilter] = useState(false);
+  const { filteredData } = useSelector((store) => store.projects);
 
   const navClassName = (isActive) =>
     isActive ? `${classes.navLink} ${classes.isActive}` : classes.navLink;
@@ -51,17 +53,38 @@ const Navbar = () => {
           ))}
         </nav>
 
-        <Button
-          disableFocusRipple
-          disableElevation
-          startIcon={<FilterAltRounded />}
-          className={classes.filterButton}
-          onClick={() => setShowFilter(true)}
-        >
-          Filters
-        </Button>
+        {filteredData.length > 0 ? (
+          <Button
+            disableElevation
+            startIcon={<FilterAltRounded />}
+            className={classes.filterButton}
+            onClick={() => setShowFilter(true)}
+          >
+            <Badge
+              color="primary"
+              badgeContent={4}
+              sx={{ padding: "1px" }}
+              variant="dot"
+            >
+              Filters
+            </Badge>
+          </Button>
+        ) : (
+          <Button
+            disableElevation
+            startIcon={<FilterAltRounded />}
+            className={classes.filterButton}
+            onClick={() => setShowFilter(true)}
+          >
+            Filters
+          </Button>
+        )}
       </Box>
-      <FilterModal open={showFilter} onClose={() => setShowFilter(false)} />
+      <FilterModal
+        open={showFilter}
+        setOpen={setShowFilter}
+        onClose={() => setShowFilter(false)}
+      />
     </AppBar>
   );
 };

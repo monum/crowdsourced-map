@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import data from "../../Boston Locations Data/Boston_Neighborhoods.json";
+import * as turf from "@turf/turf";
 
 const initialState = {
   coords: { lat: null, lng: null },
@@ -7,7 +9,7 @@ const initialState = {
     isError: false,
     data: "",
   },
-
+  neighborhood: "",
   title: "",
   description: "",
   date: "",
@@ -21,6 +23,7 @@ export const newProjectSlice = createSlice({
 
   reducers: {
     setProjectDetails: (state, action) => {
+      if (!state.isActive) return;
       const { title, description, address, coords } = action.payload;
 
       state.title = title ?? state.title;
@@ -34,23 +37,37 @@ export const newProjectSlice = createSlice({
       state.address.data = address?.data ?? state.address.data;
     },
     submitProject: (state) => {
+      if (!state.isActive) return;
       const date = new Date();
       const timestamp = () => Math.round(date.getTime() / 1000);
+      const features = data.features;
+      const point = turf.point([
+        state.coords.lng.toFixed(14),
+        state.coords.lat.toFixed(14),
+      ]);
 
+      state.timestamp = timestamp();
       state.date = date.toLocaleDateString("en-US", {
         timeZone: "America/New_York",
       });
-      state.timestamp = timestamp;
+      state.neighborhood = features.find((feature) =>
+        turf.booleanWithin(point, feature)
+      )?.properties.Name;
     },
     toggleSuggestingProject: (state, action) => {
-      if (action.payload === true) state.isActive = true;
-      else if (action.payload === false) state.isActive = false;
-      else state.isActive = !state.isActive;
+      state.isActive = action.payload;
+    },
+    resetProjectDetails: (state) => {
+      Object.assign(state, initialState);
     },
   },
 });
 
-export const { setProjectDetails, toggleSuggestingProject, submitProject } =
-  newProjectSlice.actions;
+export const {
+  setProjectDetails,
+  toggleSuggestingProject,
+  submitProject,
+  resetProjectDetails,
+} = newProjectSlice.actions;
 
 export default newProjectSlice.reducer;

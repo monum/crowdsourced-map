@@ -16,6 +16,7 @@ const MainPage = () => {
   useEffect(() => {
     if (location.pathname !== "/projects/suggest-a-project")
       dispatch(toggleSuggestingProject(false));
+    else dispatch(toggleSuggestingProject(true));
   }, [location.pathname]);
 
   return (

@@ -17,10 +17,7 @@ const projectsApi = createApi({
   tagTypes: ["Projects"],
   endpoints: (builder) => ({
     getProjects: builder.query({
-      query: (props) =>
-        `&pageSize=${props?.pageSize || 3}&${
-          props?.offset ? "offset=" + props?.offset : ""
-        }`,
+      query: (props = {}) => getQuery(props),
       providesTags: ["Projects"],
     }),
     addProject: builder.mutation({
@@ -35,4 +32,40 @@ const projectsApi = createApi({
 
 export default projectsApi;
 
-export const { useGetProjectsQuery, useAddProjectMutation } = projectsApi;
+export const {
+  useGetProjectsQuery,
+  useAddProjectMutation,
+  useLazyGetProjectsQuery,
+} = projectsApi;
+
+const getQuery = ({ pageSize, offset, formula }) => {
+  let query = `&pageSize=${pageSize || 2}`;
+
+  if (offset) query += `&offset=${offset}`;
+  // if (formula) {
+  //   let neighborhoodString;
+  //   let nameString;
+
+  //   if (formula.neighborhood) {
+  //     neighborhoodString =
+  //       "OR(" +
+  //       formula.neighborhood.map((n, i) => `{Neighborhood} = '${n}'`) +
+  //       ")";
+  //   }
+  //   if (formula.name) {
+  //     nameString = "OR(" + formula.name.map((t, i) => `{Title} = '${t}'`) + ")";
+  //   }
+
+  //   const formulaString = `AND(${neighborhoodString ? neighborhoodString : ""}
+  //   ${neighborhoodString && nameString ? "," : ""}
+  //   ${nameString ? nameString : ""})`;
+
+  //   const encodedFormulaString = encodeURIComponent(formulaString);
+  //   query += "&filterByFormula=" + encodedFormulaString;
+  //   console.log(formulaString);
+  // }
+
+  // console.log(query);
+
+  return query;
+};

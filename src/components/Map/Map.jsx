@@ -1,12 +1,11 @@
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Map, { Marker, useMap } from "react-map-gl";
 
 import { useLocalStorage } from "../../hooks";
 import { ProjectMarker } from "../../components";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
-import { useGetProjectsQuery } from "../../features/projects/projectsApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
 import { setProjectDetails } from "../../features/projects/newProjectSlice";
 
@@ -16,19 +15,23 @@ function MapRoot() {
 
   const mapRef = useRef(null);
   const [viewState, setViewState] = useState({
-    longitude: getItem()?.lng ?? -70.9,
-    latitude: getItem()?.lat ?? 42.35,
+    longitude: getItem()?.longitude ?? -70.9,
+    latitude: getItem()?.latitude ?? 42.35,
     zoom: getItem()?.zoom || 8,
   });
 
+  useEffect(() => {
+    setItem(viewState);
+  }, [viewState]);
+
   const dispatch = useDispatch();
-  const { selectedLocation } = useSelector((state) => state.location);
-  const { isActive } = useSelector((state) => state.newProject);
-  const { data, isFetching, isError } = useGetProjectsQuery();
+  const { selectedLocation } = useSelector((store) => store.location);
+  const { isActive } = useSelector((store) => store.newProject);
+  const { data } = useSelector((store) => store.projects);
 
   useEffect(() => {
     if (!selectedLocation || !mapRef.current) return;
-    const { lng, lat } = selectedLocation.coords;
+    const { lng, lat } = selectedLocation;
     mapRef.current?.easeTo({ center: [lng, lat], zoom: 13.5, duration: 1500 });
 
     dispatch(locationSelected(null));
@@ -45,7 +48,7 @@ function MapRoot() {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >
-      {data?.records.map((record) => (
+      {data?.map((record) => (
         <ProjectMarker
           key={record.id}
           coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
@@ -61,9 +64,11 @@ const NewProjectMarker = ({ isActive }) => {
   const { current: map } = useMap();
   const [getAddressTrigger, addressData] = useLazyGetAddressQuery();
 
+  const { coords } = useSelector((store) => store.newProject);
+
   const [newProjectCoords, setNewProjectCoords] = useState({
-    lat: map.getCenter().lat,
-    lng: map.getCenter().lng,
+    lat: coords.lat || map.getCenter().lat,
+    lng: coords.lng || map.getCenter().lng,
   });
 
   useEffect(() => {
@@ -74,7 +79,7 @@ const NewProjectMarker = ({ isActive }) => {
         address: {
           isFetching: addressData.isFetching,
           isError: addressData.isError,
-          data: addressData.data.features[0]["place_name"],
+          data: addressData.data?.features[0]?.place_name,
         },
       })
     );

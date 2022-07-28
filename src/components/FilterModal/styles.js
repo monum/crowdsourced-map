@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   card: {
     margin: "5% auto",
     width: "60%",
-    height: "75%",
+    height: 580,
   },
   cardHeader: {
     color: theme.palette.primary.main,
@@ -19,8 +19,9 @@ export default makeStyles((theme) => ({
   cardFooter: {
     display: "flex",
     alignItems: "center",
-    paddingLeft: 10,
-    // height: 60,
+    width: "98%",
+    margin: "auto",
+    justifyContent: "space-between",
   },
   section: {
     borderBottom: `0.5px solid ${theme.palette.gray.regular}`,

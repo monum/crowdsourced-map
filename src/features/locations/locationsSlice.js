@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Location from "../../Boston Locations Data/Location";
 import data from "../../Boston Locations Data/Boston_Neighborhoods.json";
+import * as turf from "@turf/turf";
 
 const getNeighborhoods = () => {
   const neighborhoods = data.features.map(
@@ -9,7 +9,6 @@ const getNeighborhoods = () => {
 
   return neighborhoods.map((name, i) => ({
     label: { name, id: i },
-    coords: new Location(name).getCenter(),
   }));
 };
 
@@ -24,13 +23,16 @@ export const locationsSlice = createSlice({
 
   reducers: {
     locationSelected: (state, action) => {
-      if (action.payload)
-        state.selectedLocation = state.locationsData.find(
-          (location) => location.label.name === action.payload
+      if (action.payload) {
+        const featureCollection = data?.features.find(
+          ({ properties: { Name } }) => Name === action.payload
         );
-      else {
+
+        const coords = turf.center(featureCollection).geometry.coordinates;
+        state.selectedLocation = { lat: coords[1], lng: coords[0] };
+        console.log(coords);
+      } else {
         state.selectedLocation = null;
-        console.log("done");
       }
     },
   },
