@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import FileBase from "react-file-base64";
-import locationData from "../../Boston Locations Data/Boston_Neighborhoods.json";
 import * as turf from "@turf/turf";
 import { SyncLoader } from "react-spinners";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   Card,
   CardHeader,
@@ -22,6 +22,7 @@ import {
   SwitchLeftRounded,
 } from "@mui/icons-material";
 
+import locationData from "../../Boston Locations Data/Boston_Neighborhoods.json";
 import useStyles from "./styles";
 import { useAddProjectMutation } from "../../features/projects/projectsApi";
 import { useDeterminePageSize } from "../../hooks";
@@ -87,7 +88,6 @@ const SuggestProject = () => {
   const handleClearInput = () => {
     dispatch(resetProjectDetails());
     dispatch(toggleSuggestingProject(false));
-    setLocation("");
   };
 
   return (
@@ -115,6 +115,7 @@ const SuggestProject = () => {
             <TextField
               required
               label="Project Title"
+              placeholder="e.g. New Compost Bin"
               variant="standard"
               fullWidth
               sx={{ marginBottom: 2 }}
@@ -170,14 +171,17 @@ const SuggestProject = () => {
               }
             />
           </FormControl>
-          <SubmitButton handleClearInput={handleClearInput} />
+          <SubmitButton
+            handleClearInput={handleClearInput}
+            disabled={!!!title.trim()}
+          />
         </CardContent>
       </Card>
     </div>
   );
 };
 
-const SubmitButton = ({ handleClearInput }) => {
+const SubmitButton = ({ handleClearInput, disabled }) => {
   const dispatch = useDispatch();
   const [addProject] = useAddProjectMutation();
   const { renderFullMap } = useDeterminePageSize();
@@ -197,6 +201,8 @@ const SubmitButton = ({ handleClearInput }) => {
   // };
 
   const handleSubmit = async () => {
+    if (submitting || disabled) return;
+
     setSubmitting(true);
     dispatch(submitProject());
     const addressData = projectsData.address.data;
@@ -233,11 +239,11 @@ const SubmitButton = ({ handleClearInput }) => {
     });
 
     if (action.error) {
-      return alert("There was an error when uploading the project");
+      return toast.error("An error occurred please try again");
     }
 
+    toast.success("Your idea has been submitted for review");
     setSubmitting(false);
-    dispatch(toggleSuggestingProject(false));
     handleClearInput();
   };
 
@@ -245,6 +251,7 @@ const SubmitButton = ({ handleClearInput }) => {
     <Button
       variant="contained"
       color="primary"
+      disabled={disabled}
       sx={{ margin: "40px 0  40px 25% ", width: "50%", padding: "8px, 0" }}
       onClick={() => handleSubmit()}
     >

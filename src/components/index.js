@@ -8,3 +8,4 @@ export { default as Flap } from "./Flap/Flap";
 export { default as SearchProjects } from "./SearchProjects/SearchProjects";
 export { default as ProjectMarker } from "./ProjectMarker/ProjectMarker";
 export { default as FilterModal } from "./FilterModal/FilterModal";
+export { default as HomeContent } from "./HomeContent/HomeContent";

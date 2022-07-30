@@ -115,7 +115,7 @@ const FilterModal = ({ open, setOpen, onClose }) => {
 
   const handleShowResults = () => {
     setOpen(false);
-    navigate("/projects");
+    navigate("/crowdsourced-map/projects");
     if (nameFilters.length > 0 && neighborhoodFilters.length > 0)
       return handleClearAll();
     if (isFetching) return;

@@ -33,3 +33,19 @@ nav::-webkit-scrollbar {
   border-right: 1px solid rgba(0, 0, 0, 0.204);
   transition: all 1s ease-in-out;
 }
+
+.Toastify__progress-bar--success {
+  background-color: #288be4;
+}
+
+.Toastify__progress-bar--error {
+  background-color: #288be4;
+}
+
+.Toastify__toast-icon {
+  color: #288be4;
+}
+
+:root {
+  --toastify-color-progress-light--success: #288be4;
+}

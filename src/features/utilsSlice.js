@@ -14,8 +14,9 @@ export const utilsSlice = createSlice({
     setPreviousLocation: (state, action) => {
       state.previousLocation = action.payload;
     },
-    toggleFullSizeMap: (state) => {
-      state.fullSizeMap = !state.fullSizeMap;
+    toggleFullSizeMap: (state, action) => {
+      if (action.payload) state.fullSizeMap = action.payload;
+      else state.fullSizeMap = !state.fullSizeMap;
     },
     setFullSizeMap: (state, action) => {
       state.fullSizeMap = action.payload;

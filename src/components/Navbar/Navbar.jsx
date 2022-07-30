@@ -9,10 +9,10 @@ import { FilterModal } from "../";
 import useStyles from "./style";
 
 const navLinks = [
-  { name: "Home", link: "/" },
-  { name: "Projects", link: "/projects" },
-  { name: "About", link: "/about" },
-  { name: "Contact Us", link: "/contact" },
+  { name: "Home", link: "/crowdsourced-map/" },
+  { name: "Projects", link: "/crowdsourced-map/projects" },
+  { name: "About", link: "/crowdsourced-map/about" },
+  { name: "Contact Us", link: "/crowdsourced-map/contact" },
 ];
 
 const Navbar = () => {

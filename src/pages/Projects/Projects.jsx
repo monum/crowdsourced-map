@@ -31,7 +31,7 @@ const ProjectsContainer = () => {
 
   // const { isIntersecting: loadMore } = useIsInViewport(lazyRef);
 
-  const { data, status, filteredData } = useSelector((state) => state.projects);
+  const { data, status, filteredData } = useSelector((store) => store.projects);
 
   useEffect(() => {
     if (status.isFetching && !status.isLoading) setShowLoader(true);

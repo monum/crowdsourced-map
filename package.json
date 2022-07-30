@@ -1,6 +1,6 @@
 {
+  "homepage": "https://monum.github.io/crowdsourced-map",
   "name": "crowdsourced-map",
-  "homepage": "https://monum.github.io/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -25,6 +25,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.13.3",
+    "react-toastify": "^9.0.7",
     "redux-persist": "^6.0.0",
     "web-vitals": "^2.1.4"
   },

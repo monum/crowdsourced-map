@@ -1,16 +1,17 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles(() => ({
-  card: {
-    height: 400,
-  },
-  image: {
-    height: "61%",
-  },
-  CardContent: {
+  card: ({ home }) => ({
+    height: home ? 300 : 400,
+  }),
+  image: ({ home }) => ({
+    height: home ? "75%" : "61%",
+  }),
+  CardContent: ({ home }) => ({
+    // textAlign: home && "center",
     paddingLeft: 13,
     marginTop: 20,
-  },
+  }),
   info: {
     display: "flex",
     flexDirection: "column",

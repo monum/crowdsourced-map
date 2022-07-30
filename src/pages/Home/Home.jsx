@@ -1,11 +1,10 @@
 import { Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import useStyles from "./styles";
 import { setPreviousLocation } from "../../features/utilsSlice";
-import { toggleSuggestingProject } from "../../features/projects/newProjectSlice";
+import { HomeContent } from "../../components";
 
 const Home = () => {
   const classes = useStyles();
@@ -15,7 +14,7 @@ const Home = () => {
 
   const handleRedirect = () => {
     dispatch(setPreviousLocation(location));
-    navigate("projects/suggest-a-project");
+    navigate("/crowdsourced-map/projects/suggest-a-project");
   };
 
   return (
@@ -40,10 +39,7 @@ const Home = () => {
         Suggest an Idea
       </Button>
 
-      {/* <Typography
-          variant="subtitle1"
-          sx={{ margin: "auto", width: "50%", fontSize: 23 }}
-        ></Typography> */}
+      <HomeContent />
     </div>
   );
 };

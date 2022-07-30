@@ -27,7 +27,7 @@ function MapRoot() {
   const dispatch = useDispatch();
   const { selectedLocation } = useSelector((store) => store.location);
   const { isActive } = useSelector((store) => store.newProject);
-  const { data } = useSelector((store) => store.projects);
+  const { data, filteredData } = useSelector((store) => store.projects);
 
   useEffect(() => {
     if (!selectedLocation || !mapRef.current) return;
@@ -44,16 +44,25 @@ function MapRoot() {
       onMove={(e) => setViewState(e.viewState)}
       reuseMaps
       attributionControl={false}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "70vw", height: "100%" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >
-      {data?.map((record) => (
-        <ProjectMarker
-          key={record.id}
-          coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
-        />
-      ))}
+      {filteredData.length > 0 &&
+        filteredData.map((record) => (
+          <ProjectMarker
+            key={record.id}
+            coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
+          />
+        ))}
+
+      {!filteredData.length > 0 &&
+        data?.map((record) => (
+          <ProjectMarker
+            key={record.id}
+            coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
+          />
+        ))}
       {isActive && <NewProjectMarker isActive={isActive} />}
     </Map>
   );

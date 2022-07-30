@@ -39,7 +39,7 @@ export const {
 } = projectsApi;
 
 const getQuery = ({ pageSize, offset, formula }) => {
-  let query = `&pageSize=${pageSize || 2}`;
+  let query = `&pageSize=${pageSize || 100}`;
 
   if (offset) query += `&offset=${offset}`;
   // if (formula) {

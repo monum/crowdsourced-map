@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 export default makeStyles((theme) => ({
   homeContainer: {
     width: "100%",
+    paddingBottom: 100,
   },
   suggestProjectButton: {
     width: "30%",

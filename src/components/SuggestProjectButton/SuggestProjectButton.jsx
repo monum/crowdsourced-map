@@ -30,7 +30,7 @@ const SuggestProjectButton = () => {
 
   const handleRedirect = () => {
     dispatch(setPreviousLocation(location));
-    navigate("/projects/suggest-a-project");
+    navigate("/crowdsourced-map/projects/suggest-a-project");
   };
 
   return (

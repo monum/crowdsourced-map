@@ -24,8 +24,8 @@ const trimAddress = (address = "") => {
   return addressArr.join(",");
 };
 
-const Project = ({ projectInfo, skeleton }) => {
-  const classes = useStyles();
+const Project = ({ projectInfo, skeleton, home }) => {
+  const classes = useStyles({ home });
   const { renderFullMap } = useDeterminePageSize();
   const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
 
@@ -59,15 +59,26 @@ const Project = ({ projectInfo, skeleton }) => {
             <Box className={classes.CardContent}>
               <Typography variant="h5">{projectInfo.Title}</Typography>
               <div className={classes.info}>
-                <span className={classes.infoContent}>
-                  <RoomOutlined fontSize="small" /> {address}
-                </span>
-                <span className={classes.infoContent}>
-                  <WatchLaterOutlined fontSize="small" /> Submitted{" "}
-                  {formatDistance(subDays(new Date(), 4), new Date(), {
-                    addSuffix: true,
-                  })}
-                </span>
+                {projectInfo.Address && (
+                  <span className={classes.infoContent}>
+                    <RoomOutlined fontSize="small" /> {address}
+                  </span>
+                )}
+                {projectInfo.Timestamp && (
+                  <span className={classes.infoContent}>
+                    <WatchLaterOutlined fontSize="small" /> Submitted{" "}
+                    {formatDistance(
+                      subDays(
+                        new Date(),
+                        new Date(projectInfo.Timestamp).getDay()
+                      ),
+                      new Date(),
+                      {
+                        addSuffix: true,
+                      }
+                    )}
+                  </span>
+                )}
               </div>
             </Box>
           </Card>
