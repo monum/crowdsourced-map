@@ -114,8 +114,9 @@ const FilterModal = ({ open, setOpen, onClose }) => {
   }, [isFetching]);
 
   const handleShowResults = () => {
+    if (!count) return;
     setOpen(false);
-    navigate("/crowdsourced-map/projects");
+    navigate("/crowdsourced-map");
     if (nameFilters.length > 0 && neighborhoodFilters.length > 0)
       return handleClearAll();
     if (isFetching) return;
@@ -175,7 +176,7 @@ const FilterModal = ({ open, setOpen, onClose }) => {
               color="primary"
               variant="contained"
               onClick={() => handleShowResults()}
-              disabled={isFetching}
+              disabled={isFetching || !count}
             >
               Show results ({count})
             </Button>

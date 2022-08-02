@@ -1,22 +1,28 @@
 import { makeStyles } from "@mui/styles";
 
-export default makeStyles(() => ({
-  card: ({ home }) => ({
-    height: home ? 300 : 400,
+export default makeStyles((theme) => ({
+  card: ({ home, expanded }) => ({
+    height: "fit-content",
+    // paddingBottom: 20,
   }),
   image: ({ home }) => ({
-    height: home ? "75%" : "61%",
+    height: home ? "75%" : 230,
+    marginBottom: 8,
   }),
-  CardContent: ({ home }) => ({
+  CardContent: {
     // textAlign: home && "center",
-    paddingLeft: 13,
-    marginTop: 20,
-  }),
+    // marginTop: ,
+    height: 80,
+    // paddingBottom: 20,
+  },
+  title: {
+    paddingLeft: 8,
+  },
   info: {
     display: "flex",
     flexDirection: "column",
     gap: 10,
-    marginTop: 15,
+    marginTop: 20,
     fontSize: "0.95rem",
   },
   infoContent: {
@@ -24,4 +30,11 @@ export default makeStyles(() => ({
     alignItems: "center",
     gap: 3.5,
   },
+  expandedIcon: ({ expanded }) => ({
+    transform: !expanded ? "rotate(0deg)" : "rotate(180deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+    }),
+  }),
 }));

@@ -14,7 +14,7 @@ const Home = () => {
 
   const handleRedirect = () => {
     dispatch(setPreviousLocation(location));
-    navigate("/crowdsourced-map/projects/suggest-a-project");
+    navigate("/crowdsourced-map/suggest-a-project");
   };
 
   return (

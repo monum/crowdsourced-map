@@ -22,6 +22,7 @@ const HomeContent = () => {
       const { Address, Description, Date, Timestamp, ...required } = {
         ...data[i].fields,
       };
+
       const obj = {
         id: data[i].id,
         fields: required,
@@ -40,7 +41,7 @@ const HomeContent = () => {
         </Typography>
         <Grid container columnSpacing={5} rowSpacing={5}>
           {neededData?.map(({ id, fields }) => (
-            <Project key={id} projectInfo={fields} home />
+            <Project key={id} projectInfo={{ id, fields }} home />
           ))}
         </Grid>
       </div>

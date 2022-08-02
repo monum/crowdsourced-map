@@ -38,7 +38,7 @@ const capitalizeKeys = (obj) => {
   for (let key in obj) {
     const newKey = key.charAt(0).toUpperCase() + key.slice(1);
 
-    newObj[newKey] = obj[key];
+    newObj[newKey] = obj[key].trim();
   }
 
   return newObj;
@@ -160,9 +160,11 @@ const SuggestProject = () => {
 
             <TextField
               multiline
-              label="Description(optional)"
+              label="Description"
+              required
               variant="standard"
               fullWidth
+              placeholder="please give us a little more detail"
               sx={{ marginBottom: 2 }}
               className={classes.textFeild}
               value={description}
@@ -173,7 +175,7 @@ const SuggestProject = () => {
           </FormControl>
           <SubmitButton
             handleClearInput={handleClearInput}
-            disabled={!!!title.trim()}
+            disabled={!!!title.trim() || !!!description.trim()}
           />
         </CardContent>
       </Card>
@@ -212,7 +214,7 @@ const SubmitButton = ({ handleClearInput, disabled }) => {
     const neighborhood = getNeighborhood(lng, lat);
 
     const dateObj = new Date();
-    const timestamp = () => Math.round(dateObj.getTime() / 1000);
+    const timestamp = () => dateObj.getTime();
     const date = dateObj.toLocaleDateString("en-US", {
       timeZone: "America/New_York",
     });

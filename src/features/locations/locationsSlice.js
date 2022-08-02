@@ -35,9 +35,15 @@ export const locationsSlice = createSlice({
         state.selectedLocation = null;
       }
     },
+    setLocationCoords: (state, action) => {
+      state.selectedLocation = {
+        lat: action.payload.lat,
+        lng: action.payload.lng,
+      };
+    },
   },
 });
 
-export const { locationSelected } = locationsSlice.actions;
+export const { locationSelected, setLocationCoords } = locationsSlice.actions;
 
 export default locationsSlice.reducer;

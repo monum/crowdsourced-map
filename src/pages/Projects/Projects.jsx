@@ -66,7 +66,7 @@ const ProjectsContainer = () => {
       {filteredData.length > 0 && (
         <Grid container rowSpacing={7} columnSpacing={4}>
           {filteredData.map(({ id, fields }) => (
-            <Project key={id} projectInfo={fields} />
+            <Project key={id} projectInfo={{ id, fields }} />
           ))}
         </Grid>
       )}
@@ -75,9 +75,11 @@ const ProjectsContainer = () => {
         <Grid container rowSpacing={7} columnSpacing={4}>
           {!status.isLoading
             ? data.map(({ id, fields }) => (
-                <Project key={id} projectInfo={fields} />
+                <Project key={id} projectInfo={{ id, fields }} />
               ))
-            : pageSize.map((_, i) => <Project key={i} skeleton />)}
+            : pageSize.map((_, i) => (
+                <Project key={i} skeleton projectInfo={{}} />
+              ))}
         </Grid>
       )}
 

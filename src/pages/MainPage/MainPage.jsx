@@ -14,7 +14,7 @@ const MainPage = () => {
   const classes = useStyles({ mainPageSize });
 
   useEffect(() => {
-    if (location.pathname !== "/crowdsourced-map/projects/suggest-a-project")
+    if (location.pathname !== "/crowdsourced-map/suggest-a-project")
       dispatch(toggleSuggestingProject(false));
     else dispatch(toggleSuggestingProject(true));
   }, [location.pathname]);
@@ -22,14 +22,13 @@ const MainPage = () => {
   return (
     <div className={classes.mainPage}>
       <Routes>
-        <Route path="/crowdsourced-map" element={<Home />} />
-        <Route path="/crowdsourced-map/about" element={<About />} />
-        <Route path="/crowdsourced-map/projects" element={<Projects />} />
+        <Route path="/crowdsourced-map" element={<Projects />} />
         <Route
-          path="/crowdsourced-map/projects/suggest-a-project"
+          path="/crowdsourced-map/suggest-a-project"
           element={<SuggestProject />}
         />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/crowdsourced-map/about" element={<About />} />
+        <Route path="/crowdsourced-map/contact" element={<Contact />} />
       </Routes>
     </div>
   );

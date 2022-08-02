@@ -1,5 +1,5 @@
 import { AppBar, Typography, Box, Button, Badge } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { FilterAltRounded } from "@mui/icons-material";
@@ -9,19 +9,23 @@ import { FilterModal } from "../";
 import useStyles from "./style";
 
 const navLinks = [
-  { name: "Home", link: "/crowdsourced-map/" },
-  { name: "Projects", link: "/crowdsourced-map/projects" },
+  { name: "Projects", link: "/crowdsourced-map/" },
   { name: "About", link: "/crowdsourced-map/about" },
   { name: "Contact Us", link: "/crowdsourced-map/contact" },
 ];
 
 const Navbar = () => {
   const classes = useStyles();
+  const location = useLocation();
   const [showFilter, setShowFilter] = useState(false);
   const { filteredData } = useSelector((store) => store.projects);
 
-  const navClassName = (isActive) =>
-    isActive ? `${classes.navLink} ${classes.isActive}` : classes.navLink;
+  const navClassName = (isActive, name) => {
+    return isActive ||
+      (name === "Projects" && location.pathname === "/crowdsourced-map")
+      ? `${classes.navLink} ${classes.isActive}`
+      : classes.navLink;
+  };
 
   return (
     <AppBar
@@ -45,7 +49,7 @@ const Navbar = () => {
           {navLinks.map(({ name, link }, i) => (
             <NavLink
               key={i}
-              className={({ isActive }) => navClassName(isActive)}
+              className={({ isActive }) => navClassName(isActive, name)}
               to={link}
             >
               {name}

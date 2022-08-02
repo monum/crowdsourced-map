@@ -1,9 +1,11 @@
 import { Paper, Divider, Typography } from "@mui/material";
+import { useDeterminePageSize } from "../../hooks";
 
 import useStyles from "./style";
 
 const About = () => {
-  const classes = useStyles();
+  const { renderFullMap } = useDeterminePageSize();
+  const classes = useStyles({ renderFullMap });
 
   return (
     <div>

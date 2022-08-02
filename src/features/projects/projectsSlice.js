@@ -10,6 +10,10 @@ const initialState = {
     error: false,
   },
   neighborhoodFilters: [],
+  selectedProject: {
+    id: "",
+    clickedMarker: false,
+  },
   nameFilters: [],
 };
 
@@ -42,6 +46,11 @@ export const projectsSlice = createSlice({
     setFilteredData: (state, action) => {
       state.filteredData = action.payload;
     },
+    setSelectedProject: (state, action) => {
+      state.selectedProject.id = action.payload.id ?? state.selectedProject.id;
+      state.selectedProject.clickedMarker =
+        action.payload.clickedMarker ?? state.selectedProject.clickedMarker;
+    },
   },
 });
 
@@ -52,6 +61,7 @@ export const {
   setNameFilters,
   setNeighborhoodFilters,
   setFilteredData,
+  setSelectedProject,
 } = projectsSlice.actions;
 
 export default projectsSlice.reducer;

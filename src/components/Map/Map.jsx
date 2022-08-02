@@ -3,15 +3,15 @@ import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Map, { Marker, useMap } from "react-map-gl";
 
-import { useLocalStorage } from "../../hooks";
 import { ProjectMarker } from "../../components";
+import { useLocalStorage, useDeterminePageSize } from "../../hooks";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
 import { setProjectDetails } from "../../features/projects/newProjectSlice";
 
 function MapRoot() {
   const { getItem, setItem } = useLocalStorage("defaultMapOptions");
-  const [zoom, setZoom] = useState(false);
+  const { renderFullMap } = useDeterminePageSize();
 
   const mapRef = useRef(null);
   const [viewState, setViewState] = useState({
@@ -32,7 +32,16 @@ function MapRoot() {
   useEffect(() => {
     if (!selectedLocation || !mapRef.current) return;
     const { lng, lat } = selectedLocation;
-    mapRef.current?.easeTo({ center: [lng, lat], zoom: 13.5, duration: 1500 });
+    let offset = [0, 0];
+
+    if (!renderFullMap) offset = [-280, 0];
+
+    mapRef.current?.easeTo({
+      center: [lng, lat],
+      zoom: 13.5,
+      duration: 1500,
+      offset,
+    });
 
     dispatch(locationSelected(null));
   }, [selectedLocation]);
@@ -52,6 +61,8 @@ function MapRoot() {
         filteredData.map((record) => (
           <ProjectMarker
             key={record.id}
+            title={record.Title}
+            id={record.id}
             coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
           />
         ))}
@@ -60,6 +71,8 @@ function MapRoot() {
         data?.map((record) => (
           <ProjectMarker
             key={record.id}
+            title={record.fields.Title}
+            id={record.id}
             coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
           />
         ))}
