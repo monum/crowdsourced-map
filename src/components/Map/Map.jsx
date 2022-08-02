@@ -17,7 +17,7 @@ function MapRoot() {
   const [viewState, setViewState] = useState({
     longitude: getItem()?.longitude ?? -70.9,
     latitude: getItem()?.latitude ?? 42.35,
-    zoom: getItem()?.zoom || 8,
+    zoom: getItem()?.zoom || 10,
   });
 
   useEffect(() => {
