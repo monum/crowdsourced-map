@@ -23,4 +23,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           BRANCH: gh-pages
-          FOLDER: dist
+          FOLDER: build
