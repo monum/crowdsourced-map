@@ -4,6 +4,8 @@ const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
+    breakPoint:
+      window.innerWidth > 890 ? "lg" : window.innerWidth < 600 ? "sm" : "md",
   });
 
   useEffect(() => {
@@ -11,6 +13,12 @@ const useWindowSize = () => {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
+        breakPoint:
+          window.innerWidth > 890
+            ? "lg"
+            : window.innerWidth < 600
+            ? "sm"
+            : "md",
       });
     };
 

@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 
 import useStyles from "./styles";
 import { setPreviousLocation } from "../../features/utilsSlice";
-import { HomeContent } from "../../components";
 
 const Home = () => {
   const classes = useStyles();
@@ -39,7 +38,7 @@ const Home = () => {
         Suggest an Idea
       </Button>
 
-      <HomeContent />
+      {/* <HomeContent /> */}
     </div>
   );
 };

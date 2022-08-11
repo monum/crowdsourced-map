@@ -4,26 +4,35 @@ import { Box, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
 import useStyles from "./styles";
-import { useDeterminePageSize, useIsInViewport } from "../../hooks";
+import {
+  useDeterminePageSize,
+  useIsInViewport,
+  useWindowSize,
+} from "../../hooks";
 import { Project } from "../../components";
 
 const Projects = () => {
-  const classes = useStyles();
+  const { breakPoint } = useWindowSize();
+  const classes = useStyles({ breakPoint });
 
   return (
     <div className={classes.main}>
-      <header className={classes.header}>
-        <Typography variant="h4" component="h1">
-          Submitted Projects
-        </Typography>
-      </header>
+      {breakPoint === "lg" && (
+        <header className={classes.header}>
+          <Typography variant="h4" component="h1">
+            Submitted Projects
+          </Typography>
+        </header>
+      )}
+
       <ProjectsContainer />
     </div>
   );
 };
 
 const ProjectsContainer = () => {
-  const classes = useStyles();
+  const { breakPoint } = useWindowSize();
+  const classes = useStyles({ breakPoint });
   const pageSize = [...Array(15).keys()];
   // const [offset, setOffset] = useState(null);
   const { renderFullMap } = useDeterminePageSize();

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import useStyles from "./globalStyles";
-import { Navbar } from "./components";
-import { useDeterminePageSize } from "./hooks";
+import { Navbar, BottomNav } from "./components";
+import { useDeterminePageSize, useWindowSize } from "./hooks";
 import { MapPage, MainPage } from "./pages/";
 import { useLazyGetProjectsQuery } from "./features/projects/projectsApi";
 import { setProjects, setStatus } from "./features/projects/projectsSlice";
@@ -14,10 +15,12 @@ import { toggleFullSizeMap } from "./features/utilsSlice";
 function App() {
   const globalClasses = useStyles();
   const dispatch = useDispatch();
+  const { width } = useWindowSize();
   const { isActive } = useSelector((store) => store.newProject);
   const { renderMainPage } = useDeterminePageSize();
   const [getProjectTrigger, getProjectsData] = useLazyGetProjectsQuery();
   const [offset, setOffset] = useState(0);
+  const hideMap = null;
 
   useEffect(() => {
     getProjectTrigger();
@@ -46,11 +49,30 @@ function App() {
   return (
     <div className={globalClasses.main}>
       <ToastContainer position="top-center" />
-      <Navbar />
-      <div className={globalClasses.app}>
-        {renderMainPage && <MainPage />}
-        <MapPage />
-      </div>
+
+      {width > 890 ? (
+        <>
+          <Navbar />
+          <div className={globalClasses.lgScreen}>
+            {renderMainPage && <MainPage />}
+            <MapPage />
+          </div>
+        </>
+      ) : (
+        <div className={globalClasses.smScreen}>
+          {!hideMap ? (
+            <>
+              <Navbar />
+              {width < 750 && <BottomNav />}
+              <div className={globalClasses.smScreenMainPage}>
+                <MainPage />
+              </div>
+            </>
+          ) : (
+            <MapPage />
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { FilterAltRounded } from "@mui/icons-material";
 
 import Logo from "../../images/mainLogo.svg";
 import { FilterModal } from "../";
+import { useWindowSize } from "../../hooks";
 import useStyles from "./style";
 
 const navLinks = [
@@ -15,8 +16,9 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const classes = useStyles();
   const location = useLocation();
+  const { width, breakPoint } = useWindowSize();
+  const classes = useStyles({ breakPoint, width });
   const [showFilter, setShowFilter] = useState(false);
   const { filteredData } = useSelector((store) => store.projects);
 
@@ -45,44 +47,37 @@ const Navbar = () => {
           BOSTON MAPS
         </Typography>
 
-        <nav className={classes.nav}>
-          {navLinks.map(({ name, link }, i) => (
-            <NavLink
-              key={i}
-              className={({ isActive }) => navClassName(isActive, name)}
-              to={link}
-            >
-              {name}
-            </NavLink>
-          ))}
-        </nav>
+        {width > 750 && (
+          <nav className={classes.nav}>
+            {navLinks.map(({ name, link }, i) => (
+              <NavLink
+                key={i}
+                className={({ isActive }) => navClassName(isActive, name)}
+                to={link}
+              >
+                {name}
+              </NavLink>
+            ))}
+          </nav>
+        )}
 
-        {filteredData.length > 0 ? (
-          <Button
-            disableElevation
-            startIcon={<FilterAltRounded />}
-            className={classes.filterButton}
-            onClick={() => setShowFilter(true)}
-          >
-            <Badge
-              color="primary"
-              badgeContent={4}
-              sx={{ padding: "1px" }}
-              variant="dot"
-            >
-              Filters
-            </Badge>
-          </Button>
-        ) : (
-          <Button
-            disableElevation
-            startIcon={<FilterAltRounded />}
-            className={classes.filterButton}
-            onClick={() => setShowFilter(true)}
+        <Button
+          disableElevation
+          startIcon={<FilterAltRounded />}
+          className={classes.filterButton}
+          onClick={() => setShowFilter(true)}
+        >
+          <Badge
+            invisible={filteredData.length > 0 ? false : true}
+            color="primary"
+            sh
+            badgeContent={4}
+            sx={{ padding: "1px" }}
+            variant="dot"
           >
             Filters
-          </Button>
-        )}
+          </Badge>
+        </Button>
       </Box>
       <FilterModal
         open={showFilter}

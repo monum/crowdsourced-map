@@ -114,13 +114,15 @@ const FilterModal = ({ open, setOpen, onClose }) => {
   }, [isFetching]);
 
   const handleShowResults = () => {
-    if (!count) return;
+    if (!count || isFetching) return;
     setOpen(false);
     navigate("/crowdsourced-map");
-    if (nameFilters.length > 0 && neighborhoodFilters.length > 0)
+
+    if (nameFilters.length === 0 && neighborhoodFilters.length === 0) {
       return handleClearAll();
-    if (isFetching) return;
-    dispatch(setFilteredData(filteredArr));
+    } else {
+      dispatch(setFilteredData(filteredArr));
+    }
   };
 
   return (

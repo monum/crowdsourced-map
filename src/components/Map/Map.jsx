@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Map, { Marker, useMap } from "react-map-gl";
 
-import { ProjectMarker } from "../../components";
+import { ProjectMarker } from "../";
 import { useLocalStorage, useDeterminePageSize } from "../../hooks";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
@@ -53,7 +53,7 @@ function MapRoot() {
       onMove={(e) => setViewState(e.viewState)}
       reuseMaps
       attributionControl={false}
-      style={{ width: "70vw", height: "100%" }}
+      style={{ width: "100%", height: "100%" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >

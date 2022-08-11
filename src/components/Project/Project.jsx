@@ -22,7 +22,7 @@ import {
 
 import useStyles from "./styles";
 import image from "../../images/pic1.jpg";
-import { useDeterminePageSize } from "../../hooks";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import { setLocationCoords } from "../../features/locations/locationsSlice";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
 
@@ -36,11 +36,12 @@ const trimAddress = (address = "") => {
 };
 
 const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
+  const { breakPoint } = useWindowSize();
   const dispatch = useDispatch();
   const { selectedProject } = useSelector((store) => store.projects);
   const { renderFullMap } = useDeterminePageSize();
   const [expanded, setExpanded] = useState(false);
-  const classes = useStyles({ home, expanded });
+  const classes = useStyles({ home, expanded, breakPoint });
   const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
 
   const address = trimAddress(fields?.Address);
@@ -76,7 +77,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
       item.parentElement.parentElement.parentElement.parentElement.parentElement
         .parentElement;
 
-    parentElement?.scroll({ top: item.offsetTop - 20, behavior: "smooth" });
+    parentElement?.scroll({ top: item.offsetTop - 20, behavior: "auto" });
     const timeout = setTimeout(() => {
       setExpanded(true);
     });
@@ -102,6 +103,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
         item
         lg={delayedEffect ? 11 : 4}
         md={delayedEffect ? 11 : 6}
+        sm={6}
         xs={11}
       >
         {skeleton ? (
@@ -122,7 +124,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                   className={classes.image}
                 />
                 <CardContent>
-                  <Box className={classes.CardContent}>
+                  <Box className={classes.cardContent}>
                     <Typography
                       variant="h5"
                       className={classes.title}
@@ -154,7 +156,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                   <ExpandMore className={classes.expandedIcon} />
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <CardContent>
+                  <CardContent className={classes.desctiption}>
                     <Typography variant="body2">
                       {fields.Description}
                     </Typography>

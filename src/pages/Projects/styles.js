@@ -1,16 +1,16 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
-  main: {
-    marginLeft: 40,
-    marginBottom: 100,
-    paddingBottom: 20,
+  main: ({ breakPoint }) => ({
+    margin: "auto",
+    marginLeft: breakPoint === "lg" && 40,
+    marginTop: breakPoint !== "lg" && 30,
     overflowY: "scroll",
     overflowX: "hidden",
     display: "flex",
     flexDirection: "column",
     gap: 15,
-  },
+  }),
   header: {
     display: "flex",
     width: "100%",
@@ -21,11 +21,13 @@ export default makeStyles((theme) => ({
     color: theme.palette.primary.light,
     borderBottom: `3px solid ${theme.palette.primary.light}`,
     paddingBottom: 10,
-    paddingTop: 5,
   },
 
-  projectsContainer: {
-    marginRight: 30,
+  projectsContainer: ({ breakPoint }) => ({
+    width: breakPoint !== "lg" && "93%",
+    padding: breakPoint === "sm" && "0 5.5%",
+    margin: breakPoint !== "lg" && "auto",
+    marginRight: breakPoint === "sm" ? 0 : "",
     minHeight: "fit-content",
-  },
+  }),
 }));

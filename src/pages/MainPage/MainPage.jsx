@@ -4,14 +4,15 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import useStyles from "./styles";
 import { toggleSuggestingProject } from "../../features/projects/newProjectSlice";
-import { useDeterminePageSize } from "../../hooks";
-import { About, Projects, SuggestProject, Home, Contact } from "../";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
+import { About, Projects, SuggestProject, Contact } from "../";
 
 const MainPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const { width } = useWindowSize();
   const { mainPageSize } = useDeterminePageSize();
-  const classes = useStyles({ mainPageSize });
+  const classes = useStyles({ mainPageSize, width });
 
   useEffect(() => {
     if (location.pathname !== "/crowdsourced-map/suggest-a-project")

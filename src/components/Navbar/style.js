@@ -8,30 +8,31 @@ export default makeStyles((theme) => ({
     fontSize: "1.05rem",
     flexDirection: "column",
   },
-  box: {
-    width: "80%",
+  box: ({ breakPoint }) => ({
+    width: breakPoint === "md" ? "90%" : "80%",
     marginLeft: 25,
     justifyContent: "space-between",
     alignItems: "center",
     padding: "7px 0",
-  },
+  }),
   h1: {
     color: theme.palette.primary.main,
     display: "flex",
     alignItems: "center",
     fontSize: "1.5rem",
-    width: 350,
+    minWidth: 225,
   },
   image: {
     width: 58,
   },
   nav: {
     display: "flex",
-    gap: 35,
+    gap: 50,
     justifyContent: "center",
     margin: "15px 0 10px 0",
     fontWeight: "bold",
     fontSize: "1.05rem",
+    minWidth: 300,
   },
 
   navLink: {
