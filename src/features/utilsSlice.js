@@ -1,9 +1,10 @@
-// This slice is used to manage states that wouldn't really make sense in an other slice
+// This slice is used to manage states that wouldn't really make sense in another slice
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   previousLocation: {},
   fullSizeMap: true,
+  hideMap: true,
 };
 
 export const utilsSlice = createSlice({
@@ -21,10 +22,17 @@ export const utilsSlice = createSlice({
     setFullSizeMap: (state, action) => {
       state.fullSizeMap = action.payload;
     },
+    setHideMap: (state, action) => {
+      state.hideMap = action.payload;
+    },
   },
 });
 
-export const { setPreviousLocation, toggleFullSizeMap, setFullSizeMap } =
-  utilsSlice.actions;
+export const {
+  setPreviousLocation,
+  toggleFullSizeMap,
+  setFullSizeMap,
+  setHideMap,
+} = utilsSlice.actions;
 
 export default utilsSlice.reducer;

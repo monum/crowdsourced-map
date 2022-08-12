@@ -9,7 +9,7 @@ export default makeStyles((theme) => ({
     flexDirection: "column",
   },
   box: ({ breakPoint }) => ({
-    width: breakPoint === "md" ? "90%" : "80%",
+    width: breakPoint === "md" || breakPoint === "sm" ? "91%" : "80%",
     marginLeft: 25,
     justifyContent: "space-between",
     alignItems: "center",

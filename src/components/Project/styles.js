@@ -15,6 +15,7 @@ export default makeStyles((theme) => ({
     // textAlign: home && "center",
     // marginTop: ,
     height: 80,
+    marginBottom: 10,
     // paddingBottom: 20,
   },
   // desctiption: ({ width }) => ({
@@ -42,4 +43,8 @@ export default makeStyles((theme) => ({
       duration: theme.transitions.duration.shortest,
     }),
   }),
+  mapLink: {
+    color: theme.palette.primary.light,
+    padding: 5,
+  },
 }));

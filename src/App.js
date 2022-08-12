@@ -16,14 +16,15 @@ function App() {
   const globalClasses = useStyles();
   const dispatch = useDispatch();
   const { width } = useWindowSize();
+  const { hideMap } = useSelector((store) => store.utils);
   const { isActive } = useSelector((store) => store.newProject);
   const { renderMainPage } = useDeterminePageSize();
   const [getProjectTrigger, getProjectsData] = useLazyGetProjectsQuery();
   const [offset, setOffset] = useState(0);
-  const hideMap = null;
 
   useEffect(() => {
     getProjectTrigger();
+    console.log("h: ", hideMap);
   }, []);
 
   useEffect(() => {
@@ -60,16 +61,19 @@ function App() {
         </>
       ) : (
         <div className={globalClasses.smScreen}>
-          {!hideMap ? (
-            <>
+          {hideMap ? (
+            <div className={globalClasses.smScreenContainer}>
               <Navbar />
               {width < 750 && <BottomNav />}
               <div className={globalClasses.smScreenMainPage}>
                 <MainPage />
               </div>
-            </>
+            </div>
           ) : (
-            <MapPage />
+            <div className={globalClasses.smScreenContainer}>
+              <MapPage />
+              <BottomNav />
+            </div>
           )}
         </div>
       )}

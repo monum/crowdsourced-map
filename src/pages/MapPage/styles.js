@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   mapPage: ({ mapSize }) => ({
     position: "relative",
     overflow: "hidden",
-    height: "100%",
+    height: "calc(100% - 57px)",
     width: `${mapSize}%`,
     transition: theme.transitions.presets.expandCollapseWidth,
   }),

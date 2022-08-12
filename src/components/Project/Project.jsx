@@ -13,6 +13,7 @@ import {
   Box,
   Skeleton,
   Grow,
+  ButtonBase,
   CardContent,
   CardActions,
   Collapse,
@@ -118,11 +119,11 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                 onClick={handleClick}
                 ref={ref}
               >
-                <CardMedia
+                {/* <CardMedia
                   src={image}
                   component="img"
                   className={classes.image}
-                />
+                /> */}
                 <CardContent>
                   <Box className={classes.cardContent}>
                     <Typography
@@ -152,7 +153,12 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                     </div>
                   </Box>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ marginTop: 2.5 }}>
+                  <ButtonBase onClick={() => console.log("clicked")}>
+                    <Typography className={classes.mapLink}>
+                      See on Map
+                    </Typography>
+                  </ButtonBase>
                   <ExpandMore className={classes.expandedIcon} />
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>

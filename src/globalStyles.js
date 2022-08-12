@@ -12,10 +12,13 @@ export default makeStyles((theme) => ({
     height: "calc(100vh - 72px)",
   },
   smScreen: {
-    // marginTop: 72,
-    height: "100vh",
+    overflow: "hidden",
   },
   smScreenMainPage: {
     marginTop: 72,
+  },
+  smScreenContainer: {
+    overflow: "hidden",
+    height: "100vh",
   },
 }));

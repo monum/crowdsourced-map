@@ -7,6 +7,12 @@ export default makeStyles(() => ({
     left: 0,
     right: 0,
     zIndex: 10,
-    padding: "5px 0",
+  },
+  mapNav: {
+    padding: "8.8px 0",
+    display: "flex",
+    width: "90%",
+    margin: "auto",
+    justifyContent: "space-between",
   },
 }));
