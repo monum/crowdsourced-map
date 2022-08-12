@@ -15,7 +15,6 @@ const BottomNav = () => {
   const classes = useStyles();
 
   const handleChange = (e, newVal) => {
-    console.log(e.target);
     setValue(newVal);
   };
   return (
