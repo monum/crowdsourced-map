@@ -9,3 +9,4 @@ export { default as SearchProjects } from "./SearchProjects/SearchProjects";
 export { default as ProjectMarker } from "./ProjectMarker/ProjectMarker";
 export { default as FilterModal } from "./FilterModal/FilterModal";
 export { default as BottomNav } from "./BottomNav/BottomNav";
+export { default as MiniProjectBox } from "./MiniProjectBox/MiniProjectBox";

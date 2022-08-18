@@ -1,13 +1,23 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Marker } from "react-map-gl";
-import { Tooltip } from "@mui/material";
+import {
+  Tooltip,
+  Typography,
+  Card,
+  CardActionArea,
+  ClickAwayListener,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { CircleNotificationsRounded as Circle } from "@mui/icons-material";
 
+import useStyles from "./styles";
+import { useWindowSize } from "../../hooks";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
 
 const ProjectMarker = ({ id, coords, title }) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
+  const { breakPoint } = useWindowSize();
   const [color, setColor] = useState("");
   const [size, setSize] = useState("medium");
   const { selectedProject } = useSelector((store) => store.projects);
@@ -19,30 +29,32 @@ const ProjectMarker = ({ id, coords, title }) => {
   }, [selectedProject]);
 
   const handleMarkerClick = () => {
-    dispatch(setSelectedProject({ clickedMarker: true, id }));
+    if (breakPoint === "lg")
+      dispatch(setSelectedProject({ clickedMarker: true, id }));
+    else {
+      // setShowProject(true);
+    }
   };
 
   return (
-    <Marker
-      latitude={coords.lat}
-      longitude={coords.lng}
-      onClick={handleMarkerClick}
-    >
-      <Tooltip
-        onMouseEnter={() => setSize("large")}
-        onMouseLeave={() => setSize("medium")}
-        sx={{ cursor: "pointer", padding: 0 }}
-        title={title}
-        arrow
+    <ClickAwayListener>
+      <Marker
+        latitude={coords.lat}
+        longitude={coords.lng}
+        onClick={handleMarkerClick}
       >
-        <Circle fontSize={size} color={color} />
-      </Tooltip>
-    </Marker>
+        <Tooltip
+          onMouseEnter={() => setSize("large")}
+          onMouseLeave={() => setSize("medium")}
+          className={classes.toolTip}
+          title={title}
+          arrow
+        >
+          <Circle fontSize={size} color={color} />
+        </Tooltip>
+      </Marker>
+    </ClickAwayListener>
   );
-};
-
-const ToolTipData = () => {
-  return <>My name</>;
 };
 
 export default ProjectMarker;
