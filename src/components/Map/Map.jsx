@@ -61,17 +61,17 @@ function MapRoot() {
         filteredData.map((record) => (
           <ProjectMarker
             key={record.id}
-            title={record.Title}
+            fields={record}
             id={record.id}
             coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
           />
         ))}
 
-      {!filteredData.length > 0 &&
+      {!(filteredData.length > 0) &&
         data?.map((record) => (
           <ProjectMarker
             key={record.id}
-            title={record.fields.Title}
+            fields={record.fields}
             id={record.id}
             coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
           />

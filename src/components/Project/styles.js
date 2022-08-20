@@ -1,26 +1,18 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
-  card: ({ expanded }) => ({
+  card: {
     height: "fit-content",
     margin: "auto",
-    // width: "100%",
-    // paddingBottom: 20,
-  }),
+  },
   image: {
     height: 230,
     marginBottom: 8,
   },
   cardContent: {
-    // textAlign: home && "center",
-    // marginTop: ,
     height: 80,
     marginBottom: 10,
-    // paddingBottom: 20,
   },
-  // desctiption: ({ width }) => ({
-  //   marginTop: width > 955 ? 0 : 30,
-  // }),
   title: {
     paddingLeft: 8,
   },

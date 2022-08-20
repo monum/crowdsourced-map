@@ -12,6 +12,7 @@ const initialState = {
   neighborhoodFilters: [],
   selectedProject: {
     id: "",
+    fields: {},
     clickedMarker: false,
   },
   nameFilters: [],
@@ -48,6 +49,8 @@ export const projectsSlice = createSlice({
     },
     setSelectedProject: (state, action) => {
       state.selectedProject.id = action.payload.id ?? state.selectedProject.id;
+      state.selectedProject.fields =
+        action.payload.fields ?? state.selectedProject.fields;
       state.selectedProject.clickedMarker =
         action.payload.clickedMarker ?? state.selectedProject.clickedMarker;
     },

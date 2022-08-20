@@ -14,7 +14,7 @@ import useStyles from "./styles";
 import { useWindowSize } from "../../hooks";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
 
-const ProjectMarker = ({ id, coords, title }) => {
+const ProjectMarker = ({ id, coords, fields }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { breakPoint } = useWindowSize();
@@ -24,36 +24,37 @@ const ProjectMarker = ({ id, coords, title }) => {
 
   useEffect(() => {
     if (!selectedProject?.id || id === selectedProject?.id) return setColor("");
+    if (breakPoint !== "lg") return;
 
     setColor("disabled");
   }, [selectedProject]);
 
   const handleMarkerClick = () => {
-    if (breakPoint === "lg")
-      dispatch(setSelectedProject({ clickedMarker: true, id }));
-    else {
-      // setShowProject(true);
-    }
+    // if (breakPoint === "lg")
+    dispatch(setSelectedProject({ clickedMarker: true, id, fields }));
+    // else {
+    //   // setShowProject(true);
+    // }
   };
 
   return (
-    <ClickAwayListener>
-      <Marker
-        latitude={coords.lat}
-        longitude={coords.lng}
-        onClick={handleMarkerClick}
+    // <ClickAwayListener >
+    <Marker
+      latitude={coords.lat}
+      longitude={coords.lng}
+      onClick={handleMarkerClick}
+    >
+      <Tooltip
+        onMouseEnter={() => setSize("large")}
+        onMouseLeave={() => setSize("medium")}
+        className={classes.toolTip}
+        title={fields?.Title}
+        arrow
       >
-        <Tooltip
-          onMouseEnter={() => setSize("large")}
-          onMouseLeave={() => setSize("medium")}
-          className={classes.toolTip}
-          title={title}
-          arrow
-        >
-          <Circle fontSize={size} color={color} />
-        </Tooltip>
-      </Marker>
-    </ClickAwayListener>
+        <Circle fontSize={size} color={color} />
+      </Tooltip>
+    </Marker>
+    // </ClickAwayListener>
   );
 };
 

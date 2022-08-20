@@ -4,7 +4,7 @@ import {
   RoomOutlined,
   WatchLaterOutlined,
   ExpandMore,
-} from "@mui/icons-material/";
+} from "@mui/icons-material";
 import {
   Card,
   Grid,
@@ -23,6 +23,7 @@ import {
 
 import useStyles from "./styles";
 import image from "../../images/pic1.jpg";
+import { setHideMap } from "../../features/utilsSlice";
 import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import { setLocationCoords } from "../../features/locations/locationsSlice";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
@@ -37,13 +38,13 @@ const trimAddress = (address = "") => {
 };
 
 const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
-  const { breakPoint } = useWindowSize();
   const dispatch = useDispatch();
-  const { selectedProject } = useSelector((store) => store.projects);
-  const { renderFullMap } = useDeterminePageSize();
+  const { breakPoint } = useWindowSize();
   const [expanded, setExpanded] = useState(false);
+  const { renderFullMap } = useDeterminePageSize();
   const classes = useStyles({ home, expanded, breakPoint });
   const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
+  const { selectedProject } = useSelector((store) => store.projects);
 
   const address = trimAddress(fields?.Address);
   useEffect(() => {
@@ -59,12 +60,15 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
   const handleClick = () => {
     if (expanded) {
       setExpanded(false);
-      return dispatch(setSelectedProject({ id: "" }));
+      return dispatch(setSelectedProject({ id: "", fields: {} }));
     }
 
     setExpanded(true);
     dispatch(setLocationCoords({ lat: fields.Lat, lng: fields.Lng }));
-    setTimeout(() => dispatch(setSelectedProject({ id })));
+
+    if (breakPoint === "lg") {
+      setTimeout(() => dispatch(setSelectedProject({ id, fields })));
+    }
   };
 
   useEffect(() => {
@@ -90,8 +94,8 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
 
   const handleClickAway = () => {
     if (expanded && selectedProject.id !== id) setExpanded(false);
-
-    dispatch(setSelectedProject({ id: "" }));
+    if (breakPoint === "lg")
+      dispatch(setSelectedProject({ id: "", fields: {} }));
   };
 
   const ref = useCallback((node) => {
@@ -154,11 +158,14 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                   </Box>
                 </CardContent>
                 <CardActions sx={{ marginTop: 2.5 }}>
-                  <ButtonBase onClick={() => console.log("clicked")}>
-                    <Typography className={classes.mapLink}>
-                      See on Map
-                    </Typography>
-                  </ButtonBase>
+                  {breakPoint !== "lg" && (
+                    <ButtonBase onClick={() => dispatch(setHideMap(false))}>
+                      <Typography className={classes.mapLink}>
+                        See on Map
+                      </Typography>
+                    </ButtonBase>
+                  )}
+
                   <ExpandMore className={classes.expandedIcon} />
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>

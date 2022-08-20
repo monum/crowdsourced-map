@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import useStyles from "./styles";
+import { useWindowSize } from "../../hooks";
 import { SearchProjects, Sort } from "../";
 import {
   setFilteredData,
@@ -23,7 +24,8 @@ import {
 } from "../../features/projects/projectsSlice";
 
 const FilterModal = ({ open, setOpen, onClose }) => {
-  const classes = useStyles();
+  const { breakPoint, width } = useWindowSize();
+  const classes = useStyles({ breakPoint, width });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [count, setCount] = useState(0);
