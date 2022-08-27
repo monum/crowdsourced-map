@@ -24,7 +24,6 @@ function App() {
 
   useEffect(() => {
     getProjectTrigger();
-    console.log("h: ", hideMap);
   }, []);
 
   useEffect(() => {

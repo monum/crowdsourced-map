@@ -24,6 +24,7 @@ import {
 
 import locationData from "../../Boston Locations Data/Boston_Neighborhoods.json";
 import useStyles from "./styles";
+import { setHideMap } from "../../features/utilsSlice";
 import { useAddProjectMutation } from "../../features/projects/projectsApi";
 import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import {
@@ -37,8 +38,7 @@ const capitalizeKeys = (obj) => {
   const newObj = {};
   for (let key in obj) {
     const newKey = key.charAt(0).toUpperCase() + key.slice(1);
-
-    newObj[newKey] = obj[key].trim();
+    newObj[newKey] = typeof obj[key] === "string" ? obj[key].trim() : obj[key];
   }
 
   return newObj;
@@ -83,6 +83,7 @@ const SuggestProject = () => {
 
   const handleRedirect = () => {
     handleClearInput();
+    dispatch(setHideMap(false));
     navigate(previousLocation.pathname);
   };
 
@@ -230,6 +231,7 @@ const SubmitButton = ({ handleClearInput, disabled }) => {
       neighborhood,
     };
 
+    console.log("here");
     const newProject = capitalizeKeys(project);
     const action = await addProject({
       records: [

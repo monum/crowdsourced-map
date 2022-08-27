@@ -5,16 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from "./styles";
 import { useEffect, useState } from "react";
-import { useWindowSize } from "../../hooks";
 import { setPreviousLocation } from "../../features/utilsSlice";
-import { toggleSuggestingProject } from "../../features/projects/newProjectSlice";
+import {
+  toggleSuggestingProject,
+  resetProjectDetails,
+} from "../../features/projects/newProjectSlice";
 
 const SuggestProjectButton = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
-  const { breakPoint } = useWindowSize();
   const [open, setOpen] = useState(false);
   const { isActive } = useSelector((store) => store.newProject);
 
@@ -36,7 +37,10 @@ const SuggestProjectButton = () => {
     navigate("/crowdsourced-map/suggest-a-project");
   };
 
-  const handleClose = () => {};
+  const handleClose = () => {
+    dispatch(resetProjectDetails());
+    dispatch(toggleSuggestingProject(false));
+  };
 
   return (
     <div className={classes.buttonContainer}>
@@ -62,7 +66,11 @@ const SuggestProjectButton = () => {
         )}
 
         {isActive && (
-          <Fab color="white" aria-label="Suggest a new Project">
+          <Fab
+            color="white"
+            aria-label="Suggest a new Project"
+            onClick={handleClose}
+          >
             <CloseRounded />
           </Fab>
         )}

@@ -100,7 +100,7 @@ const MiniProjectBox = ({ title, window }) => {
       position={position}
     >
       <Card className={classes.miniProjectBox} elevation={5}>
-        {!isActive && (
+        {!isActive && id && (
           <CardActionArea
             sx={{ height: "100%" }}
             onClick={() => setExpanded(!expanded)}
@@ -153,7 +153,7 @@ const MiniProjectBox = ({ title, window }) => {
           <>
             <CardHeader
               action={
-                <div onClick={handleRedirect}>
+                <div onClick={handleRedirect} onTouchEnd={handleRedirect}>
                   <Typography className={classes.suggestionAction}>
                     Verify Location
                   </Typography>
