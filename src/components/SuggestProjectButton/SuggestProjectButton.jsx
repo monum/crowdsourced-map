@@ -1,10 +1,11 @@
 import { Fab, Tooltip, ClickAwayListener } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { AddRounded, CloseRounded } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from "./styles";
 import { useEffect, useState } from "react";
+import { useWindowSize } from "../../hooks";
 import { setPreviousLocation } from "../../features/utilsSlice";
 import { toggleSuggestingProject } from "../../features/projects/newProjectSlice";
 
@@ -13,7 +14,9 @@ const SuggestProjectButton = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
+  const { breakPoint } = useWindowSize();
   const [open, setOpen] = useState(false);
+  const { isActive } = useSelector((store) => store.newProject);
 
   useEffect(() => {
     // eslint-disable-next-line no-unused-vars
@@ -33,25 +36,36 @@ const SuggestProjectButton = () => {
     navigate("/crowdsourced-map/suggest-a-project");
   };
 
+  const handleClose = () => {};
+
   return (
-    <div
-      className={classes.buttonContainer}
-      onClick={() => dispatch(toggleSuggestingProject(true))}
-    >
+    <div className={classes.buttonContainer}>
       <div onClick={handleRedirect}>
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Tooltip
-            title="Suggest a new Project"
-            open={open}
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-            arrow
-          >
-            <Fab color="white" aria-label="Suggest a new Project">
-              <Add />
-            </Fab>
-          </Tooltip>
-        </ClickAwayListener>
+        {!isActive && (
+          <ClickAwayListener onClickAway={() => setOpen(false)}>
+            <Tooltip
+              title="Suggest a new Project"
+              open={open}
+              onMouseEnter={() => setOpen(true)}
+              onMouseLeave={() => setOpen(false)}
+              arrow
+            >
+              <Fab
+                color="white"
+                aria-label="Suggest a new project"
+                onClick={() => dispatch(toggleSuggestingProject(true))}
+              >
+                <AddRounded />
+              </Fab>
+            </Tooltip>
+          </ClickAwayListener>
+        )}
+
+        {isActive && (
+          <Fab color="white" aria-label="Suggest a new Project">
+            <CloseRounded />
+          </Fab>
+        )}
       </div>
     </div>
   );

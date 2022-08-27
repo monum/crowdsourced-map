@@ -4,16 +4,26 @@ import { useSelector, useDispatch } from "react-redux";
 import Map, { Marker, useMap } from "react-map-gl";
 
 import { ProjectMarker } from "../";
-import { useLocalStorage, useDeterminePageSize } from "../../hooks";
+import {
+  useLocalStorage,
+  useDeterminePageSize,
+  useWindowSize,
+} from "../../hooks";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
 import { setProjectDetails } from "../../features/projects/newProjectSlice";
 
 function MapRoot() {
-  const { getItem, setItem } = useLocalStorage("defaultMapOptions");
-  const { renderFullMap } = useDeterminePageSize();
-
   const mapRef = useRef(null);
+  const dispatch = useDispatch();
+  const { breakPoint } = useWindowSize();
+  const { renderFullMap } = useDeterminePageSize();
+  const { getItem, setItem } = useLocalStorage("defaultMapOptions");
+
+  const { isActive } = useSelector((store) => store.newProject);
+  const { selectedLocation } = useSelector((store) => store.location);
+  const { data, filteredData } = useSelector((store) => store.projects);
+
   const [viewState, setViewState] = useState({
     longitude: getItem()?.longitude ?? -70.9,
     latitude: getItem()?.latitude ?? 42.35,
@@ -24,17 +34,12 @@ function MapRoot() {
     setItem(viewState);
   }, [viewState]);
 
-  const dispatch = useDispatch();
-  const { selectedLocation } = useSelector((store) => store.location);
-  const { isActive } = useSelector((store) => store.newProject);
-  const { data, filteredData } = useSelector((store) => store.projects);
-
   useEffect(() => {
     if (!selectedLocation || !mapRef.current) return;
     const { lng, lat } = selectedLocation;
     let offset = [0, 0];
 
-    if (!renderFullMap) offset = [-280, 0];
+    if (renderFullMap === false && breakPoint === "lg") offset = [-280, 0];
 
     mapRef.current?.easeTo({
       center: [lng, lat],
@@ -61,7 +66,7 @@ function MapRoot() {
         filteredData.map((record) => (
           <ProjectMarker
             key={record.id}
-            fields={record}
+            fields={record.fields}
             id={record.id}
             coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
           />

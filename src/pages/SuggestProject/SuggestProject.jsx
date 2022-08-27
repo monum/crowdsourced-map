@@ -25,7 +25,7 @@ import {
 import locationData from "../../Boston Locations Data/Boston_Neighborhoods.json";
 import useStyles from "./styles";
 import { useAddProjectMutation } from "../../features/projects/projectsApi";
-import { useDeterminePageSize } from "../../hooks";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import {
   setProjectDetails,
   resetProjectDetails,
@@ -58,10 +58,11 @@ const SuggestProject = () => {
     (state) => state.newProject
   );
   const { renderFullMap } = useDeterminePageSize();
+  const { breakPoint } = useWindowSize();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const classes = useStyles({ renderFullMap });
+  const classes = useStyles({ renderFullMap, breakPoint });
   const { previousLocation } = useSelector((state) => state.utils);
 
   const [location, setLocation] = useState("");

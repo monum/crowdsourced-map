@@ -40,22 +40,15 @@ const trimAddress = (address = "") => {
 const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
   const dispatch = useDispatch();
   const { breakPoint } = useWindowSize();
-  const [expanded, setExpanded] = useState(false);
   const { renderFullMap } = useDeterminePageSize();
-  const classes = useStyles({ home, expanded, breakPoint });
+
+  const [expanded, setExpanded] = useState(false);
   const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
+
+  const classes = useStyles({ home, expanded, breakPoint });
   const { selectedProject } = useSelector((store) => store.projects);
 
   const address = trimAddress(fields?.Address);
-  useEffect(() => {
-    const delayedTimeout = setTimeout(() => {
-      setDelayedEffect(renderFullMap);
-    }, 150);
-
-    return () => {
-      clearTimeout(delayedTimeout);
-    };
-  }, [renderFullMap]);
 
   const handleClick = () => {
     if (expanded) {
@@ -70,6 +63,35 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
       setTimeout(() => dispatch(setSelectedProject({ id, fields })));
     }
   };
+
+  const handleClickAway = () => {
+    if (expanded && selectedProject.id !== id) setExpanded(false);
+    if (breakPoint === "lg")
+      dispatch(setSelectedProject({ id: "", fields: {} }));
+  };
+
+  const handleSeeOnMap = () => {
+    setExpanded(true);
+    dispatch(setHideMap(false));
+    setTimeout(() => {
+      dispatch(setLocationCoords({ lat: fields.Lat, lng: fields.Lng }));
+      dispatch(setSelectedProject({ id, fields }));
+    }, 100);
+  };
+
+  const ref = useCallback((node) => {
+    node?.setAttribute("id", id);
+  }, []);
+
+  useEffect(() => {
+    const delayedTimeout = setTimeout(() => {
+      setDelayedEffect(renderFullMap);
+    }, 150);
+
+    return () => {
+      clearTimeout(delayedTimeout);
+    };
+  }, [renderFullMap]);
 
   useEffect(() => {
     if (!selectedProject?.clickedMarker || id !== selectedProject.id) return;
@@ -92,21 +114,11 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
     };
   }, [selectedProject]);
 
-  const handleClickAway = () => {
-    if (expanded && selectedProject.id !== id) setExpanded(false);
-    if (breakPoint === "lg")
-      dispatch(setSelectedProject({ id: "", fields: {} }));
-  };
-
-  const ref = useCallback((node) => {
-    node?.setAttribute("id", id);
-  }, []);
-
   return (
     <Grow in>
       <Grid
         item
-        lg={delayedEffect ? 11 : 4}
+        lg={delayedEffect ? 11 : 3.9}
         md={delayedEffect ? 11 : 6}
         sm={6}
         xs={11}
@@ -159,7 +171,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                 </CardContent>
                 <CardActions sx={{ marginTop: 2.5 }}>
                   {breakPoint !== "lg" && (
-                    <ButtonBase onClick={() => dispatch(setHideMap(false))}>
+                    <ButtonBase onClick={handleSeeOnMap}>
                       <Typography className={classes.mapLink}>
                         See on Map
                       </Typography>

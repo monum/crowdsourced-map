@@ -40,4 +40,23 @@ export default makeStyles((theme) => ({
       duration: theme.transitions.duration.shortest,
     }),
   }),
+  suggestionAction: {
+    color: theme.palette.primary.light,
+    cursor: "pointer",
+  },
+  suggestionDetails: {
+    marginTop: -20,
+  },
+  suggestionData: {
+    display: "flex",
+    alignItems: "center",
+    gap: 5,
+    width: "82%",
+  },
+  suggestionAddress: {
+    marginTop: 5,
+    display: "flex",
+    justifyContent: "space-between",
+    // justifyContent: "space-between",
+  },
 }));

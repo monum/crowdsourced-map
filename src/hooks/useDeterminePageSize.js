@@ -4,7 +4,7 @@ import { useWindowSize } from "./";
 
 const useDeterminePageSize = () => {
   const { fullSizeMap } = useSelector((state) => state.utils);
-  const { width } = useWindowSize();
+  const { width, breakPoint } = useWindowSize();
 
   const checkPageSize = () => {
     if (width < 890) return {};

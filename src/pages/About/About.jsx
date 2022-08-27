@@ -33,7 +33,7 @@ const About = () => {
           accurately pin point the location they'd like to see said projects.
           Residents can also see other exciting projects that have been approved
           for implementation by the city. This app was built with simplicity in
-          mind but if there is a feature you are not sure how to use, please
+          mind but if there is a feature you are not sure how to use it, please
           read the{" "}
           <span>
             {" "}

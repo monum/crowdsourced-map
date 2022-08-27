@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Draggable from "react-draggable";
+import { SyncLoader } from "react-spinners";
 import {
   RoomOutlined,
   WatchLaterOutlined,
   ExpandMore,
+  GpsNotFixedRounded,
 } from "@mui/icons-material";
 import {
   Card,
@@ -18,6 +21,12 @@ import {
 } from "@mui/material";
 
 import useStyles from "./styles";
+import { setSelectedProject } from "../../features/projects/projectsSlice";
+import { setPreviousLocation, setHideMap } from "../../features/utilsSlice";
+import {
+  toggleSuggestingProject,
+  resetProjectDetails,
+} from "../../features/projects/newProjectSlice";
 
 const offScreenX = 500;
 
@@ -31,28 +40,41 @@ const trimAddress = (address = "") => {
 };
 
 const MiniProjectBox = ({ title, window }) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [position, setPosition] = useState({ x: 500, y: 0, deltaX: 0 });
   const [expanded, setExpanded] = useState();
   const classes = useStyles({ expanded });
   const {
     selectedProject: { id, fields },
   } = useSelector((store) => store.projects);
+  const {
+    isActive,
+    coords,
+    address: suggestionAddress,
+  } = useSelector((store) => store.newProject);
 
   const address = trimAddress(fields?.Address);
+  const trimmedSuggestionAddress = trimAddress(suggestionAddress?.data);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id && !isActive) return;
 
     setPosition({ ...position, x: 0 });
-  }, [id]);
+  }, [id, isActive]);
 
   const handleDrag = () => {
-    if (position.deltaX > 0.35)
+    if (position.deltaX > 0.5) {
       setPosition({
         ...position,
         x: offScreenX,
       });
-    else {
+
+      dispatch(resetProjectDetails());
+      dispatch(toggleSuggestingProject(false));
+      dispatch(setSelectedProject({ id: "", fields: {} }));
+    } else {
       setPosition({
         ...position,
         x: 0,
@@ -60,63 +82,104 @@ const MiniProjectBox = ({ title, window }) => {
     }
   };
 
+  const handleRedirect = () => {
+    dispatch(setPreviousLocation(location));
+    navigate("/crowdsourced-map/suggest-a-project");
+    dispatch(setHideMap(true));
+  };
+
   return (
     // <Slide in={id} direction="up" {...handler}>
     <Draggable
       axis="x"
-      onDrag={(e, { lastX, deltaX, deltaY }) => {
+      onDrag={(e, { lastX, deltaX }) => {
+        console.log();
         setPosition({ x: lastX, y: 0, deltaX: deltaX });
       }}
       onStop={handleDrag}
       position={position}
     >
       <Card className={classes.miniProjectBox} elevation={5}>
-        <CardActionArea
-          sx={{ height: "100%" }}
-          onClick={() => setExpanded(!expanded)}
-        >
-          <CardHeader
-            title={
-              <Typography
-                variant="h5"
-                className={classes.title}
-                noWrap={!expanded}
-              >
-                {fields.Title}
+        {!isActive && (
+          <CardActionArea
+            sx={{ height: "100%" }}
+            onClick={() => setExpanded(!expanded)}
+          >
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  className={classes.title}
+                  noWrap={!expanded}
+                >
+                  {fields.Title}
+                </Typography>
+              }
+            />
+            <CardContent>
+              <Box className={classes.cardContent}>
+                <div className={classes.info}>
+                  {fields.Address && (
+                    <span className={classes.infoContent}>
+                      <RoomOutlined fontSize="small" />{" "}
+                      <Typography variant="body2" noWrap={!expanded}>
+                        {address}
+                      </Typography>
+                    </span>
+                  )}
+                  {fields.Timestamp && (
+                    <span className={classes.infoContent}>
+                      <WatchLaterOutlined fontSize="small" />
+                      <Typography variant="body2" noWrap={!expanded}>
+                        Submitted {formatTime(fields.Timestamp)}
+                      </Typography>
+                    </span>
+                  )}
+                </div>
+              </Box>
+            </CardContent>
+            <CardActions sx={{ marginTop: 2.5 }}>
+              <ExpandMore className={classes.expandedIcon} />
+            </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <CardContent className={classes.desctiption}>
+                <Typography variant="body2">{fields.Description}</Typography>
+              </CardContent>
+            </Collapse>
+          </CardActionArea>
+        )}
+
+        {isActive && (
+          <>
+            <CardHeader
+              action={
+                <div onClick={handleRedirect}>
+                  <Typography className={classes.suggestionAction}>
+                    Verify Location
+                  </Typography>
+                </div>
+              }
+            />
+            <CardContent className={classes.suggestionDetails}>
+              <Typography className={classes.suggestionData}>
+                <GpsNotFixedRounded />
+                lat: {coords?.lat?.toFixed(4)}, lng: {coords?.lng?.toFixed(4)}
               </Typography>
-            }
-          />
-          <CardContent>
-            <Box className={classes.cardContent}>
-              <div className={classes.info}>
-                {fields.Address && (
-                  <span className={classes.infoContent}>
-                    <RoomOutlined fontSize="small" />{" "}
-                    <Typography variant="body2" noWrap={!expanded}>
-                      {address}
-                    </Typography>
-                  </span>
-                )}
-                {fields.Timestamp && (
-                  <span className={classes.infoContent}>
-                    <WatchLaterOutlined fontSize="small" />
-                    <Typography variant="body2" noWrap={!expanded}>
-                      Submitted {formatTime(fields.Timestamp)}
-                    </Typography>
-                  </span>
+              <div className={classes.suggestionAddress}>
+                <Typography
+                  sx={{ marginTop: "5px" }}
+                  className={classes.suggestionData}
+                >
+                  <RoomOutlined />
+                  {trimmedSuggestionAddress}
+                </Typography>
+                {suggestionAddress?.isFetching && (
+                  <SyncLoader size={7} margin={4} style={{ marginBottom: 3 }} />
                 )}
               </div>
-            </Box>
-          </CardContent>
-          <CardActions sx={{ marginTop: 2.5 }}>
-            <ExpandMore className={classes.expandedIcon} />
-          </CardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent className={classes.desctiption}>
-              <Typography variant="body2">{fields.Description}</Typography>
             </CardContent>
-          </Collapse>
-        </CardActionArea>
+          </>
+        )}
       </Card>
     </Draggable>
     // </Slide>

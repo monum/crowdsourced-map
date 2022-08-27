@@ -73,7 +73,7 @@ const ProjectsContainer = () => {
   return (
     <Box className={classes.projectsContainer}>
       {filteredData.length > 0 && (
-        <Grid container rowSpacing={7} columnSpacing={4}>
+        <Grid container spacing={4}>
           {filteredData.map(({ id, fields }) => (
             <Project key={id} projectInfo={{ id, fields }} />
           ))}
@@ -81,7 +81,7 @@ const ProjectsContainer = () => {
       )}
 
       {!filteredData.length > 0 && (
-        <Grid container rowSpacing={7} columnSpacing={4}>
+        <Grid container spacing={4}>
           {!status.isLoading
             ? data.map(({ id, fields }) => (
                 <Project key={id} projectInfo={{ id, fields }} />

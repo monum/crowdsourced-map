@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -22,6 +22,7 @@ import { setHideMap } from "../../features/utilsSlice";
 
 const BottomNav = () => {
   const classes = useStyles();
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [value, setValue] = useState(" ");
@@ -29,11 +30,25 @@ const BottomNav = () => {
   const { hideMap } = useSelector((store) => store.utils);
   const { filteredData } = useSelector((store) => store.projects);
 
-  const handleChange = (e, newVal) => {
+  const handleChange = (_, newVal) => {
     if (newVal === "map") return;
     navigate(`/crowdsourced-map/${newVal}`);
     setValue(newVal);
   };
+
+  const handleSetValue = () => {
+    const path = location.pathname.split("/");
+    setValue(path[2] || " ");
+  };
+
+  useEffect(() => {
+    handleSetValue();
+  }, []);
+
+  useEffect(() => {
+    handleSetValue();
+  }, [hideMap]);
+
   return (
     <Paper className={classes.navContainer} elevation={10}>
       {hideMap ? (
