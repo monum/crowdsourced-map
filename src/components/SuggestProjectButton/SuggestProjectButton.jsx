@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./styles";
 import { useEffect, useState } from "react";
 import { setPreviousLocation } from "../../features/utilsSlice";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import {
   toggleSuggestingProject,
   resetProjectDetails,
@@ -13,24 +14,24 @@ import {
 
 const SuggestProjectButton = () => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+
+  const { width, breakPoint } = useWindowSize();
+  const { renderFullMap } = useDeterminePageSize();
   const { isActive } = useSelector((store) => store.newProject);
   const { previousLocation } = useSelector((store) => store.utils);
+  const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
 
   useEffect(() => {
-    // eslint-disable-next-line no-unused-vars
-    let isMounted = true;
+    setTimeout(() => setDelayedEffect(renderFullMap), 100);
+  }, [renderFullMap]);
 
-    setTimeout(() => {
-      setOpen(true);
-    }, 5000);
+  const classes = useStyles({ delayedEffect, width, breakPoint });
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    setTimeout(() => setOpen(true), 5000);
   }, []);
 
   const handleRedirect = () => {
