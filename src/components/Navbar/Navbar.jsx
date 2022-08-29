@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FilterAltRounded } from "@mui/icons-material";
 
 import Logo from "../../images/mainLogo.svg";
+import { APP_NAME } from "../../config";
 import { FilterModal } from "../";
 import { useWindowSize } from "../../hooks";
 import useStyles from "./style";
@@ -44,7 +45,7 @@ const Navbar = () => {
           className={classes.h1}
         >
           <img src={Logo} alt="" className={classes.image} />
-          BOSTON MAPS
+          {APP_NAME}
         </Typography>
 
         {width > 750 && (

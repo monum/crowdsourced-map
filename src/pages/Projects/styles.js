@@ -11,7 +11,7 @@ export default makeStyles((theme) => ({
     flexDirection: "column",
     gap: 15,
   }),
-  header: {
+  header: ({ mapSize }) => ({
     display: "flex",
     width: "100%",
     minWidth: 750,
@@ -21,7 +21,8 @@ export default makeStyles((theme) => ({
     color: theme.palette.primary.light,
     borderBottom: `3px solid ${theme.palette.primary.light}`,
     paddingBottom: 10,
-  },
+    fontSize: mapSize === 100 && 15,
+  }),
 
   projectsContainer: ({ breakPoint }) => ({
     width: breakPoint !== "lg" && "93%",

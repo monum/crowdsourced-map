@@ -21,7 +21,7 @@ import projectsReducer from "../features/projects/projectsSlice";
 const persistConfig = {
   key: "crowdsourced-map",
   storage,
-  whitelist: ["newProject"],
+  whitelist: ["newProject", "utils"],
 };
 
 const projectsPersistConfig = {

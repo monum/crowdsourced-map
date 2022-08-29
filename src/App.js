@@ -15,20 +15,14 @@ import { toggleFullSizeMap } from "./features/utilsSlice";
 function App() {
   const globalClasses = useStyles();
   const dispatch = useDispatch();
-  const { width } = useWindowSize();
+  const { width, breakPoint } = useWindowSize();
   const { hideMap } = useSelector((store) => store.utils);
   const { isActive } = useSelector((store) => store.newProject);
   const { renderMainPage } = useDeterminePageSize();
   const [getProjectTrigger, getProjectsData] = useLazyGetProjectsQuery();
   const [offset, setOffset] = useState(0);
 
-  useEffect(() => {
-    getProjectTrigger();
-  }, []);
-
-  useEffect(() => {
-    if (isActive) dispatch(toggleFullSizeMap(true));
-  }, [isActive]);
+  useEffect(() => getProjectTrigger(), []);
 
   useEffect(() => {
     if (getProjectsData.isUninitialized) return;
@@ -50,7 +44,7 @@ function App() {
     <div className={globalClasses.main}>
       <ToastContainer position="top-center" />
 
-      {width > 890 ? (
+      {breakPoint === "lg" ? (
         <>
           <Navbar />
           <div className={globalClasses.lgScreen}>

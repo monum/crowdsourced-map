@@ -20,6 +20,9 @@ const projectsApi = createApi({
       query: (props = {}) => getQuery(props),
       providesTags: ["Projects"],
     }),
+    getFilteredProjects: builder.query({
+      // query: (props = {}) => getQuery,
+    }),
     addProject: builder.mutation({
       query: (project) => ({
         method: "POST",
@@ -39,7 +42,9 @@ export const {
 } = projectsApi;
 
 const getQuery = ({ pageSize, offset, formula }) => {
-  let query = `&pageSize=${pageSize || 100}`;
+  let query = `&pageSize=${
+    pageSize || 100
+  }&filterByFormula=NOT(%7BApproved%7D%20%3D%20'')`;
 
   if (offset) query += `&offset=${offset}`;
   // if (formula) {

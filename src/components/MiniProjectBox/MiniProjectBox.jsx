@@ -46,6 +46,7 @@ const MiniProjectBox = ({ title, window }) => {
   const [position, setPosition] = useState({ x: 500, y: 0, deltaX: 0 });
   const [expanded, setExpanded] = useState();
   const classes = useStyles({ expanded });
+  const { previousLocation } = useSelector((store) => store.utils);
   const {
     selectedProject: { id, fields },
   } = useSelector((store) => store.projects);
@@ -74,6 +75,7 @@ const MiniProjectBox = ({ title, window }) => {
       dispatch(resetProjectDetails());
       dispatch(toggleSuggestingProject(false));
       dispatch(setSelectedProject({ id: "", fields: {} }));
+      navigate(previousLocation.pathname);
     } else {
       setPosition({
         ...position,

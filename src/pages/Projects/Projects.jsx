@@ -13,13 +13,19 @@ import { Project } from "../../components";
 
 const Projects = () => {
   const { breakPoint } = useWindowSize();
+  const { mapSize, renderMainPage } = useDeterminePageSize();
+  const { width } = useWindowSize();
   const classes = useStyles({ breakPoint });
 
   return (
     <div className={classes.main}>
       {breakPoint === "lg" && (
         <header className={classes.header}>
-          <Typography variant="h4" component="h1">
+          <Typography
+            variant="h4"
+            component="h1"
+            fontSize={width < 1155 && renderMainPage && 22}
+          >
             Submitted Projects
           </Typography>
         </header>

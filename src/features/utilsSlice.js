@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  previousLocation: {},
+  previousLocation: { pathname: "/crowdsourced-map/" },
   fullSizeMap: true,
   hideMap: true,
 };

@@ -7,7 +7,7 @@ const useDeterminePageSize = () => {
   const { width, breakPoint } = useWindowSize();
 
   const checkPageSize = () => {
-    if (width < 890) return {};
+    if (breakPoint !== "lg") return {};
 
     if (fullSizeMap) {
       if (width < 1155) {

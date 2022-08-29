@@ -18,6 +18,7 @@ const SuggestProjectButton = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const { isActive } = useSelector((store) => store.newProject);
+  const { previousLocation } = useSelector((store) => store.utils);
 
   useEffect(() => {
     // eslint-disable-next-line no-unused-vars
@@ -34,17 +35,19 @@ const SuggestProjectButton = () => {
 
   const handleRedirect = () => {
     dispatch(setPreviousLocation(location));
+    dispatch(toggleSuggestingProject(true));
     navigate("/crowdsourced-map/suggest-a-project");
   };
 
   const handleClose = () => {
     dispatch(resetProjectDetails());
     dispatch(toggleSuggestingProject(false));
+    navigate(previousLocation.pathname);
   };
 
   return (
     <div className={classes.buttonContainer}>
-      <div onClick={handleRedirect}>
+      <div>
         {!isActive && (
           <ClickAwayListener onClickAway={() => setOpen(false)}>
             <Tooltip
@@ -57,7 +60,7 @@ const SuggestProjectButton = () => {
               <Fab
                 color="white"
                 aria-label="Suggest a new project"
-                onClick={() => dispatch(toggleSuggestingProject(true))}
+                onClick={handleRedirect}
               >
                 <AddRounded />
               </Fab>

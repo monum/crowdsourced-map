@@ -9,6 +9,7 @@ import {
   useDeterminePageSize,
   useWindowSize,
 } from "../../hooks";
+import { MAP_STYLE } from "../../config";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
 import { setProjectDetails } from "../../features/projects/newProjectSlice";
@@ -59,7 +60,7 @@ function MapRoot() {
       reuseMaps
       attributionControl={false}
       style={{ width: "100%", height: "100%" }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapStyle={MAP_STYLE}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >
       {filteredData.length > 0 &&
@@ -89,6 +90,8 @@ function MapRoot() {
 const NewProjectMarker = ({ isActive }) => {
   const dispatch = useDispatch();
   const { current: map } = useMap();
+  const { breakPoint } = useWindowSize();
+  const { renderFullMap } = useDeterminePageSize();
   const [getAddressTrigger, addressData] = useLazyGetAddressQuery();
 
   const { coords } = useSelector((store) => store.newProject);
@@ -143,6 +146,9 @@ const NewProjectMarker = ({ isActive }) => {
       longitude={newProjectCoords.lng}
       latitude={newProjectCoords.lat}
       draggable
+      offset={
+        renderFullMap === false && breakPoint === "lg" ? [-280, 0] : [0, 0]
+      }
       onDrag={(e) => handleNewProjectUpdate("coords", e.lngLat)}
       onDragEnd={(e) => handleNewProjectUpdate("address", e.lngLat)}
     ></Marker>
