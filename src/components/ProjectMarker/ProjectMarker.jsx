@@ -24,7 +24,7 @@ const ProjectMarker = ({ id, coords, fields }) => {
 
   useEffect(() => {
     if (!selectedProject?.id || id === selectedProject?.id) return setColor("");
-    if (breakPoint !== "lg") return;
+    // if (breakPoint !== "lg") return;
 
     setColor("disabled");
   }, [selectedProject]);

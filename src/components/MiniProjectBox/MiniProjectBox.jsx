@@ -8,6 +8,7 @@ import {
   WatchLaterOutlined,
   ExpandMore,
   GpsNotFixedRounded,
+  CloseRounded,
 } from "@mui/icons-material";
 import {
   Card,
@@ -18,6 +19,7 @@ import {
   CardActionArea,
   CardContent,
   Typography,
+  IconButton,
 } from "@mui/material";
 
 import useStyles from "./styles";
@@ -39,7 +41,7 @@ const trimAddress = (address = "") => {
   return addressArr.join(",");
 };
 
-const MiniProjectBox = ({ title, window }) => {
+const MiniProjectBox = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,6 +67,13 @@ const MiniProjectBox = ({ title, window }) => {
     setPosition({ ...position, x: 0 });
   }, [id, isActive]);
 
+  const handleClose = () => {
+    dispatch(resetProjectDetails());
+    dispatch(toggleSuggestingProject(false));
+    dispatch(setSelectedProject({ id: "", fields: {} }));
+    navigate(previousLocation.pathname);
+  };
+
   const handleDrag = () => {
     if (position.deltaX > 0.5) {
       setPosition({
@@ -72,10 +81,7 @@ const MiniProjectBox = ({ title, window }) => {
         x: offScreenX,
       });
 
-      dispatch(resetProjectDetails());
-      dispatch(toggleSuggestingProject(false));
-      dispatch(setSelectedProject({ id: "", fields: {} }));
-      navigate(previousLocation.pathname);
+      handleClose();
     } else {
       setPosition({
         ...position,
@@ -94,8 +100,7 @@ const MiniProjectBox = ({ title, window }) => {
     // <Slide in={id} direction="up" {...handler}>
     <Draggable
       axis="x"
-      onDrag={(e, { lastX, deltaX }) => {
-        console.log();
+      onDrag={(_, { lastX, deltaX }) => {
         setPosition({ x: lastX, y: 0, deltaX: deltaX });
       }}
       onStop={handleDrag}
@@ -116,6 +121,11 @@ const MiniProjectBox = ({ title, window }) => {
                 >
                   {fields.Title}
                 </Typography>
+              }
+              action={
+                <IconButton onClick={handleClose}>
+                  <CloseRounded />
+                </IconButton>
               }
             />
             <CardContent>

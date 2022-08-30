@@ -125,7 +125,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
       >
         {skeleton ? (
           <Card className={classes.card} elevation={0}>
-            <Skeleton variant="rectangular" height={400} width={400} />
+            <Skeleton variant="rectangular" height={181} width={400} />
           </Card>
         ) : (
           <Card className={classes.card} elevation={5}>
@@ -150,22 +150,19 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                       {fields.Title}
                     </Typography>
                     <div className={classes.info}>
-                      {fields.Address && (
-                        <span className={classes.infoContent}>
-                          <RoomOutlined fontSize="small" />{" "}
-                          <Typography variant="body2" noWrap={!expanded}>
-                            {address}
-                          </Typography>
-                        </span>
-                      )}
-                      {fields.Timestamp && (
-                        <span className={classes.infoContent}>
-                          <WatchLaterOutlined fontSize="small" />
-                          <Typography variant="body2" noWrap={!expanded}>
-                            Submitted {formatTime(fields.Timestamp)}
-                          </Typography>
-                        </span>
-                      )}
+                      <span className={classes.infoContent}>
+                        <RoomOutlined fontSize="small" />{" "}
+                        <Typography variant="body2" noWrap={!expanded}>
+                          {address}
+                        </Typography>
+                      </span>
+
+                      <span className={classes.infoContent}>
+                        <WatchLaterOutlined fontSize="small" />
+                        <Typography variant="body2" noWrap={!expanded}>
+                          Submitted {formatTime(fields.Timestamp)}
+                        </Typography>
+                      </span>
                     </div>
                   </Box>
                 </CardContent>

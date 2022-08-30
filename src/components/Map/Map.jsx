@@ -57,6 +57,7 @@ function MapRoot() {
       {...viewState}
       ref={mapRef}
       onMove={(e) => setViewState(e.viewState)}
+      onResize={() => setViewState(viewState)}
       reuseMaps
       attributionControl={false}
       style={{ width: "100%", height: "100%" }}
@@ -95,7 +96,6 @@ const NewProjectMarker = ({ isActive }) => {
   const [getAddressTrigger, addressData] = useLazyGetAddressQuery();
 
   const { coords } = useSelector((store) => store.newProject);
-
   const [newProjectCoords, setNewProjectCoords] = useState({
     lat: coords.lat || map.getCenter().lat,
     lng: coords.lng || map.getCenter().lng,
@@ -146,6 +146,7 @@ const NewProjectMarker = ({ isActive }) => {
       longitude={newProjectCoords.lng}
       latitude={newProjectCoords.lat}
       draggable
+      style={{ zIndex: 10 }}
       offset={
         renderFullMap === false && breakPoint === "lg" ? [-280, 0] : [0, 0]
       }
