@@ -65,6 +65,7 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
   };
 
   const handleClickAway = () => {
+    if (breakPoint !== "lg") return;
     if (expanded && selectedProject.id !== id) setExpanded(false);
     if (breakPoint === "lg")
       dispatch(setSelectedProject({ id: "", fields: {} }));
