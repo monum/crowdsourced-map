@@ -53,6 +53,8 @@ const trimAddress = (address = "") => {
   return addressArr;
 };
 
+const toastId = "suggest-project-page-toast";
+
 const SuggestProject = () => {
   const { coords, address, title, description } = useSelector(
     (state) => state.newProject
@@ -212,7 +214,6 @@ const SubmitButton = ({ handleClearInput, disabled }) => {
     const addressData = projectsData.address.data;
     const lat = projectsData.coords.lat;
     const lng = projectsData.coords.lng;
-
     const neighborhood = getNeighborhood(lng, lat);
 
     const dateObj = new Date();
@@ -231,7 +232,6 @@ const SubmitButton = ({ handleClearInput, disabled }) => {
       neighborhood,
     };
 
-    console.log("here");
     const newProject = capitalizeKeys(project);
     const action = await addProject({
       records: [
@@ -247,7 +247,9 @@ const SubmitButton = ({ handleClearInput, disabled }) => {
       return toast.error("An error occurred please try again");
     }
 
-    toast.success("Your idea has been submitted for review");
+    toast.success("Your idea has been submitted for review", {
+      toastId,
+    });
     setSubmitting(false);
     handleClearInput();
   };

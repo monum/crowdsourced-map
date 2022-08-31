@@ -122,11 +122,11 @@ const MiniProjectBox = () => {
                   {fields.Title}
                 </Typography>
               }
-              action={
-                <IconButton onClick={handleClose}>
-                  <CloseRounded />
-                </IconButton>
-              }
+              // action={
+              //   <IconButton onClick={handleClose}>
+              //     <CloseRounded />
+              //   </IconButton>
+              // }
             />
             <CardContent>
               <Box className={classes.cardContent}>
