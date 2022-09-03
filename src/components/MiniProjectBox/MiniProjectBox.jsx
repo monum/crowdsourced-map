@@ -75,19 +75,18 @@ const MiniProjectBox = () => {
   };
 
   const handleDrag = () => {
-    if (position.deltaX > 0.5) {
-      setPosition({
-        ...position,
-        x: offScreenX,
-      });
-
-      handleClose();
-    } else {
-      setPosition({
-        ...position,
-        x: 0,
-      });
-    }
+    // if (position.deltaX > 0.5) {
+    //   setPosition({
+    //     ...position,
+    //     x: offScreenX,
+    //   });
+    //   handleClose();
+    // } else {
+    //   setPosition({
+    //     ...position,
+    //     x: 0,
+    //   });
+    // }
   };
 
   const handleRedirect = () => {
