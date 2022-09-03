@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import Map, { Marker, useMap } from "react-map-gl";
+import { useSelector, useDispatch } from "react-redux";
 
 import { ProjectMarker } from "../";
 import {
@@ -9,7 +9,7 @@ import {
   useDeterminePageSize,
   useWindowSize,
 } from "../../hooks";
-import { MAP_STYLE } from "../../config";
+import config from "../../app-config";
 import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
 import { locationSelected } from "../../features/locations/locationsSlice";
 import { setProjectDetails } from "../../features/projects/newProjectSlice";
@@ -61,7 +61,7 @@ function MapRoot() {
       reuseMaps
       attributionControl={false}
       style={{ width: "100%", height: "100%" }}
-      mapStyle={MAP_STYLE}
+      mapStyle={config.style}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >
       {filteredData.length > 0 &&

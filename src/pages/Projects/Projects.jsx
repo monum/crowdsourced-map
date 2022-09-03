@@ -100,7 +100,7 @@ const ProjectsContainer = () => {
 
       <div ref={lazyRef} style={{ width: 1, height: 1, marginTop: 50 }}></div>
 
-      {showLoader && (
+      {!showLoader && (
         <SyncLoader
           size={13}
           margin={10}

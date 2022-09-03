@@ -1,0 +1,14 @@
+{
+  "name": "BOSTON MAPS",
+  "style": "mapbox://styles/mapbox/streets-v11",
+  "SECRET_KEYS": {
+    "MAPBOX_API_KEY": {
+      "description": "The API key for the mapbox map",
+      "value": "REACT_APP_MAPBOX_ACESS_TOKEN"
+    },
+    "AIRTABLE_API_KEY": {
+      "description": "The API key for the airtable api used as the database",
+      "value": "REACT_APP_AIRTABLE_API_KEY"
+    }
+  }
+}

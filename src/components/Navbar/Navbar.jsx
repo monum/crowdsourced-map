@@ -1,14 +1,14 @@
-import { AppBar, Typography, Box, Button, Badge } from "@mui/material";
-import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { FilterAltRounded } from "@mui/icons-material";
+import { NavLink, useLocation } from "react-router-dom";
+import { AppBar, Typography, Box, Button, Badge } from "@mui/material";
 
-import Logo from "../../images/mainLogo.svg";
-import { APP_NAME } from "../../config";
+import useStyles from "./style";
 import { FilterModal } from "../";
 import { useWindowSize } from "../../hooks";
-import useStyles from "./style";
+import Logo from "../../images/mainLogo.svg";
+import config from "../../app-config.json";
 
 const navLinks = [
   { name: "Projects", link: "/crowdsourced-map/" },
@@ -45,7 +45,7 @@ const Navbar = () => {
           className={classes.h1}
         >
           <img src={Logo} alt="" className={classes.image} />
-          {APP_NAME}
+          {config.name}
         </Typography>
 
         {width > 750 && (
