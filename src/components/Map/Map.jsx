@@ -60,7 +60,7 @@ function MapRoot() {
       onResize={() => setViewState(viewState)}
       reuseMaps
       attributionControl={false}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%", height: "100%", overflow: "hidden" }}
       mapStyle={config.style}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >

@@ -94,6 +94,7 @@ const MiniProjectBox = () => {
         handleClose();
       } else setBottom(25);
     },
+    preventScrollOnSwipe: true,
   });
 
   const handleRedirect = () => {
