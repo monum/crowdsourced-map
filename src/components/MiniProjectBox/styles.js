@@ -1,14 +1,13 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
-  miniProjectBox: {
+  miniProjectBox: ({ bottom, width }) => ({
     position: "absolute",
     zIndex: 20,
     right: "4.5%",
-    bottom: 25,
-    width: 450,
-    // height: 185,
-  },
+    bottom,
+    width: width > 490 ? 450 : 370,
+  }),
   puller: {
     width: 30,
     height: 6,
@@ -57,6 +56,5 @@ export default makeStyles((theme) => ({
     marginTop: 5,
     display: "flex",
     justifyContent: "space-between",
-    // justifyContent: "space-between",
   },
 }));

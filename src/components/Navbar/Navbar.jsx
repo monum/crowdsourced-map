@@ -8,7 +8,7 @@ import useStyles from "./style";
 import { FilterModal } from "../";
 import { useWindowSize } from "../../hooks";
 import Logo from "../../images/mainLogo.svg";
-import config from "../../app-config.json";
+import config from "../../app-config";
 
 const navLinks = [
   { name: "Projects", link: "/crowdsourced-map/" },

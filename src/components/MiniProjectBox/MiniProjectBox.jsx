@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Draggable from "react-draggable";
+import { useSwipeable } from "react-swipeable";
 import { SyncLoader } from "react-spinners";
 import {
   RoomOutlined,
@@ -20,17 +21,17 @@ import {
   CardContent,
   Typography,
   IconButton,
+  Slide,
 } from "@mui/material";
 
 import useStyles from "./styles";
+import { useWindowSize } from "../../hooks";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
 import { setPreviousLocation, setHideMap } from "../../features/utilsSlice";
 import {
   toggleSuggestingProject,
   resetProjectDetails,
 } from "../../features/projects/newProjectSlice";
-
-const offScreenX = 500;
 
 const trimAddress = (address = "") => {
   const addressArr = address.split(",");
@@ -42,12 +43,15 @@ const trimAddress = (address = "") => {
 };
 
 const MiniProjectBox = () => {
+  const closeButton = useRef(null);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [position, setPosition] = useState({ x: 500, y: 0, deltaX: 0 });
+  const { width } = useWindowSize();
+  const [open, setOpen] = useState(true);
+  const [bottom, setBottom] = useState(25);
   const [expanded, setExpanded] = useState();
-  const classes = useStyles({ expanded });
+  const classes = useStyles({ expanded, bottom, width });
   const { previousLocation } = useSelector((store) => store.utils);
   const {
     selectedProject: { id, fields },
@@ -61,12 +65,6 @@ const MiniProjectBox = () => {
   const address = trimAddress(fields?.Address);
   const trimmedSuggestionAddress = trimAddress(suggestionAddress?.data);
 
-  useEffect(() => {
-    if (!id && !isActive) return;
-
-    setPosition({ ...position, x: 0 });
-  }, [id, isActive]);
-
   const handleClose = () => {
     dispatch(resetProjectDetails());
     dispatch(toggleSuggestingProject(false));
@@ -74,20 +72,29 @@ const MiniProjectBox = () => {
     navigate(previousLocation.pathname);
   };
 
-  const handleDrag = () => {
-    if (position.deltaX > 0.5) {
-      setPosition({
-        ...position,
-        x: offScreenX,
-      });
-      handleClose();
+  useEffect(() => {
+    if (isActive || id) {
+      setOpen(true);
+      setBottom(25);
     } else {
-      setPosition({
-        ...position,
-        x: 0,
-      });
+      setOpen(false);
     }
-  };
+  }, [id, isActive]);
+
+  const handler = useSwipeable({
+    onSwiping: (e) => {
+      if (e.dir === "Down" && e.velocity > 0.03)
+        setBottom((state) => state - e.velocity * 15);
+      else if (e.dir === "Up" && bottom < 25)
+        setBottom((state) => state + e.velocity * 100);
+    },
+    onSwiped: (e) => {
+      if ((e.velocity > 0.3 && e.dir === "Down") || bottom < -55) {
+        setOpen(false);
+        handleClose();
+      } else setBottom(25);
+    },
+  });
 
   const handleRedirect = () => {
     dispatch(setPreviousLocation(location));
@@ -95,21 +102,18 @@ const MiniProjectBox = () => {
     dispatch(setHideMap(true));
   };
 
+  const handleClick = (e) => {
+    if (closeButton.current.contains(e.target)) handleClose();
+    else setExpanded(!expanded);
+  };
+
   return (
-    // <Slide in={id} direction="up" {...handler}>
-    <Draggable
-      axis="x"
-      onDrag={(_, { lastX, deltaX }) => {
-        setPosition({ x: lastX, y: 0, deltaX: deltaX });
-      }}
-      // onStop={handleDrag}
-      position={position}
-    >
+    <Slide in={open} direction="up" {...handler}>
       <Card className={classes.miniProjectBox} elevation={5}>
         {!isActive && id && (
           <CardActionArea
-            sx={{ height: "100%" }}
-            onClick={() => setExpanded(!expanded)}
+            sx={{ height: "100%", cursor: "pointer" }}
+            onClick={handleClick}
           >
             <CardHeader
               title={
@@ -122,7 +126,7 @@ const MiniProjectBox = () => {
                 </Typography>
               }
               action={
-                <IconButton onClick={handleClose}>
+                <IconButton ref={closeButton}>
                   <CloseRounded />
                 </IconButton>
               }
@@ -192,8 +196,7 @@ const MiniProjectBox = () => {
           </>
         )}
       </Card>
-    </Draggable>
-    // </Slide>
+    </Slide>
   );
 };
 
