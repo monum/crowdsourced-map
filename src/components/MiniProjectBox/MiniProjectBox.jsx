@@ -75,18 +75,18 @@ const MiniProjectBox = () => {
   };
 
   const handleDrag = () => {
-    // if (position.deltaX > 0.5) {
-    //   setPosition({
-    //     ...position,
-    //     x: offScreenX,
-    //   });
-    //   handleClose();
-    // } else {
-    //   setPosition({
-    //     ...position,
-    //     x: 0,
-    //   });
-    // }
+    if (position.deltaX > 0.5) {
+      setPosition({
+        ...position,
+        x: offScreenX,
+      });
+      handleClose();
+    } else {
+      setPosition({
+        ...position,
+        x: 0,
+      });
+    }
   };
 
   const handleRedirect = () => {
@@ -102,7 +102,7 @@ const MiniProjectBox = () => {
       onDrag={(_, { lastX, deltaX }) => {
         setPosition({ x: lastX, y: 0, deltaX: deltaX });
       }}
-      onStop={handleDrag}
+      // onStop={handleDrag}
       position={position}
     >
       <Card className={classes.miniProjectBox} elevation={5}>
