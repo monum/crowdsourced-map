@@ -1,9 +1,4 @@
-import { useEffect, useState, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import Draggable from "react-draggable";
-import { useSwipeable } from "react-swipeable";
-import { SyncLoader } from "react-spinners";
+// imports from installed modules
 import {
   RoomOutlined,
   WatchLaterOutlined,
@@ -11,6 +6,7 @@ import {
   GpsNotFixedRounded,
   CloseRounded,
 } from "@mui/icons-material";
+
 import {
   Card,
   Box,
@@ -24,14 +20,22 @@ import {
   Slide,
 } from "@mui/material";
 
-import useStyles from "./styles";
-import { useWindowSize } from "../../hooks";
-import { setSelectedProject } from "../../features/projects/projectsSlice";
-import { setPreviousLocation, setHideMap } from "../../features/utilsSlice";
+import { SyncLoader } from "react-spinners";
+import { useSwipeable } from "react-swipeable";
+import { useEffect, useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+
+// imports from local folders
 import {
   toggleSuggestingProject,
   resetProjectDetails,
 } from "../../features/projects/newProjectSlice";
+
+import useStyles from "./styles";
+import { useWindowSize } from "../../hooks";
+import { setSelectedProject } from "../../features/projects/projectsSlice";
+import { setPreviousLocation, setHideMap } from "../../features/utilsSlice";
 
 const trimAddress = (address = "") => {
   const addressArr = address.split(",");

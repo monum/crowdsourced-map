@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import FileBase from "react-file-base64";
 import * as turf from "@turf/turf";
 import { SyncLoader } from "react-spinners";
 import { useSelector, useDispatch } from "react-redux";
