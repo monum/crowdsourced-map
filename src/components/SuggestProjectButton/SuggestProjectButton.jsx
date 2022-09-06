@@ -1,16 +1,18 @@
-import { Fab, Tooltip, ClickAwayListener } from "@mui/material";
-import { AddRounded, CloseRounded } from "@mui/icons-material";
-import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import { AddRounded, CloseRounded } from "@mui/icons-material";
+import { Fab, Tooltip, ClickAwayListener } from "@mui/material";
 
-import useStyles from "./styles";
-import { useEffect, useState } from "react";
-import { setPreviousLocation } from "../../features/utilsSlice";
-import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import {
   toggleSuggestingProject,
   resetProjectDetails,
-} from "../../features/projects/newProjectSlice";
+} from "../../features/suggestProject/newProjectSlice";
+
+import useStyles from "./styles";
+import config from "../../app-config.json";
+import { useEffect, useState } from "react";
+import { setPreviousLocation } from "../../features/utilsSlice";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 
 const SuggestProjectButton = () => {
   const dispatch = useDispatch();
@@ -25,22 +27,26 @@ const SuggestProjectButton = () => {
   const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
 
   useEffect(() => {
+    // move the button according to screen size
     setTimeout(() => setDelayedEffect(renderFullMap), 100);
   }, [renderFullMap]);
 
   const classes = useStyles({ delayedEffect, width, breakPoint });
 
   useEffect(() => {
+    // open the tool tip on load
     setTimeout(() => setOpen(true), 5000);
   }, []);
 
-  const handleRedirect = () => {
+  const handleSuggestProject = () => {
+    // navigate to the form for suggesting a project
     dispatch(setPreviousLocation(location));
     dispatch(toggleSuggestingProject(true));
-    navigate("/crowdsourced-map/suggest-a-project");
+    navigate(`${config.homepage}/suggest-a-project`);
   };
 
   const handleClose = () => {
+    // clear all data and stop the suggesting project process
     dispatch(resetProjectDetails());
     dispatch(toggleSuggestingProject(false));
     navigate(previousLocation.pathname);
@@ -61,7 +67,7 @@ const SuggestProjectButton = () => {
               <Fab
                 color="white"
                 aria-label="Suggest a new project"
-                onClick={handleRedirect}
+                onClick={handleSuggestProject}
               >
                 <AddRounded />
               </Fab>

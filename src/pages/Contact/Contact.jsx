@@ -1,17 +1,20 @@
-import { Paper, Divider, Typography, Box } from "@mui/material";
+// imports from installed modules
 import {
   EmailRounded,
   PhoneRounded,
   GitHub,
   BugReportRounded,
 } from "@mui/icons-material";
+import { Paper, Divider, Typography, Box } from "@mui/material";
 
-import { useDeterminePageSize, useWindowSize } from "../../hooks";
+// imports from local files
 import useStyles from "./style";
+import config from "../../app-config.json";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 
 const Contact = () => {
-  const { renderFullMap } = useDeterminePageSize();
   const { breakPoint } = useWindowSize();
+  const { renderFullMap } = useDeterminePageSize();
   const classes = useStyles({ renderFullMap, breakPoint });
 
   return (
@@ -42,10 +45,10 @@ const Contact = () => {
             </Typography>
             <div className={classes.icons}>
               <a
-                href="https://github.com/monum/crowdsourced-map"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={classes.link}
+                href={config.repository}
               >
                 <div className={classes.icon}>
                   <GitHub /> GitHub Repository
@@ -53,10 +56,10 @@ const Contact = () => {
               </a>
 
               <a
-                href="https://github.com/monum/crowdsourced-map/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={classes.link}
+                href={`${config.repository}/issues`}
               >
                 <div className={classes.icon}>
                   <BugReportRounded /> Report a Bug

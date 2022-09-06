@@ -1,15 +1,17 @@
+// imports from installed modules
 import React from "react";
 import ReactDom from "react-dom";
 import { Provider } from "react-redux";
-import { createTheme, duration, easing, ThemeProvider } from "@mui/material";
-import { BrowserRouter } from "react-router-dom";
 import { persistStore } from "redux-persist";
+import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/es/integration/react";
+import { createTheme, duration, easing, ThemeProvider } from "@mui/material";
 
-import { store } from "./app/store";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+// imports from local files
 import "./index.css";
+import App from "./App";
+import { store } from "./app/store";
+import reportWebVitals from "./reportWebVitals";
 
 const theme = createTheme({
   palette: {

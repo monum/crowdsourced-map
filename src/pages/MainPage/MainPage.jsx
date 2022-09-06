@@ -1,11 +1,14 @@
+// imports from installed modules
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Routes, Route, useLocation } from "react-router-dom";
 
+// imports from local files
 import useStyles from "./styles";
-import { toggleSuggestingProject } from "../../features/projects/newProjectSlice";
-import { useDeterminePageSize, useWindowSize } from "../../hooks";
+import config from "../../app-config.json";
 import { About, Projects, SuggestProject, Contact } from "../";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
+import { toggleSuggestingProject } from "../../features/suggestProject/newProjectSlice";
 
 const MainPage = () => {
   const location = useLocation();
@@ -15,7 +18,7 @@ const MainPage = () => {
   const classes = useStyles({ mainPageSize, width });
 
   useEffect(() => {
-    if (location.pathname !== "/crowdsourced-map/suggest-a-project")
+    if (location.pathname !== `${config.homepage}/suggest-a-project`)
       dispatch(toggleSuggestingProject(false));
     else dispatch(toggleSuggestingProject(true));
   }, [location.pathname]);
@@ -23,13 +26,13 @@ const MainPage = () => {
   return (
     <div className={classes.mainPage}>
       <Routes>
-        <Route path="/crowdsourced-map" element={<Projects />} />
+        <Route path={config.homepage} element={<Projects />} />
         <Route
-          path="/crowdsourced-map/suggest-a-project"
+          path={`${config.homepage}/suggest-a-project`}
           element={<SuggestProject />}
         />
-        <Route path="/crowdsourced-map/about" element={<About />} />
-        <Route path="/crowdsourced-map/contact" element={<Contact />} />
+        <Route path={`${config.homepage}/about`} element={<About />} />
+        <Route path={`${config.homepage}/contact`} element={<Contact />} />
       </Routes>
     </div>
   );

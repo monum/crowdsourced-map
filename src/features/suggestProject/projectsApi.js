@@ -1,10 +1,11 @@
+// this gets the projects data and submits the data for a suggested project
+import config from "../../app-config.json";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const projectsApi = createApi({
   reducerPath: "projectsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl:
-      "https://api.airtable.com/v0/appuilRrhQ6k2ut3l/Projects?view=Grid%20view&",
+    baseUrl: `${config.URL.AIRTABLE_URL.value}?view=Grid%20view&`,
     prepareHeaders: (headers) => {
       headers.set(
         "authorization",
@@ -19,9 +20,6 @@ const projectsApi = createApi({
     getProjects: builder.query({
       query: (props = {}) => getQuery(props),
       providesTags: ["Projects"],
-    }),
-    getFilteredProjects: builder.query({
-      // query: (props = {}) => getQuery,
     }),
     addProject: builder.mutation({
       query: (project) => ({
@@ -41,36 +39,12 @@ export const {
   useLazyGetProjectsQuery,
 } = projectsApi;
 
-const getQuery = ({ pageSize, offset, formula }) => {
+const getQuery = ({ pageSize, offset }) => {
   let query = `&pageSize=${
     pageSize || 100
   }&filterByFormula=NOT(%7BApproved%7D%20%3D%20'')`;
 
   if (offset) query += `&offset=${offset}`;
-  // if (formula) {
-  //   let neighborhoodString;
-  //   let nameString;
-
-  //   if (formula.neighborhood) {
-  //     neighborhoodString =
-  //       "OR(" +
-  //       formula.neighborhood.map((n, i) => `{Neighborhood} = '${n}'`) +
-  //       ")";
-  //   }
-  //   if (formula.name) {
-  //     nameString = "OR(" + formula.name.map((t, i) => `{Title} = '${t}'`) + ")";
-  //   }
-
-  //   const formulaString = `AND(${neighborhoodString ? neighborhoodString : ""}
-  //   ${neighborhoodString && nameString ? "," : ""}
-  //   ${nameString ? nameString : ""})`;
-
-  //   const encodedFormulaString = encodeURIComponent(formulaString);
-  //   query += "&filterByFormula=" + encodedFormulaString;
-  //   console.log(formulaString);
-  // }
-
-  // console.log(query);
 
   return query;
 };

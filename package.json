@@ -1,5 +1,6 @@
 {
   "homepage": "https://monum.github.io/crowdsourced-map",
+  "repository": "https://github.com/monum/crowdsourced-map",
   "name": "crowdsourced-map",
   "version": "0.1.0",
   "private": true,

@@ -1,19 +1,23 @@
+// imports from installed modules
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import { FilterAltRounded } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { AppBar, Typography, Box, Button, Badge } from "@mui/material";
 
+// imports from local files
 import useStyles from "./style";
+import config from "../../app-config.json";
+import Logo from "../../images/mainLogo.svg";
+
 import { FilterModal } from "../";
 import { useWindowSize } from "../../hooks";
-import Logo from "../../images/mainLogo.svg";
-import config from "../../app-config";
 
+// data required for each navivation link
 const navLinks = [
-  { name: "Projects", link: "/crowdsourced-map/" },
-  { name: "About", link: "/crowdsourced-map/about" },
-  { name: "Contact Us", link: "/crowdsourced-map/contact" },
+  { name: "Projects", link: `${config.homepage}/` },
+  { name: "About", link: `${config.homepage}/about` },
+  { name: "Contact Us", link: `${config.homepage}/contact` },
 ];
 
 const Navbar = () => {
@@ -21,11 +25,13 @@ const Navbar = () => {
   const { width, breakPoint } = useWindowSize();
   const classes = useStyles({ breakPoint, width });
   const [showFilter, setShowFilter] = useState(false);
+
   const { filteredData } = useSelector((store) => store.projects);
 
   const navClassName = (isActive, name) => {
+    // determine what the navigation link className will be
     return isActive ||
-      (name === "Projects" && location.pathname === "/crowdsourced-map")
+      (name === "Projects" && location.pathname === config.homepage)
       ? `${classes.navLink} ${classes.isActive}`
       : classes.navLink;
   };
@@ -49,6 +55,7 @@ const Navbar = () => {
         </Typography>
 
         {width > 750 && (
+          // display the navigation links
           <nav className={classes.nav}>
             {navLinks.map(({ name, link }, i) => (
               <NavLink
@@ -71,7 +78,6 @@ const Navbar = () => {
           <Badge
             invisible={filteredData.length > 0 ? false : true}
             color="primary"
-            sh
             badgeContent={4}
             sx={{ padding: "1px" }}
             variant="dot"

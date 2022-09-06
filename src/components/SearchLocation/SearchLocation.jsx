@@ -1,24 +1,22 @@
-import { Autocomplete, TextField } from "@mui/material";
+// imports from installed modules
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Autocomplete, TextField } from "@mui/material";
 
+// imports from local files
 import useStyles from "./styles";
 import { locationSelected } from "../../features/locations/locationsSlice";
 
-const Search = () => {
-  const dispatch = useDispatch();
+const SearchLocation = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { locationsData } = useSelector((state) => state.location);
 
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    let isMounted = true;
+    // set the autocomplete options
     setOptions(locationsData?.map((data) => data.label));
-
-    return () => {
-      isMounted = false;
-    };
   }, [locationsData]);
 
   return (
@@ -40,4 +38,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchLocation;

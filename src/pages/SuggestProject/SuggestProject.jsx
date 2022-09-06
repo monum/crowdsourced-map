@@ -1,9 +1,4 @@
-import { useState, useEffect } from "react";
-import * as turf from "@turf/turf";
-import { SyncLoader } from "react-spinners";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// imports from installed modules
 import {
   Card,
   CardHeader,
@@ -15,51 +10,41 @@ import {
   Button,
 } from "@mui/material";
 
+import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import { SyncLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+// imports from local files
 import {
   CloseRounded,
   SwitchRightRounded,
   SwitchLeftRounded,
 } from "@mui/icons-material";
 
-import locationData from "../../Boston Locations Data/Boston_Neighborhoods.json";
-import useStyles from "./styles";
-import { setHideMap } from "../../features/utilsSlice";
-import { useAddProjectMutation } from "../../features/projects/projectsApi";
-import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import {
   setProjectDetails,
   resetProjectDetails,
   submitProject,
   toggleSuggestingProject,
-} from "../../features/projects/newProjectSlice";
+} from "../../features/suggestProject/newProjectSlice";
 
-const capitalizeKeys = (obj) => {
-  const newObj = {};
-  for (let key in obj) {
-    const newKey = key.charAt(0).toUpperCase() + key.slice(1);
-    newObj[newKey] = typeof obj[key] === "string" ? obj[key].trim() : obj[key];
-  }
-
-  return newObj;
-};
-
-const trimAddress = (address = "") => {
-  const addressArr = address.split(",");
-
-  addressArr.pop(); // getting out "United States" from the address
-  if (addressArr.length > 2) addressArr.pop(); // getting out "Massachusetts" from the address
-
-  return addressArr;
-};
+import useStyles from "./styles";
+import { getNeighborhood } from "../../utils";
+import { setHideMap } from "../../features/utilsSlice";
+import { trimAddress, capitalizeKeys } from "../../utils";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
+import { useAddProjectMutation } from "../../features/suggestProject/projectsApi";
 
 const toastId = "suggest-project-page-toast";
 
 const SuggestProject = () => {
+  const { breakPoint } = useWindowSize();
+  const { renderFullMap } = useDeterminePageSize();
   const { coords, address, title, description } = useSelector(
     (state) => state.newProject
   );
-  const { renderFullMap } = useDeterminePageSize();
-  const { breakPoint } = useWindowSize();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -70,6 +55,7 @@ const SuggestProject = () => {
   const [showCoords, setShowCoords] = useState(false);
 
   useEffect(() => {
+    // update the address and coords fields
     if (showCoords) {
       if (!coords.lat) return;
       return setLocation(
@@ -79,16 +65,19 @@ const SuggestProject = () => {
 
     if (!address?.data) return;
     const trimmedAddress = trimAddress(address.data);
+    console.log();
     return setLocation(trimmedAddress);
   }, [address, coords, showCoords]);
 
-  const handleRedirect = () => {
+  const handleClose = () => {
+    // clear all data and stop suggesting project
     handleClearInput();
     dispatch(setHideMap(false));
     navigate(previousLocation.pathname);
   };
 
   const handleClearInput = () => {
+    // clear all fields
     dispatch(resetProjectDetails());
     dispatch(toggleSuggestingProject(false));
   };
@@ -99,7 +88,7 @@ const SuggestProject = () => {
         <CardHeader
           sx={renderFullMap ? { marginBottom: 4 } : { paddingLeft: 6.5 }}
           action={
-            <IconButton onClick={handleRedirect}>
+            <IconButton onClick={handleClose}>
               <CloseRounded />
             </IconButton>
           }
@@ -189,32 +178,25 @@ const SuggestProject = () => {
 const SubmitButton = ({ handleClearInput, disabled }) => {
   const dispatch = useDispatch();
   const [addProject] = useAddProjectMutation();
-  const { renderFullMap } = useDeterminePageSize();
   const { isActive, ...projectsData } = useSelector(
     (state) => state.newProject
   );
 
   const [submitting, setSubmitting] = useState(false);
 
-  // const handleUpdateState = () => {
-  //   dispatch(
-  //     setProjectDetails({
-  //       title,
-  //       description,
-  //     })
-  //   );
-  // };
-
   const handleSubmit = async () => {
+    // organize data and submit project
     if (submitting || disabled) return;
 
-    setSubmitting(true);
     dispatch(submitProject());
     const addressData = projectsData.address.data;
     const lat = projectsData.coords.lat;
     const lng = projectsData.coords.lng;
     const neighborhood = getNeighborhood(lng, lat);
+    if (!neighborhood)
+      return toast.error("The location you selected is outside Boston");
 
+    setSubmitting(true);
     const dateObj = new Date();
     const timestamp = () => dateObj.getTime();
     const date = dateObj.toLocaleDateString("en-US", {
@@ -270,35 +252,4 @@ const SubmitButton = ({ handleClearInput, disabled }) => {
   );
 };
 
-const getNeighborhood = (lng, lat) => {
-  const features = locationData.features;
-
-  const point = turf.point([
-    parseFloat(lng.toFixed(14)),
-    parseFloat(lat.toFixed(14)),
-  ]);
-  const neighborhood = features.find((feature) =>
-    turf.booleanWithin(point, feature)
-  );
-
-  return neighborhood?.properties.Name;
-};
-
 export default SuggestProject;
-
-/* <label htmlFor="contained-button-file">
-        <Input
-          accept="image/*"
-          id="contained-button-file"
-          multiple
-          type="file"
-          onChange={(e) => {
-            const file = URL.createObjectURL(e.target.files[0]);
-            setImage(file);
-          }}
-        />
-        <Button variant="contained" component="span">
-          Upload
-        </Button>
-        <img src={image} alt="img" />
-      </label> */

@@ -31,9 +31,6 @@ export default makeStyles((theme) => ({
   expandedIcon: ({ expanded }) => ({
     transform: !expanded ? "rotate(0deg)" : "rotate(180deg)",
     marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
   }),
   mapLink: {
     color: theme.palette.primary.light,

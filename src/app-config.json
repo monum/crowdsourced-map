@@ -1,6 +1,8 @@
 {
   "name": "BOSTON MAPS",
-  "style": "mapbox://styles/mapbox/streets-v11",
+  "homepage": "/crowdsourced-map",
+  "map-style": "mapbox://styles/mapbox/streets-v11",
+  "repository": "https://github.com/monum/crowdsourced-map",
   "SECRET_KEYS": {
     "MAPBOX_API_KEY": {
       "description": "The API key for the mapbox map",
@@ -9,6 +11,16 @@
     "AIRTABLE_API_KEY": {
       "description": "The API key for the airtable api used as the database",
       "value": "REACT_APP_AIRTABLE_API_KEY"
+    }
+  },
+  "URL": {
+    "MAP_BOX_URL": {
+      "description": "The mapbox URL the map uses",
+      "value": "https://api.mapbox.com/geocoding/v5/mapbox.places"
+    },
+    "AIRTABLE_URL": {
+      "description": "The Airtable URL used as the database",
+      "value": "https://api.airtable.com/v0/appuilRrhQ6k2ut3l/Projects"
     }
   }
 }

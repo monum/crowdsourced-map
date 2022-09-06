@@ -26,42 +26,38 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// imports from local folders
+// imports from local files
 import {
   toggleSuggestingProject,
   resetProjectDetails,
-} from "../../features/projects/newProjectSlice";
+} from "../../features/suggestProject/newProjectSlice";
 
 import useStyles from "./styles";
+import config from "../../app-config.json";
 import { useWindowSize } from "../../hooks";
+import { formatTime, trimAddress } from "../../utils";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
 import { setPreviousLocation, setHideMap } from "../../features/utilsSlice";
 
-const trimAddress = (address = "") => {
-  const addressArr = address.split(",");
-
-  addressArr.pop(); // getting out "United States" from the address
-  if (addressArr.length > 2) addressArr.pop(); // getting out "Massachusetts" from the address
-
-  return addressArr.join(",");
-};
-
 const MiniProjectBox = () => {
-  const closeButton = useRef(null);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const closeButton = useRef(null);
   const { width } = useWindowSize();
+
   const [open, setOpen] = useState(true);
   const [bottom, setBottom] = useState(25);
   const [expanded, setExpanded] = useState();
+
   const classes = useStyles({ expanded, bottom, width });
   const { previousLocation } = useSelector((store) => store.utils);
+
   const {
     selectedProject: { id, fields },
   } = useSelector((store) => store.projects);
   const {
-    isActive,
+    isActive: isSuggestingProject,
     coords,
     address: suggestionAddress,
   } = useSelector((store) => store.newProject);
@@ -70,6 +66,7 @@ const MiniProjectBox = () => {
   const trimmedSuggestionAddress = trimAddress(suggestionAddress?.data);
 
   const handleClose = () => {
+    // clear out the data and close the mini project box
     dispatch(resetProjectDetails());
     dispatch(toggleSuggestingProject(false));
     dispatch(setSelectedProject({ id: "", fields: {} }));
@@ -77,15 +74,17 @@ const MiniProjectBox = () => {
   };
 
   useEffect(() => {
-    if (isActive || id) {
+    // show the mini project box as need be
+    if (isSuggestingProject || id) {
       setOpen(true);
       setBottom(25);
     } else {
       setOpen(false);
     }
-  }, [id, isActive]);
+  }, [id, isSuggestingProject]);
 
   const handler = useSwipeable({
+    // setting the handler for the swipe to close feature
     onSwiping: (e) => {
       if (e.dir === "Down" && e.velocity > 0.03)
         setBottom((state) => state - e.velocity * 15);
@@ -101,13 +100,15 @@ const MiniProjectBox = () => {
     preventScrollOnSwipe: true,
   });
 
-  const handleRedirect = () => {
+  const handleVerifyLocation = () => {
+    // show the form for suggesting the project
     dispatch(setPreviousLocation(location));
-    navigate("/crowdsourced-map/suggest-a-project");
+    navigate(`${config.homepage}/suggest-a-project`);
     dispatch(setHideMap(true));
   };
 
   const handleClick = (e) => {
+    // expand the mini project box to see the project description
     if (closeButton.current.contains(e.target)) handleClose();
     else setExpanded(!expanded);
   };
@@ -115,7 +116,8 @@ const MiniProjectBox = () => {
   return (
     <Slide in={open} direction="up" {...handler}>
       <Card className={classes.miniProjectBox} elevation={5}>
-        {!isActive && id && (
+        {!isSuggestingProject && id && (
+          // we wanna show the selected project
           <CardActionArea
             sx={{ height: "100%", cursor: "pointer" }}
             onClick={handleClick}
@@ -169,11 +171,12 @@ const MiniProjectBox = () => {
           </CardActionArea>
         )}
 
-        {isActive && (
+        {isSuggestingProject && (
+          // we wanna show a box with location details of where the project marker is
           <>
             <CardHeader
               action={
-                <div onClick={handleRedirect} onTouchEnd={handleRedirect}>
+                <div onClick={handleVerifyLocation}>
                   <Typography className={classes.suggestionAction}>
                     Verify Location
                   </Typography>
@@ -203,46 +206,6 @@ const MiniProjectBox = () => {
       </Card>
     </Slide>
   );
-};
-
-const intervals = [
-  { label: "year", seconds: 31536000 },
-  { label: "month", seconds: 2592000 },
-  { label: "day", seconds: 86400 },
-  { label: "hour", seconds: 3600 },
-  { label: "minute", seconds: 60 },
-  { label: "second", seconds: 1 },
-];
-
-const month = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sept",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const formatTime = (dateNum) => {
-  const date = new Date(dateNum);
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-
-  if (seconds > 2592000) {
-    const dateString = `${date.getDate()} ${
-      month[date.getMonth()]
-    } ${date.getFullYear()}`;
-
-    return dateString;
-  }
-  const interval = intervals.find((i) => i.seconds < seconds);
-  const count = Math.floor(seconds / interval.seconds);
-  return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
 };
 
 export default MiniProjectBox;

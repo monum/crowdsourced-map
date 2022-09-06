@@ -10,7 +10,6 @@ export default makeStyles((theme) => ({
     overflowY: "scroll",
     overflowX: "hidden",
     position: "relative",
-    // padding: width > 890 ? "" : "0 0.5%",
     paddingTop: 10,
   }),
 }));

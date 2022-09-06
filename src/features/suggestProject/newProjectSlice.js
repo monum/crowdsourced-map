@@ -1,6 +1,7 @@
+// this slice holds all the data for that is being suggested
+import * as turf from "@turf/turf";
 import { createSlice } from "@reduxjs/toolkit";
 import data from "../../Boston Locations Data/Boston_Neighborhoods.json";
-import * as turf from "@turf/turf";
 
 const initialState = {
   coords: { lat: null, lng: null },
@@ -37,6 +38,7 @@ export const newProjectSlice = createSlice({
       state.address.data = address?.data ?? state.address.data;
     },
     submitProject: (state) => {
+      //  cleans up the data needed to submit a project
       if (!state.isActive) return;
       const date = new Date();
       const timestamp = () => Math.round(date.getTime() / 1000);

@@ -1,8 +1,9 @@
 // This slice is used to manage states that wouldn't really make sense in another slice
+import config from "../app-config.json";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  previousLocation: { pathname: "/crowdsourced-map/" },
+  previousLocation: { pathname: `${config.homepage}/` },
   fullSizeMap: true,
   hideMap: true,
 };

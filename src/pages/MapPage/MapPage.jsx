@@ -1,14 +1,14 @@
-import { Slide } from "@mui/material";
-import { useState } from "react";
+// imports from installed modules
+import { useRef } from "react";
 
+// imports from local files
 import {
   Map,
-  Search,
+  SearchLocation,
   SuggestProject,
   Flap,
   MiniProjectBox,
 } from "../../components";
-import { useRef } from "react";
 import useStyles from "./styles";
 import { useDeterminePageSize, useWindowSize } from "../../hooks";
 
@@ -20,13 +20,11 @@ const MapPage = () => {
 
   return (
     <div className={classes.mapPage} ref={ref}>
-      <Search />
+      <SearchLocation />
       <SuggestProject />
       <Map />
       {breakPoint !== "lg" && (
-        // <Slide in>
         <MiniProjectBox title={"name"} window={ref.current} />
-        // </Slide>
       )}
       {breakPoint === "lg" && <Flap />}
     </div>

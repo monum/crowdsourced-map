@@ -1,41 +1,55 @@
-import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
+// imports from installed modules
 import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+
+// imports from local files
+import {
+  useDeterminePageSize,
+  useWindowSize,
+  useNetworkStatus,
+  useLocalStorage,
+} from "./hooks";
 
 import useStyles from "./globalStyles";
-import { Navbar, BottomNav } from "./components";
-import { useDeterminePageSize, useWindowSize, useNetworkStatus } from "./hooks";
 import { MapPage, MainPage } from "./pages/";
-import { useLazyGetProjectsQuery } from "./features/projects/projectsApi";
+import { Navbar, BottomNav } from "./components";
 import { setProjects, setStatus } from "./features/projects/projectsSlice";
-import { toggleFullSizeMap } from "./features/utilsSlice";
+import { useLazyGetProjectsQuery } from "./features/suggestProject/projectsApi";
 
 const toastId = "app-page-toast";
 
 function App() {
-  const globalClasses = useStyles();
   const dispatch = useDispatch();
+  const globalClasses = useStyles();
   const { isOnline } = useNetworkStatus();
   const { width, breakPoint } = useWindowSize();
-  const { hideMap } = useSelector((store) => store.utils);
-  const { isActive } = useSelector((store) => store.newProject);
   const { renderMainPage } = useDeterminePageSize();
-  const [getProjectTrigger, getProjectsData] = useLazyGetProjectsQuery();
+  const { hideMap } = useSelector((store) => store.utils);
+  const { setItem, getItem, remove } = useLocalStorage("refresh-count");
+
   const [offset, setOffset] = useState(0);
   const [isOffLine, setisOffLine] = useState(false);
+  const [getProjectTrigger, getProjectsData] = useLazyGetProjectsQuery();
 
   useEffect(() => getProjectTrigger(), []);
-
   useEffect(() => {
-    if (!isOffLine) return;
+    // attempt to continue getting projects data if internet connection is lost and then re-established
+    if (!isOffLine || getItem() > 4) return remove();
 
-    if (isOnline) window.location.reload();
+    if (isOnline) {
+      const currentCount = getItem() ? parseInt(getItem()) : 0;
+      setItem(currentCount + 1);
+      getProjectTrigger({ offset });
+      toast.dismiss(toastId);
+      setisOffLine(false);
+    }
   });
 
   useEffect(() => {
+    // attempt to get projects
     if (getProjectsData.isUninitialized) return;
     const { data, error, isLoading, isFetching, isSuccess } = getProjectsData;
 

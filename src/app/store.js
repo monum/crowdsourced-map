@@ -1,6 +1,3 @@
-import { configureStore } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
-import { combineReducers } from "redux";
 import {
   persistReducer,
   FLUSH,
@@ -11,12 +8,16 @@ import {
   REGISTER,
 } from "redux-persist";
 
+import { combineReducers } from "redux";
+import storage from "redux-persist/lib/storage";
+import { configureStore } from "@reduxjs/toolkit";
+
 import utilsReducer from "../features/utilsSlice";
-import projectsApi from "../features/projects/projectsApi";
-import addressApi from "../features/projects/addressApi";
-import locationsReducer from "../features/locations/locationsSlice";
-import newProjectReducer from "../features/projects/newProjectSlice";
+import addressApi from "../features/suggestProject/addressApi";
+import projectsApi from "../features/suggestProject/projectsApi";
 import projectsReducer from "../features/projects/projectsSlice";
+import locationsReducer from "../features/locations/locationsSlice";
+import newProjectReducer from "../features/suggestProject/newProjectSlice";
 
 const persistConfig = {
   key: "crowdsourced-map",

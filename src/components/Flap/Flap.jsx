@@ -1,7 +1,9 @@
+// imports from installed modules
 import { Button } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 
+// imports from local files
 import useStyles from "./styles";
 import { toggleFullSizeMap } from "../../features/utilsSlice";
 

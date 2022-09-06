@@ -4,8 +4,8 @@ export default makeStyles((theme) => ({
   paper: ({ renderFullMap, breakPoint }) => ({
     width: renderFullMap || breakPoint === "sm" ? "100%" : "80%",
     margin: breakPoint !== "sm" ? "50px auto 0 auto" : "auto",
-    padding: 20,
-    marginBottom: renderFullMap || breakPoint !== "sm" ? 100 : 0,
+    padding: "50px 20px",
+    marginTop: 60,
   }),
   body: {
     width: "100%",
@@ -14,7 +14,7 @@ export default makeStyles((theme) => ({
     padding: "10px 0 10px 25px",
   },
   div: {
-    marginBottom: 30,
+    marginBottom: 60,
   },
   icons: {
     display: "flex",

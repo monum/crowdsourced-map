@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export default makeStyles(() => ({
+export default makeStyles({
   searchContainer: {
     width: "85%",
     backgroundColor: "transparent",
@@ -15,4 +15,4 @@ export default makeStyles(() => ({
     borderRadius: "5px",
     boxShadow: "2px 3px 2px 2px rgba(0, 0, 0, 0.2)",
   },
-}));
+});

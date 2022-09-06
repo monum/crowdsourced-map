@@ -1,3 +1,4 @@
+// imports from installed modules
 import {
   Modal,
   Slide,
@@ -9,38 +10,44 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import { CloseRounded, FilterAltOffRounded } from "@mui/icons-material";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 
-import useStyles from "./styles";
-import { useWindowSize } from "../../hooks";
-import { SearchProjects, Sort } from "../";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { CloseRounded, FilterAltOffRounded } from "@mui/icons-material";
+
+// imports from local files
 import {
   setFilteredData,
   setNameFilters,
   setNeighborhoodFilters,
 } from "../../features/projects/projectsSlice";
 
+import useStyles from "./styles";
+import config from "../../app-config.json";
+import { SearchProjects } from "../";
+import { useWindowSize } from "../../hooks";
+
 const FilterModal = ({ open, setOpen, onClose }) => {
-  const { breakPoint, width } = useWindowSize();
-  const classes = useStyles({ breakPoint, width });
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [count, setCount] = useState(0);
   const {
     data,
     nameFilters,
     neighborhoodFilters,
     status: { isFetching },
-  } = useSelector((state) => state.projects);
+  } = useSelector((store) => store.projects);
 
-  const [neighborhoodOptions, setNeighborhoodOptions] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { breakPoint, width } = useWindowSize();
+  const classes = useStyles({ breakPoint, width });
+
+  const [count, setCount] = useState(0);
   const [nameOptions, setNameOptions] = useState([]);
   const [filteredArr, setFilteredArr] = useState([]);
+  const [neighborhoodOptions, setNeighborhoodOptions] = useState([]);
 
   const handleClearAll = () => {
+    // clear filter parameters and filtered projects
     setFilteredArr([]);
     dispatch(setFilteredData([]));
     dispatch(setNameFilters([]));
@@ -48,11 +55,13 @@ const FilterModal = ({ open, setOpen, onClose }) => {
   };
 
   const handleFilterData = () => {
+    // use filter parameters to get the projects that match
     if (nameFilters.length <= 0 && neighborhoodFilters.length <= 0)
       return setCount(data.length);
 
     let filtered = [];
 
+    // filter all the projects with the title and neighborhood filteres
     if (nameFilters.length > 0 && neighborhoodFilters.length > 0) {
       nameFilters.forEach((title) => {
         neighborhoodFilters.forEach((neighborhood) => {
@@ -89,12 +98,14 @@ const FilterModal = ({ open, setOpen, onClose }) => {
   }, [nameFilters, neighborhoodFilters]);
 
   useEffect(() => {
+    // set the options for autocomplete
     if (isFetching) return;
 
+    setNameOptions([]);
     setCount(data.length);
     setNeighborhoodOptions([]);
-    setNameOptions([]);
 
+    // the "optionsLog" helps ensure there are no repeat entries
     const optionsLog = [];
     data.forEach(({ fields: { Title, Neighborhood } }, i) => {
       const repeatEntry = optionsLog.find(
@@ -112,13 +123,14 @@ const FilterModal = ({ open, setOpen, onClose }) => {
       );
     });
 
-    return handleFilterData();
+    handleFilterData();
   }, [isFetching]);
 
   const handleShowResults = () => {
+    // show the results for the data that match the filter parameters
     if (!count || isFetching) return;
     setOpen(false);
-    navigate("/crowdsourced-map");
+    navigate(config.homepage);
 
     if (nameFilters.length === 0 && neighborhoodFilters.length === 0) {
       return handleClearAll();
@@ -158,9 +170,6 @@ const FilterModal = ({ open, setOpen, onClose }) => {
                 label="Filter By Neighborhood"
                 options={neighborhoodOptions}
               />
-            </Box>
-            <Box className={classes.section}>
-              <Sort />
             </Box>
           </CardContent>
           <CardActions

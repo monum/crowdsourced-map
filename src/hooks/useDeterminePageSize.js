@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+// this hooks determines the size of the map and main page on desktop and tab views
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+
 import { useWindowSize } from "./";
 
 const useDeterminePageSize = () => {
-  const { fullSizeMap } = useSelector((state) => state.utils);
   const { width, breakPoint } = useWindowSize();
+  const { fullSizeMap } = useSelector((state) => state.utils);
 
   const checkPageSize = () => {
+    // calculate the page sizes
     if (breakPoint !== "lg") return {};
 
     if (fullSizeMap) {

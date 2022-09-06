@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export default makeStyles(() => ({
+export default makeStyles({
   searchBar: {
     width: 350,
     marginBottom: 20,
@@ -13,4 +13,4 @@ export default makeStyles(() => ({
   searchedText: {
     width: "90%",
   },
-}));
+});

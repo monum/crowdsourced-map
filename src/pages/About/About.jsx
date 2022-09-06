@@ -1,11 +1,14 @@
+// imports from installed modules
 import { Paper, Divider, Typography } from "@mui/material";
 
-import { useDeterminePageSize, useWindowSize } from "../../hooks";
+// imports from local files
 import useStyles from "./style";
+import config from "../../app-config.json";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 
 const About = () => {
-  const { renderFullMap } = useDeterminePageSize();
   const { breakPoint } = useWindowSize();
+  const { renderFullMap } = useDeterminePageSize();
   const classes = useStyles({ renderFullMap, breakPoint });
 
   return (
@@ -40,8 +43,8 @@ const About = () => {
             <a
               href="http://"
               target="_blank"
-              rel="noopener noreferrer"
               className={classes.link}
+              rel="noopener noreferrer"
             >
               project wiki
             </a>{" "}
@@ -51,10 +54,10 @@ const About = () => {
           <span>
             {" "}
             <a
-              href="https://github.com/monum/crowdsourced-map"
               target="_blank"
-              rel="noopener noreferrer"
               className={classes.link}
+              rel="noopener noreferrer"
+              href={`https://github.com/monum${config.homepage}`}
             >
               repository
             </a>{" "}

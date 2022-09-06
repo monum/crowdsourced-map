@@ -1,18 +1,21 @@
+// imports from installed modules
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useRef, useEffect, useState } from "react";
 import Map, { Marker, useMap } from "react-map-gl";
+import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { ProjectMarker } from "../";
+// imports from local files
 import {
   useLocalStorage,
   useDeterminePageSize,
   useWindowSize,
 } from "../../hooks";
-import config from "../../app-config";
-import { useLazyGetAddressQuery } from "../../features/projects/addressApi";
+import config from "../../app-config.json";
+
+import { ProjectMarker } from "../";
 import { locationSelected } from "../../features/locations/locationsSlice";
-import { setProjectDetails } from "../../features/projects/newProjectSlice";
+import { useLazyGetAddressQuery } from "../../features/suggestProject/addressApi";
+import { setProjectDetails } from "../../features/suggestProject/newProjectSlice";
 
 function MapRoot() {
   const mapRef = useRef(null);
@@ -21,7 +24,9 @@ function MapRoot() {
   const { renderFullMap } = useDeterminePageSize();
   const { getItem, setItem } = useLocalStorage("defaultMapOptions");
 
-  const { isActive } = useSelector((store) => store.newProject);
+  const { isActive: isSuggestingProject } = useSelector(
+    (store) => store.newProject
+  );
   const { selectedLocation } = useSelector((store) => store.location);
   const { data, filteredData } = useSelector((store) => store.projects);
 
@@ -32,15 +37,17 @@ function MapRoot() {
   });
 
   useEffect(() => {
+    // save the view state to local storage
     setItem(viewState);
   }, [viewState]);
 
   useEffect(() => {
+    // set the map center to the selected location
     if (!selectedLocation || !mapRef.current) return;
     const { lng, lat } = selectedLocation;
-    let offset = [0, 0];
 
-    if (renderFullMap === false && breakPoint === "lg") offset = [-280, 0];
+    let offset = [0, 0];
+    if (!renderFullMap && breakPoint === "lg") offset = [-280, 0];
 
     mapRef.current?.easeTo({
       center: [lng, lat],
@@ -61,7 +68,7 @@ function MapRoot() {
       reuseMaps
       attributionControl={false}
       style={{ width: "100%", height: "100%", overflow: "hidden" }}
-      mapStyle={config.style}
+      mapStyle={config["map-style"]}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >
       {filteredData.length > 0 &&
@@ -83,19 +90,19 @@ function MapRoot() {
             coords={{ lat: record.fields.Lat, lng: record.fields.Lng }}
           />
         ))}
-      {isActive && <NewProjectMarker isActive={isActive} />}
+      {isSuggestingProject && <NewProjectMarker />}
     </Map>
   );
 }
 
-const NewProjectMarker = ({ isActive }) => {
+const NewProjectMarker = () => {
   const dispatch = useDispatch();
   const { current: map } = useMap();
   const { breakPoint } = useWindowSize();
   const { renderFullMap } = useDeterminePageSize();
   const [getAddressTrigger, addressData] = useLazyGetAddressQuery();
+  const { coords, isActive } = useSelector((store) => store.newProject);
 
-  const { coords } = useSelector((store) => store.newProject);
   const [newProjectCoords, setNewProjectCoords] = useState({
     lat: coords.lat || map.getCenter().lat,
     lng: coords.lng || map.getCenter().lng,
@@ -123,6 +130,7 @@ const NewProjectMarker = ({ isActive }) => {
   }, [isActive]);
 
   const handleNewProjectUpdate = async (key, details) => {
+    // update the coords and address data on the suggest project page
     setNewProjectCoords(details);
     if (key === "coords") {
       dispatch(

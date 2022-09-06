@@ -1,8 +1,11 @@
+// this slice holds the location data for the searchable locations
+// and the selected locations the map may have to move to
 import { createSlice } from "@reduxjs/toolkit";
 import data from "../../Boston Locations Data/Boston_Neighborhoods.json";
 import * as turf from "@turf/turf";
 
 const getNeighborhoods = () => {
+  // get all the necessary data from the neighborhoods json
   const neighborhoods = data.features.map(
     (feauture) => feauture.properties.Name
   );
@@ -23,6 +26,7 @@ export const locationsSlice = createSlice({
 
   reducers: {
     locationSelected: (state, action) => {
+      // take the selected location and find its center
       if (action.payload) {
         const featureCollection = data?.features.find(
           ({ properties: { Name } }) => Name === action.payload

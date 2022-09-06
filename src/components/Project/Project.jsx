@@ -1,14 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// imports from installed modules
 import {
   RoomOutlined,
   WatchLaterOutlined,
   ExpandMore,
 } from "@mui/icons-material";
+
 import {
   Card,
   Grid,
-  CardMedia,
   Typography,
   Box,
   Skeleton,
@@ -21,36 +20,30 @@ import {
   ClickAwayListener,
 } from "@mui/material";
 
+import { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// imports from local files
 import useStyles from "./styles";
-import image from "../../images/pic1.jpg";
+import { trimAddress, formatTime } from "../../utils";
 import { setHideMap } from "../../features/utilsSlice";
 import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import { setLocationCoords } from "../../features/locations/locationsSlice";
 import { setSelectedProject } from "../../features/projects/projectsSlice";
 
-const trimAddress = (address = "") => {
-  const addressArr = address.split(",");
-
-  addressArr.pop(); // getting out "United States" from the address
-  if (addressArr.length > 2) addressArr.pop(); // getting out "Massachusetts" from the address
-
-  return addressArr.join(",");
-};
-
-const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
-  const dispatch = useDispatch();
+const Project = ({ projectInfo: { id, fields }, skeleton }) => {
   const { breakPoint } = useWindowSize();
-  const { renderFullMap } = useDeterminePageSize();
-
   const [expanded, setExpanded] = useState(false);
-  const [delayedEffect, setDelayedEffect] = useState(renderFullMap);
-
-  const classes = useStyles({ home, expanded, breakPoint });
+  const { renderFullMap } = useDeterminePageSize();
+  const { hideMap } = useSelector((store) => store.utils);
   const { selectedProject } = useSelector((store) => store.projects);
 
+  const dispatch = useDispatch();
   const address = trimAddress(fields?.Address);
+  const classes = useStyles({ expanded, breakPoint });
 
   const handleClick = () => {
+    // expand project box to see the project description and set the map center to the selected project
     if (expanded) {
       setExpanded(false);
       return dispatch(setSelectedProject({ id: "", fields: {} }));
@@ -60,21 +53,25 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
     dispatch(setLocationCoords({ lat: fields.Lat, lng: fields.Lng }));
 
     if (breakPoint === "lg") {
-      setTimeout(() => dispatch(setSelectedProject({ id, fields })));
+      setTimeout(() =>
+        dispatch(setSelectedProject({ id, fields, clickedMarker: false }))
+      );
     }
   };
 
   const handleClickAway = () => {
-    if (breakPoint !== "lg") return;
+    // collapse the project box and de-emphasize the selected project
+    // !hideMap is the map view on mobile
+    if (!hideMap) return;
     if (expanded && selectedProject.id !== id) setExpanded(false);
-    if (breakPoint === "lg")
-      dispatch(setSelectedProject({ id: "", fields: {} }));
   };
 
   const handleSeeOnMap = () => {
+    // show map view and center the map to the selected project
     setExpanded(true);
     dispatch(setHideMap(false));
     setTimeout(() => {
+      // for a delayed effect
       dispatch(setLocationCoords({ lat: fields.Lat, lng: fields.Lng }));
       dispatch(setSelectedProject({ id, fields }));
     }, 100);
@@ -85,17 +82,9 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
   }, []);
 
   useEffect(() => {
-    const delayedTimeout = setTimeout(() => {
-      setDelayedEffect(renderFullMap);
-    }, 150);
-
-    return () => {
-      clearTimeout(delayedTimeout);
-    };
-  }, [renderFullMap]);
-
-  useEffect(() => {
-    if (!selectedProject?.clickedMarker || id !== selectedProject.id) return;
+    // scroll the project page to the selected selected project
+    if (id !== selectedProject.id) return setExpanded(false);
+    if (!selectedProject?.clickedMarker) return;
 
     const item = document.getElementById(selectedProject.id);
     if (!item) return;
@@ -106,21 +95,17 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
         .parentElement;
 
     parentElement?.scroll({ top: item.offsetTop - 20, behavior: "auto" });
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
       setExpanded(true);
     });
-
-    return () => {
-      // clearTimeout(timeout);
-    };
   }, [selectedProject]);
 
   return (
     <Grow in>
       <Grid
         item
-        lg={delayedEffect ? 11 : 3.9}
-        md={delayedEffect ? 11 : 6}
+        lg={renderFullMap ? 11 : 3.9}
+        md={renderFullMap ? 11 : 6}
         sm={6}
         xs={11}
       >
@@ -136,11 +121,6 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
                 onClick={handleClick}
                 ref={ref}
               >
-                {/* <CardMedia
-                  src={image}
-                  component="img"
-                  className={classes.image}
-                /> */}
                 <CardContent>
                   <Box className={classes.cardContent}>
                     <Typography
@@ -192,46 +172,6 @@ const Project = ({ projectInfo: { id, fields }, skeleton, home }) => {
       </Grid>
     </Grow>
   );
-};
-
-const intervals = [
-  { label: "year", seconds: 31536000 },
-  { label: "month", seconds: 2592000 },
-  { label: "day", seconds: 86400 },
-  { label: "hour", seconds: 3600 },
-  { label: "minute", seconds: 60 },
-  { label: "second", seconds: 1 },
-];
-
-const month = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sept",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const formatTime = (dateNum) => {
-  const date = new Date(dateNum);
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-
-  if (seconds > 2592000) {
-    const dateString = `${date.getDate()} ${
-      month[date.getMonth()]
-    } ${date.getFullYear()}`;
-
-    return dateString;
-  }
-  const interval = intervals.find((i) => i.seconds < seconds);
-  const count = Math.floor(seconds / interval.seconds);
-  return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
 };
 
 export default Project;

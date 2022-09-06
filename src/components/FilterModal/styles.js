@@ -3,8 +3,8 @@ import { makeStyles } from "@mui/styles";
 export default makeStyles((theme) => ({
   card: ({ breakPoint, width }) => ({
     margin: "5% auto",
-    width: breakPoint === "sm" ? "100%" : width < 740 ? 590 : 720,
     height: 580,
+    width: breakPoint === "sm" ? "100%" : width < 740 ? 590 : 720,
   }),
   cardHeader: {
     color: theme.palette.primary.main,

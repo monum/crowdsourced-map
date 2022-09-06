@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export default makeStyles(() => ({
+export default makeStyles({
   navContainer: {
     position: "fixed",
     bottom: 0,
@@ -15,4 +15,4 @@ export default makeStyles(() => ({
     margin: "auto",
     justifyContent: "space-between",
   },
-}));
+});

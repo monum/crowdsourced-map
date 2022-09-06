@@ -1,3 +1,4 @@
+// imports from installed modules
 import {
   Autocomplete,
   TextField,
@@ -11,15 +12,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { SyncLoader } from "react-spinners";
 
-import useStyles from "./styles";
+// imports from local files
 import {
   setNameFilters,
   setNeighborhoodFilters,
 } from "../../features/projects/projectsSlice";
+import useStyles from "./styles";
 
 const SearchProjects = ({ neighborhood, name, options, label }) => {
-  const dispatch = useDispatch();
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const {
     nameFilters,
@@ -28,6 +30,7 @@ const SearchProjects = ({ neighborhood, name, options, label }) => {
   } = useSelector((state) => state.projects);
 
   const handleSelect = (value) => {
+    // create a card for a selected option
     let repeatEntry;
 
     if (repeatEntry || !value.name) return;
@@ -49,8 +52,9 @@ const SearchProjects = ({ neighborhood, name, options, label }) => {
   const projects = name ? nameFilters : neighborhood ? neighborhoodFilters : [];
 
   const handleRemove = (item) => {
+    // remove the cooresponding  card
     let newFilter = [];
-    console.log(item);
+
     if (name) {
       newFilter = nameFilters.filter((name) => name !== item);
       dispatch(setNameFilters(newFilter));
