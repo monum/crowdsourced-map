@@ -7,6 +7,7 @@ export default makeStyles((theme) => ({
     right: "4.5%",
     bottom,
     width: width > 490 ? 450 : 370,
+    maxHeight: 600,
   }),
   puller: {
     width: 30,
@@ -31,6 +32,16 @@ export default makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     gap: 3.5,
+  },
+  description: {
+    overflowY: "scroll",
+    maxHeight: 350,
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
+
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
   },
   expandedIcon: ({ expanded }) => ({
     transform: !expanded ? "rotate(0deg)" : "rotate(180deg)",

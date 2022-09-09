@@ -31,8 +31,8 @@ const BottomNav = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // the default for "value" is purposefully set at " "
-  const [value, setValue] = useState(" ");
+
+  const [value, setValue] = useState(location.pathname.split("/")[2] || " ");
   const [showFilter, setShowFilter] = useState(false);
 
   const { width } = useWindowSize();
@@ -45,20 +45,6 @@ const BottomNav = () => {
     navigate(`${config.homepage}/${newVal}`);
     setValue(newVal);
   };
-
-  const handleSetValue = () => {
-    // highlight the correct nav icon
-    const path = location.pathname.split("/");
-    setValue(path[2] || " ");
-  };
-
-  useEffect(() => {
-    handleSetValue();
-  }, []);
-
-  useEffect(() => {
-    handleSetValue();
-  }, [hideMap, location]);
 
   return (
     <Paper className={classes.navContainer} elevation={10}>
@@ -96,7 +82,7 @@ const BottomNav = () => {
             <div className={classes.tabNav}>
               <Button
                 startIcon={<MapRounded />}
-                onClick={() => dispatch(setHideMap(true))}
+                onClick={() => dispatch(setHideMap(false))}
               >
                 show Map
               </Button>

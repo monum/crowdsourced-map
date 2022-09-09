@@ -14,9 +14,9 @@ const MainPage = () => {
   const pageRef = useRef();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { width } = useWindowSize();
+  const { width, breakPoint } = useWindowSize();
   const { mainPageSize } = useDeterminePageSize();
-  const classes = useStyles({ mainPageSize, width });
+  const classes = useStyles({ mainPageSize, width, breakPoint });
 
   useEffect(() => {
     if (location.pathname !== `${config.homepage}/suggest-a-project`) {

@@ -164,7 +164,7 @@ const MiniProjectBox = () => {
               <ExpandMore className={classes.expandedIcon} />
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <CardContent className={classes.desctiption}>
+              <CardContent className={classes.description}>
                 <Typography variant="body2">{fields.Description}</Typography>
               </CardContent>
             </Collapse>

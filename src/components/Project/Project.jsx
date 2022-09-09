@@ -94,9 +94,9 @@ const Project = ({ projectInfo: { id, fields }, skeleton }) => {
       item.parentElement.parentElement.parentElement.parentElement.parentElement
         .parentElement;
 
-    parentElement?.scroll({ top: item.offsetTop - 20, behavior: "auto" });
     setTimeout(() => {
       setExpanded(true);
+      parentElement?.scroll({ top: item.offsetTop - 20, behavior: "auto" });
     });
   }, [selectedProject]);
 

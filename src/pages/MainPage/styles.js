@@ -1,10 +1,10 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
-  mainPage: ({ mainPageSize, width }) => ({
+  mainPage: ({ mainPageSize, width, breakPoint }) => ({
     backgroundColor: theme.palette.gray.light,
     width: `${mainPageSize || 100}%`,
-    height: width > 750 ? "calc(100vh - 72px)" : "calc(100vh - 129px)",
+    height: breakPoint === "lg" ? "calc(100vh - 72px)" : "calc(100vh - 127px)",
     transition: theme.transitions.presets.expandCollapseWidth,
     borderRight: `0.5px ${theme.palette.gray.regular} solid`,
     overflowY: "scroll",
