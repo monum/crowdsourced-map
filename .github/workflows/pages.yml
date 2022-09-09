@@ -37,7 +37,11 @@ jobs:
         with:
           # Upload entire repository
 <<<<<<< HEAD
+<<<<<<< HEAD
           path: "."
+=======
+          path: '.'
+>>>>>>> 7e05aa43e635e518f9dcbf897e1a6e03eb0d670a
 =======
           path: '.'
 >>>>>>> 7e05aa43e635e518f9dcbf897e1a6e03eb0d670a
