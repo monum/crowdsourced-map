@@ -2,7 +2,13 @@
 
 This is the official repository for the Boston CrowdSourced map. This is a map based app which allows users to deploy a map of the city of Boston. Residents can then sugest location sensitive ideas and view other approved projects, suggested by other residents. 
 
-Read the project [WIKI](https://github.com/monum/crowdsourced-map/wiki) for any questions you may have
+## How to Deploy 
+
+run:  
+* `git clone https://github.com/monum/crowdsourced-map.git`
+* `npm install`
+* `npm start`  
+Read the [WIKI](https://github.com/monum/crowdsourced-map/wiki) for a full guide 
 
 ## webpage
 Check out the app [HERE](https://monum.github.io/crowdsourced-map/)
