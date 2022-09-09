@@ -22,6 +22,7 @@ import { ArrowBackIosRounded, FilterAltRounded } from "@mui/icons-material";
 
 // imports from local files
 import useStyles from "./styles";
+import { useWindowSize } from "../../hooks";
 import { FilterModal } from "../../components";
 import { setHideMap } from "../../features/utilsSlice";
 
@@ -34,6 +35,7 @@ const BottomNav = () => {
   const [value, setValue] = useState(" ");
   const [showFilter, setShowFilter] = useState(false);
 
+  const { width } = useWindowSize();
   const { hideMap } = useSelector((store) => store.utils);
   const { filteredData } = useSelector((store) => store.projects);
 
@@ -62,30 +64,45 @@ const BottomNav = () => {
     <Paper className={classes.navContainer} elevation={10}>
       {hideMap ? (
         // display all the navigation links
-        <BottomNavigation value={value} onChange={handleChange}>
-          <BottomNavigationAction
-            label="Projects"
-            value=" "
-            icon={<LayersRounded />}
-          />
-          <BottomNavigationAction
-            label="About"
-            value="about"
-            icon={<InfoRounded />}
-          />
-          <BottomNavigationAction
-            label="Contact Us"
-            value="contact"
-            icon={<MailRounded />}
-          />
-          <BottomNavigationAction
-            onClick={() => dispatch(setHideMap(false))}
-            label="show map"
-            value="map"
-            icon={<MapRounded />}
-            showLabel
-          />
-        </BottomNavigation>
+        <>
+          {width < 750 && (
+            <BottomNavigation value={value} onChange={handleChange}>
+              <BottomNavigationAction
+                label="Projects"
+                value=" "
+                icon={<LayersRounded />}
+              />
+              <BottomNavigationAction
+                label="About"
+                value="about"
+                icon={<InfoRounded />}
+              />
+              <BottomNavigationAction
+                label="Contact Us"
+                value="contact"
+                icon={<MailRounded />}
+              />
+              <BottomNavigationAction
+                onClick={() => dispatch(setHideMap(false))}
+                label="show map"
+                value="map"
+                icon={<MapRounded />}
+                showLabel
+              />
+            </BottomNavigation>
+          )}
+
+          {width > 750 && (
+            <div className={classes.tabNav}>
+              <Button
+                startIcon={<MapRounded />}
+                onClick={() => dispatch(setHideMap(true))}
+              >
+                show Map
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         // display the "Hide Map" and "Filter" buttons
         <div className={classes.mapNav}>

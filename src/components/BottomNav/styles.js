@@ -15,4 +15,9 @@ export default makeStyles({
     margin: "auto",
     justifyContent: "space-between",
   },
+  tabNav: {
+    padding: "8.8px 0",
+    width: 200,
+    marginLeft: "78%",
+  },
 });

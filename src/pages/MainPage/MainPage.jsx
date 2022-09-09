@@ -1,6 +1,6 @@
 // imports from installed modules
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 // imports from local files
@@ -11,6 +11,7 @@ import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import { toggleSuggestingProject } from "../../features/suggestProject/newProjectSlice";
 
 const MainPage = () => {
+  const pageRef = useRef();
   const location = useLocation();
   const dispatch = useDispatch();
   const { width } = useWindowSize();
@@ -18,13 +19,17 @@ const MainPage = () => {
   const classes = useStyles({ mainPageSize, width });
 
   useEffect(() => {
-    if (location.pathname !== `${config.homepage}/suggest-a-project`)
+    if (location.pathname !== `${config.homepage}/suggest-a-project`) {
       dispatch(toggleSuggestingProject(false));
-    else dispatch(toggleSuggestingProject(true));
+    } else {
+      dispatch(toggleSuggestingProject(true));
+    }
+
+    if (pageRef.current) pageRef.current.scrollTo(0, 0);
   }, [location.pathname]);
 
   return (
-    <div className={classes.mainPage}>
+    <div className={classes.mainPage} ref={pageRef}>
       <Routes>
         <Route path={config.homepage} element={<Projects />} />
         <Route

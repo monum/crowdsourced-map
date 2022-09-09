@@ -48,7 +48,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={classes.link}
-                href={config.repository}
+                href="https://github.com/monum/crowdsourced-map"
               >
                 <div className={classes.icon}>
                   <GitHub /> GitHub Repository
@@ -59,7 +59,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={classes.link}
-                href={`${config.repository}/issues`}
+                href="https://github.com/monum/crowdsourced-map/issues"
               >
                 <div className={classes.icon}>
                   <BugReportRounded /> Report a Bug

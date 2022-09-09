@@ -8,7 +8,7 @@ import { AppBar, Typography, Box, Button, Badge } from "@mui/material";
 // imports from local files
 import useStyles from "./style";
 import config from "../../app-config.json";
-import Logo from "../../images/mainLogo.svg";
+import Logo from "../../images/main-logo.png";
 
 import { FilterModal } from "../";
 import { useWindowSize } from "../../hooks";

@@ -49,21 +49,21 @@ const Project = ({ projectInfo: { id, fields }, skeleton }) => {
       return dispatch(setSelectedProject({ id: "", fields: {} }));
     }
 
-    setExpanded(true);
-    dispatch(setLocationCoords({ lat: fields.Lat, lng: fields.Lng }));
-
-    if (breakPoint === "lg") {
-      setTimeout(() =>
-        dispatch(setSelectedProject({ id, fields, clickedMarker: false }))
-      );
-    }
+    setTimeout(() => {
+      setExpanded(true);
+      dispatch(setSelectedProject({ id, fields, clickedMarker: false }));
+      dispatch(setLocationCoords({ lat: fields.Lat, lng: fields.Lng }));
+    });
   };
 
   const handleClickAway = () => {
     // collapse the project box and de-emphasize the selected project
     // !hideMap is the map view on mobile
-    if (!hideMap) return;
-    if (expanded && selectedProject.id !== id) setExpanded(false);
+    if (!hideMap && breakPoint !== "lg") return;
+    if (expanded && selectedProject.id === id) {
+      setExpanded(false);
+      dispatch(setSelectedProject({ id: "", fields: {} }));
+    }
   };
 
   const handleSeeOnMap = () => {

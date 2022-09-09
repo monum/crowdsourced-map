@@ -1,5 +1,6 @@
 // imports from installed modules
 import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
@@ -13,6 +14,7 @@ import {
   useLocalStorage,
 } from "./hooks";
 
+import config from "./app-config.json";
 import useStyles from "./globalStyles";
 import { MapPage, MainPage } from "./pages/";
 import { Navbar, BottomNav } from "./components";
@@ -28,7 +30,15 @@ function App() {
   const { width, breakPoint } = useWindowSize();
   const { renderMainPage } = useDeterminePageSize();
   const { hideMap } = useSelector((store) => store.utils);
-  const { setItem, getItem, remove } = useLocalStorage("refresh-count");
+
+  const {
+    setItem: setCount,
+    getItem: getCount,
+    remove: removeCount,
+  } = useLocalStorage("refresh-count");
+
+  const { setItem: setBreakpoint, getItem: getBreakpoint } =
+    useLocalStorage("breakpoint");
 
   const [offset, setOffset] = useState(0);
   const [isOffLine, setisOffLine] = useState(false);
@@ -37,16 +47,25 @@ function App() {
   useEffect(() => getProjectTrigger(), []);
   useEffect(() => {
     // attempt to continue getting projects data if internet connection is lost and then re-established
-    if (!isOffLine || getItem() > 4) return remove();
+    if (!isOffLine || getCount() > 4) return removeCount();
 
     if (isOnline) {
-      const currentCount = getItem() ? parseInt(getItem()) : 0;
-      setItem(currentCount + 1);
+      const currentCount = getCount() ? parseInt(getCount()) : 0;
+      setCount(currentCount + 1);
       getProjectTrigger({ offset });
       toast.dismiss(toastId);
       setisOffLine(false);
     }
   });
+
+  useEffect(() => {
+    if (!getBreakpoint()) {
+      setBreakpoint(breakPoint);
+    } else if (breakPoint !== getBreakpoint()) {
+      setBreakpoint(breakPoint);
+      window.location.reload();
+    }
+  }, [breakPoint]);
 
   useEffect(() => {
     // attempt to get projects
@@ -76,6 +95,9 @@ function App() {
 
   return (
     <div className={globalClasses.main}>
+      <Helmet>
+        <title>{config.title}</title>
+      </Helmet>
       <ToastContainer position="top-center" />
 
       {breakPoint === "lg" ? (
@@ -99,9 +121,9 @@ function App() {
           ) : (
             <div className={globalClasses.smScreenContainer}>
               <MapPage />
-              <BottomNav />
             </div>
           )}
+          <BottomNav />
         </div>
       )}
     </div>

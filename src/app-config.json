@@ -1,8 +1,8 @@
 {
   "name": "BOSTON MAPS",
+  "title": "Boston Maps",
   "homepage": "/crowdsourced-map",
   "map-style": "mapbox://styles/mapbox/streets-v11",
-  "repository": "https://github.com/monum/crowdsourced-map",
   "SECRET_KEYS": {
     "MAPBOX_API_KEY": {
       "description": "The API key for the mapbox map",
@@ -14,7 +14,7 @@
     }
   },
   "URL": {
-    "MAP_BOX_URL": {
+    "MAPBOX_URL": {
       "description": "The mapbox URL the map uses",
       "value": "https://api.mapbox.com/geocoding/v5/mapbox.places"
     },

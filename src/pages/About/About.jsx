@@ -3,7 +3,6 @@ import { Paper, Divider, Typography } from "@mui/material";
 
 // imports from local files
 import useStyles from "./style";
-import config from "../../app-config.json";
 import { useDeterminePageSize, useWindowSize } from "../../hooks";
 
 const About = () => {
@@ -26,7 +25,6 @@ const About = () => {
           questions, such as:
           <ul className={classes.list}>
             <li>Where should the city install new benches</li>
-            <li>Where is your favorite public art</li>
             <li>Where would you like to see a new piece of public art</li>
             <li>Where would you like to see a new community compost bin</li>
           </ul>
@@ -41,7 +39,7 @@ const About = () => {
           <span>
             {" "}
             <a
-              href="http://"
+              href="https://github.com/monum/crowdsourced-map/wiki"
               target="_blank"
               className={classes.link}
               rel="noopener noreferrer"
@@ -57,7 +55,7 @@ const About = () => {
               target="_blank"
               className={classes.link}
               rel="noopener noreferrer"
-              href={`https://github.com/monum${config.homepage}`}
+              href="https://github.com/monum/crowdsourced-map"
             >
               repository
             </a>{" "}

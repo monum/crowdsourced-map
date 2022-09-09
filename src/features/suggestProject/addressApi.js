@@ -7,7 +7,7 @@ const API_KEY = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 const addressApi = createApi({
   reducerPath: "addressApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${config.URL.MAP_BOX_URL.value}`,
+    baseUrl: `${config.URL.MAPBOX_URL.value}`,
   }),
   tagTypes: ["Address"],
   endpoints: (builder) => ({
