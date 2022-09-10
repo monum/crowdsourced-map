@@ -1,6 +1,6 @@
 // imports from installed modules
-import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 // imports from local files
@@ -14,9 +14,10 @@ const MainPage = () => {
   const pageRef = useRef();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { width, breakPoint } = useWindowSize();
+  const { breakPoint } = useWindowSize();
   const { mainPageSize } = useDeterminePageSize();
-  const classes = useStyles({ mainPageSize, width, breakPoint });
+  const { status } = useSelector((store) => store.projects);
+  const classes = useStyles({ mainPageSize, status, breakPoint });
 
   useEffect(() => {
     if (location.pathname !== `${config.homepage}/suggest-a-project`) {

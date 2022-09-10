@@ -41,7 +41,7 @@ const ProjectsContainer = () => {
   const { data, status, filteredData } = useSelector((store) => store.projects);
 
   const lazyRef = useRef(false);
-  const pageSize = [...Array(15).keys()];
+  const pageSize = [...Array(50).keys()];
   const classes = useStyles({ breakPoint });
   const [showLoader, setShowLoader] = useState(false);
 
@@ -64,12 +64,12 @@ const ProjectsContainer = () => {
       {!filteredData.length > 0 && (
         // show unfiltered data
         <Grid container spacing={4}>
-          {data
-            ? data.map(({ id, fields }) => (
-                <Project key={id} projectInfo={{ id, fields }} />
-              ))
-            : pageSize.map((_, i) => (
+          {status.isLoading || status.error
+            ? pageSize.map((_, i) => (
                 <Project key={i} skeleton projectInfo={{}} />
+              ))
+            : data.map(({ id, fields }) => (
+                <Project key={id} projectInfo={{ id, fields }} />
               ))}
         </Grid>
       )}

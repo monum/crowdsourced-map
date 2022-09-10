@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
   cardContent: {
     backgroundColor: `${theme.palette.gray.light}`,
     height: "77%",
-    overflow: "scroll",
+    overflowY: "scroll",
     borderTop: `1.5px solid ${theme.palette.gray.regular}`,
     borderBottom: `1.5px solid ${theme.palette.gray.regular}`,
   },
@@ -24,7 +24,7 @@ export default makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   section: {
-    borderBottom: `0.5px solid ${theme.palette.gray.regular}`,
+    // borderBottom: `0.5px solid ${theme.palette.gray.regular}`,
     padding: "20px 0",
     minHeight: "65%",
   },

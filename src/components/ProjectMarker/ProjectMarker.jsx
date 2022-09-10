@@ -3,7 +3,7 @@ import { Marker } from "react-map-gl";
 import { Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { CircleNotificationsRounded as Circle } from "@mui/icons-material";
+import { ReactComponent as MarkerIcon } from "../../images/map-marker.svg";
 
 // imports from local files
 import useStyles from "./styles";
@@ -12,15 +12,16 @@ import { setSelectedProject } from "../../features/projects/projectsSlice";
 const ProjectMarker = ({ id, coords, fields }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [color, setColor] = useState("");
-  const [size, setSize] = useState("medium");
+  const [opacity, setOpacity] = useState();
+  const [width, setWidth] = useState(30);
   const { selectedProject } = useSelector((store) => store.projects);
 
   useEffect(() => {
     // set the marker of any non selected project to be faded out
-    if (!selectedProject?.id || id === selectedProject?.id) return setColor("");
+    if (!selectedProject?.id || id === selectedProject?.id)
+      return setOpacity(1);
 
-    setColor("disabled");
+    setOpacity(0.4);
   }, [selectedProject]);
 
   const handleClick = () => {
@@ -30,13 +31,13 @@ const ProjectMarker = ({ id, coords, fields }) => {
   return (
     <Marker latitude={coords.lat} longitude={coords.lng} onClick={handleClick}>
       <Tooltip
-        onMouseEnter={() => setSize("large")}
-        onMouseLeave={() => setSize("medium")}
+        onMouseEnter={() => setWidth(45)}
+        onMouseLeave={() => setWidth(30)}
         className={classes.toolTip}
         title={fields?.Title}
         arrow
       >
-        <Circle fontSize={size} color={color} />
+        <MarkerIcon width={width} opacity={opacity} />
       </Tooltip>
     </Marker>
   );

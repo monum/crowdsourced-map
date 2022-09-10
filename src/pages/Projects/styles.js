@@ -5,7 +5,6 @@ export default makeStyles((theme) => ({
     margin: "auto",
     marginLeft: breakPoint === "lg" && 40,
     marginTop: breakPoint !== "lg" && 30,
-    overflowY: "scroll",
     overflowX: "hidden",
     display: "flex",
     flexDirection: "column",

@@ -9,6 +9,7 @@ import {
   Box,
   CardActions,
   Button,
+  Divider,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -164,6 +165,7 @@ const FilterModal = ({ open, setOpen, onClose }) => {
                 options={nameOptions}
               />
             </Box>
+            <Divider />
             <Box className={classes.section}>
               <SearchProjects
                 neighborhood
