@@ -59,6 +59,12 @@ const BottomNav = () => {
                 icon={<LayersRounded />}
               />
               <BottomNavigationAction
+                onClick={() => dispatch(setHideMap(false))}
+                label="show map"
+                value="map"
+                icon={<MapRounded />}
+              />
+              <BottomNavigationAction
                 label="About"
                 value="about"
                 icon={<InfoRounded />}
@@ -67,13 +73,6 @@ const BottomNav = () => {
                 label="Contact Us"
                 value="contact"
                 icon={<MailRounded />}
-              />
-              <BottomNavigationAction
-                onClick={() => dispatch(setHideMap(false))}
-                label="show map"
-                value="map"
-                icon={<MapRounded />}
-                showLabel
               />
             </BottomNavigation>
           )}

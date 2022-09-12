@@ -30,12 +30,14 @@ const Contact = () => {
               Boston Office of New Urban Mechanics
             </Typography>
             <div className={classes.icons}>
-              <div className={classes.icon}>
-                <EmailRounded /> write email here
-              </div>
-              <div className={classes.icon}>
-                <PhoneRounded /> write phone here
-              </div>
+              <a className={classes.icon} href={`mailto:${config.email}`}>
+                <EmailRounded /> {config.email}
+              </a>
+              {config.phone && (
+                <a className={classes.icon} href={`tel:${config.phone}`}>
+                  <PhoneRounded /> {config.phone}
+                </a>
+              )}
             </div>
           </div>
 
@@ -47,23 +49,19 @@ const Contact = () => {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className={classes.link}
+                className={classes.icon}
                 href="https://github.com/monum/crowdsourced-map"
               >
-                <div className={classes.icon}>
-                  <GitHub /> GitHub Repository
-                </div>
+                <GitHub /> GitHub Repository
               </a>
 
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className={classes.link}
+                className={classes.icon}
                 href="https://github.com/monum/crowdsourced-map/issues"
               >
-                <div className={classes.icon}>
-                  <BugReportRounded /> Report a Bug
-                </div>
+                <BugReportRounded /> Report a Bug
               </a>
             </div>
           </div>

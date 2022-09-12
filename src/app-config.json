@@ -2,7 +2,14 @@
   "name": "BOSTON MAPS",
   "title": "Boston Maps",
   "homepage": "/crowdsourced-map",
-  "map-style": "mapbox://styles/mapbox/streets-v11",
+  "email": "info@newurbanmechanics.org",
+  "phone": "",
+  "MAP-DETAILS": {
+    "style": "mapbox://styles/mapbox/streets-v11",
+    "lat": 42.35,
+    "lng": -71.085,
+    "zoom": 10.1
+  },
   "SECRET_KEYS": {
     "MAPBOX_API_KEY": {
       "description": "The API key for the mapbox map",
@@ -20,7 +27,7 @@
     },
     "AIRTABLE_URL": {
       "description": "The Airtable URL used as the database",
-      "value": "https://api.airtable.com/v0/appuilRrhQ6k2ut3l/Projects"
+      "value": "https://api.airtable.com/v0/appbctgqoG5xFRRw2/Table%201"
     }
   }
 }

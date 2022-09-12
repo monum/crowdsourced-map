@@ -160,17 +160,17 @@ const FilterModal = ({ open, setOpen, onClose }) => {
           >
             <Box className={classes.section}>
               <SearchProjects
-                name
-                label="Filter By Name"
-                options={nameOptions}
+                neighborhood
+                label="Filter By Neighborhood"
+                options={neighborhoodOptions}
               />
             </Box>
             <Divider />
             <Box className={classes.section}>
               <SearchProjects
-                neighborhood
-                label="Filter By Neighborhood"
-                options={neighborhoodOptions}
+                name
+                label="Filter By Title"
+                options={nameOptions}
               />
             </Box>
           </CardContent>

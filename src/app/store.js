@@ -9,8 +9,8 @@ import {
 } from "redux-persist";
 
 import { combineReducers } from "redux";
-import storage from "redux-persist/lib/storage";
 import { configureStore } from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage/session";
 
 import utilsReducer from "../features/utilsSlice";
 import addressApi from "../features/suggestProject/addressApi";

@@ -5,11 +5,7 @@ import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // imports from local files
-import {
-  useLocalStorage,
-  useDeterminePageSize,
-  useWindowSize,
-} from "../../hooks";
+import { useDeterminePageSize, useWindowSize } from "../../hooks";
 import config from "../../app-config.json";
 
 import { ProjectMarker } from "../";
@@ -22,7 +18,6 @@ function MapRoot() {
   const dispatch = useDispatch();
   const { breakPoint } = useWindowSize();
   const { renderFullMap } = useDeterminePageSize();
-  const { getItem, setItem } = useLocalStorage("defaultMapOptions");
 
   const { isActive: isSuggestingProject } = useSelector(
     (store) => store.newProject
@@ -30,16 +25,12 @@ function MapRoot() {
   const { selectedLocation } = useSelector((store) => store.location);
   const { data, filteredData } = useSelector((store) => store.projects);
 
+  const { lng, lat, zoom, style } = config["MAP-DETAILS"];
   const [viewState, setViewState] = useState({
-    longitude: getItem()?.longitude ?? -70.9,
-    latitude: getItem()?.latitude ?? 42.35,
-    zoom: getItem()?.zoom || 10,
+    longitude: lng || -71.085,
+    latitude: lat || 42.35,
+    zoom: zoom || 10.1,
   });
-
-  useEffect(() => {
-    // save the view state to local storage
-    setItem(viewState);
-  }, [viewState]);
 
   useEffect(() => {
     // set the map center to the selected location
@@ -68,7 +59,7 @@ function MapRoot() {
       reuseMaps
       attributionControl={false}
       style={{ width: "100%", height: "100%", overflow: "hidden" }}
-      mapStyle={config["map-style"]}
+      mapStyle={style}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
     >
       {filteredData.length > 0 &&

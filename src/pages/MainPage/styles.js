@@ -7,7 +7,7 @@ export default makeStyles((theme) => ({
     height: breakPoint === "lg" ? "calc(100vh - 72px)" : "calc(100vh - 127px)",
     transition: theme.transitions.presets.expandCollapseWidth,
     borderRight: `0.5px ${theme.palette.gray.regular} solid`,
-    overflowY: status.isLoading || status.error ? "hidden" : "scroll",
+    overflowY: status.isLoading || status.error ? "hidden" : "auto",
     overflowX: "hidden",
     position: "relative",
     paddingTop: 10,

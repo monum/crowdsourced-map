@@ -26,13 +26,9 @@ export default makeStyles((theme) => ({
     alignItems: "center",
     gap: 10,
     color: theme.palette.primary.main,
+    textDecoration: "none",
   },
   heading: {
     fontSize: 20,
-  },
-  link: {
-    color: `${theme.palette.primary.light}`,
-    cursor: "pointer",
-    textDecoration: "none",
   },
 }));
