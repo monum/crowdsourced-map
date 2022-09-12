@@ -25,7 +25,7 @@ function MapRoot() {
   const { selectedLocation } = useSelector((store) => store.location);
   const { data, filteredData } = useSelector((store) => store.projects);
 
-  const { lng, lat, zoom, style } = config["MAP-DETAILS"];
+  const { lng, lat, zoom, style } = config["MAP_DETAILS"];
   const [viewState, setViewState] = useState({
     longitude: lng || -71.085,
     latitude: lat || 42.35,

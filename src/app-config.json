@@ -4,7 +4,7 @@
   "homepage": "/crowdsourced-map",
   "email": "info@newurbanmechanics.org",
   "phone": "",
-  "MAP-DETAILS": {
+  "MAP_DETAILS": {
     "style": "mapbox://styles/mapbox/streets-v11",
     "lat": 42.35,
     "lng": -71.085,
