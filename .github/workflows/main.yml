@@ -16,7 +16,7 @@ jobs:
           npm run build
         env:
           REACT_APP_AIRTABLE_API_KEY: ${{ secrets.REACT_APP_AIRTABLE_API_KEY }}
-          REACT_APP_MAPBOX_ACESS_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
+          REACT_APP_MAPBOX_ACCESS_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4

@@ -60,7 +60,7 @@ function MapRoot() {
       attributionControl={false}
       style={{ width: "100%", height: "100%", overflow: "hidden" }}
       mapStyle={style}
-      mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACESS_TOKEN}
+      mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
     >
       {filteredData.length > 0 &&
         filteredData.map((record) => (
