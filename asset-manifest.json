@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/crowdsourced-map/static/css/main.623daf28.css",
-    "main.js": "/crowdsourced-map/static/js/main.3c959d93.js",
-    "static/js/483.a3c05c44.chunk.js": "/crowdsourced-map/static/js/483.a3c05c44.chunk.js",
+    "main.js": "/crowdsourced-map/static/js/main.12421993.js",
+    "static/js/483.e58fd510.chunk.js": "/crowdsourced-map/static/js/483.e58fd510.chunk.js",
     "index.html": "/crowdsourced-map/index.html",
     "static/media/map-marker.svg": "/crowdsourced-map/static/media/map-marker.30061dde981bdc0d698fa72328479766.svg",
     "main.623daf28.css.map": "/crowdsourced-map/static/css/main.623daf28.css.map",
-    "main.3c959d93.js.map": "/crowdsourced-map/static/js/main.3c959d93.js.map",
-    "483.a3c05c44.chunk.js.map": "/crowdsourced-map/static/js/483.a3c05c44.chunk.js.map"
+    "main.12421993.js.map": "/crowdsourced-map/static/js/main.12421993.js.map",
+    "483.e58fd510.chunk.js.map": "/crowdsourced-map/static/js/483.e58fd510.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.623daf28.css",
-    "static/js/main.3c959d93.js"
+    "static/js/main.12421993.js"
   ]
 }
