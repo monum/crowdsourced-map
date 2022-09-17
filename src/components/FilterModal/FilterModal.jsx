@@ -109,19 +109,24 @@ const FilterModal = ({ open, setOpen, onClose }) => {
     // the "optionsLog" helps ensure there are no repeat entries
     const optionsLog = [];
     data.forEach(({ fields: { Title, Neighborhood } }, i) => {
-      const repeatEntry = optionsLog.find(
-        (item) => item === Title || item === Neighborhood
-      );
-
-      if (repeatEntry) return;
-
-      optionsLog.push(Title);
-      optionsLog.push(Neighborhood);
-
-      setNameOptions((state) => state.concat([{ name: Title, id: i }]));
-      setNeighborhoodOptions((state) =>
+      const repeatTitle = optionsLog.find(
+        (item) => item === Title
+      )
+      if(!repeatTitle){
+        optionsLog.push(Title);
+        setNameOptions((state) => state.concat([{ name: Title, id: i }]));
+      }
+      
+      const repeatNeighborhood = optionsLog.find(
+        (item) => item === Neighborhood
+      )
+      if(!repeatNeighborhood){
+        optionsLog.push(Neighborhood));
+        setNeighborhoodOptions((state) =>
         state.concat([{ name: Neighborhood, id: i }])
       );
+      }     
+      
     });
 
     handleFilterData();
