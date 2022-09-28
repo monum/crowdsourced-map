@@ -9,19 +9,23 @@ export default makeStyles((theme) => ({
     flexDirection: "column",
   },
   box: ({ breakPoint }) => ({
-    width: breakPoint === "md" || breakPoint === "sm" ? "91%" : "80%",
+    width: breakPoint === "md" ? "97%" : breakPoint === "sm" ? "91%" : "85%",
+    // backgroundColor: "blue",
     marginLeft: 25,
     justifyContent: "space-between",
     alignItems: "center",
     padding: "7px 0",
   }),
-  h1: {
+  h1: ({ breakPoint }) => ({
     color: theme.palette.primary.main,
     display: "flex",
     alignItems: "center",
     fontSize: "1.5rem",
     minWidth: 225,
-  },
+    maxWidth: breakPoint === "sm" ? "60%" : breakPoint === "md" ? "45%" : "40%",
+    textAlign: "center",
+    // backgroundColor: "red",
+  }),
   image: {
     width: 58,
   },

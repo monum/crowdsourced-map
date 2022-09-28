@@ -56,7 +56,7 @@ function App() {
       toast.dismiss(toastId);
       setisOffLine(false);
     }
-  });
+  }, [isOnline]);
 
   useEffect(() => {
     if (!getBreakpoint()) {
